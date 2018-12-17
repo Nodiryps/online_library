@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/Member.php';
+
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 

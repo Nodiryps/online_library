@@ -11,7 +11,7 @@
  *
  * @author Spy
  */
-require_once 'functions.php';
+require_once 'framework/model';
 
 class User {
     var $id;
@@ -30,4 +30,10 @@ class User {
         $this->birthdate = $birthdate;
         $this->role = $role;
     }
+    
+    
+    
+    function get_user($id) {
+        return sql_fetch("SELECT * FROM user where id = :id", array("id" => $id));
+}
 }
