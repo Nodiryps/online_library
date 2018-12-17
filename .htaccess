@@ -1,3 +1,3 @@
 RewriteEngine on
-RewriteBase /04_msn_mvc_final/
+RewriteBase /prwb_1819_pc06g02/
 RewriteRule ^([\w]*)/?([\w]*)?/?([\w-]*)?/?([\w-]*)?/?([\w-]*)?/?$ index.php?controller=$1&action=$2&param1=$3&param2=$4&param3=$5 [NC,L]
