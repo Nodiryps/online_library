@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `prwb_1819_pc06g02`
 --
-DROP DATABASE IF EXISTS `prwb_1819_pc06g02`;
-CREATE DATABASE IF NOT EXISTS `prwb_1819_pc06g02` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `prwb_1819_pc06g02`;
+DROP DATABASE IF EXISTS `prwb_1819_pg02`;
+CREATE DATABASE IF NOT EXISTS `prwb_1819_pg02` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `prwb_1819_pg02`;
 
 -- --------------------------------------------------------
 
@@ -44,7 +44,12 @@ CREATE TABLE IF NOT EXISTS `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
-
+INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`) VALUES 
+(NULL, '1111111111111', 'Harry Potter à lécole des sorciers', 'JK Rowlings', 'Pocket', NULL), 
+(NULL, '2222222222222', 'Mobyz Dick', 'Jules Verge', 'Pocket', NULL), 
+(NULL, '3333333333333', 'Les Fleurs Du Mâle', 'Beau De Lair', 'Pocket', NULL), 
+(NULL, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 
+(NULL, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', NULL);
 --
 -- Table structure for table `rental`
 --
@@ -84,7 +89,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 -- Constraints for dumped tables
 --
-
+INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `birthdate`, `role`) VALUES 
+(NULL, 'admin', 'epfc', 'chaffi', 'admin@epfc.com', NULL, 'admin'), 
+(NULL, 'manager', 'epfc', 'Spyridon', 'manager@epfc.com', NULL, 'manager'), 
+(NULL, 'member', 'epfc', 'virginie', 'member@epfc.com', NULL, 'member');
 --
 -- Constraints for table `rental`
 --
