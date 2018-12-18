@@ -39,7 +39,7 @@ class Router {
                 return new $controller_class_name();
             }
         } else {
-            throw new Exception("Controller '$controller_name' does'nt exist");
+            throw new Exception("Controller '$controller_name' does'nt exists");
         }
     }
 

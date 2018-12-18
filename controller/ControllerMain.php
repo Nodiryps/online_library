@@ -1,6 +1,6 @@
 <?php
 
-
+require_once 'model/User.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 
@@ -25,10 +25,10 @@ class ControllerMain extends Controller {
         //des chaînes vides
             $pseudo = $_POST['pseudo'];
             $password = $_POST['password'];
-
-            $errors = Member::validate_login($pseudo, $password);
+             
+            $errors = User::validate_login($pseudo, $password);
             if (empty($errors)) {
-                $this->log_user(Member::get_member_by_pseudo($pseudo));
+                $this->log_user(User::get_user_by_username($pseudo));
             }
         }
         (new View("login"))->show(array("pseudo" => $pseudo, "password" => $password, "errors" => $errors));
@@ -36,27 +36,35 @@ class ControllerMain extends Controller {
 
     //gestion de l'inscription d'un utilisateur
     public function signup() {
-        $pseudo = '';
+        $username = '';
         $password = '';
         $password_confirm = '';
+        $fullname="";
+        $email="";
+        $birthdate="";
+        $role="";
         $errors = [];
 
-        if (isset($_POST['pseudo']) && isset($_POST['password']) && isset($_POST['password_confirm'])) {
-            $pseudo = trim($_POST['pseudo']);
-            $password = $_POST['password'];
-            $password_confirm = $_POST['password_confirm'];
+        if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
+            $username = sanitize(trim($_POST['username']));
+            $password = Tools::sanitize($_POST['password']) ;
+            $password_confirm = Tools::sanitize($_POST['password_confirm']);
+            $fullname= Tools::sanitize($_POST["fullname"]);
+            $email= Tools::sanitize($_POST["email"]);
+            $birthdate= Tools::sanitize($_POST["birthdate"]);
+            $role="member";
 
-            $member = new Member($pseudo, Tools::my_hash($password));
-            $errors = Member::validate_unicity($pseudo);
+            $member = new User($username, $password, $fullname, $email, $birthdate, $role);
+            $errors = User::validate_unicity($username);
             $errors = array_merge($errors, $member->validate());
-            $errors = array_merge($errors, Member::validate_passwords($password, $password_confirm));
+            $errors = array_merge($errors, User::validate_passwords($password, $password_confirm));
 
             if (count($errors) == 0) { 
                 $member->update(); //sauve l'utilisateur
                 $this->log_user($member);
             }
         }
-        (new View("signup"))->show(array("pseudo" => $pseudo, "password" => $password, "password_confirm" => $password_confirm, "errors" => $errors));
+        (new View("signup"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm,"fullname"=>$fullname,"email"=>$email,"birthdate"=>$birthdate, "errors" => $errors));
     }
 
 }
