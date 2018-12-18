@@ -226,7 +226,6 @@ class User extends Model {
 
         try {
             $query = self::execute("SELECT password FROM user WHERE id=:id", array("id" => $id));
-
             $password = $query->fetch();
             return $password["password"];
         } catch (Exception $e) {
