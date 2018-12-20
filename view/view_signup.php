@@ -3,18 +3,19 @@
     <head>
         <title>Sign Up</title>
         <meta charset="UTF-8">
+        <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
+        <link href="css/styles.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="title">Sign Up</div>
         <div class="menu">
-            <a href="../main/index">Home</a>
+            <a href="main/index">Home</a>
         </div>
         <div class="main">
             Please enter your details to sign up :
             <br><br>
-            <form action="../main/signup" method="post">
+            <form action="main/signup" method="post">
                 <table>
                     <tr>
                         <td>User Name:</td>

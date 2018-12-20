@@ -3,6 +3,7 @@
     <head>
         <title><?= $utilisateur->username ?>'s Profile</title>
         <meta charset="UTF-8">
+        <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link href="styles.css" rel="stylesheet" type="text/css"/>
     </head>
@@ -13,7 +14,7 @@
             Edition du membre : <?= $member->fullname ?>.
             
             <br><br>
-            <form action="../user/edit_profile" method="post">
+            <form action="user/edit_profile" method="post">
                 <table>
 
                     <tr>
@@ -60,7 +61,7 @@
 
                 </table>
                 <input type="hidden" name="idmember" value="<?= $member->id ?>">
-                <input type="submit" name="valider" value="Valider"></td
+                <input type="submit" name="valider" value="Valider">
             </form>
 
             <br> <a href="../user/user_list">Retour a la liste des membres</a>

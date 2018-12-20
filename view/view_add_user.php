@@ -3,18 +3,19 @@
     <head>
         <title>ajouter membre</title>
         <meta charset="UTF-8">
+        <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link href="../css/style.css" rel="stylesheet" type="text/css"/>
+         <link href="css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <div class="title">Ajouter un utilisateur</div>
         <div class="menu">
-            <a href="../user/profil">Home</a>
+            <a href="user/profil">Home</a>
         </div>
         <div class="main">
             Please enter your details to sign up :
             <br><br>
-            <form action="../user/add_user" method="post">
+            <form action="user/add_user" method="post">
                 <table>
                     <tr>
                         <td>username:</td>
@@ -76,7 +77,7 @@
             }
             ?>
         </div>
-         <br> <a href="../user/user_list">Retour a la liste des membres</a>
+         <br> <a href="user/user_list">Retour a la liste des membres</a>
 
     </body>
     

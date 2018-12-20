@@ -1,9 +1,10 @@
 <html>
     <head>
         <title>Members</title>
+        <base href="<?= $web_root ?>"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         
@@ -38,12 +39,12 @@
                             <td> <?= $member->birthdate ?></td>
                             <td> <?= $member->role ?></td>
                             <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
-                                <td><form action="../user/edit_profile" method="POST">
+                                <td><form action="user/edit_profile" method="POST">
                                         <input type="hidden"  name="idmember" value="<?= $member->id ?>" >
                                         <input name="modifier" type="submit" value="modifier">
                                     </form>
                                    <?php  if($utilisateur->role=="admin" && $utilisateur->username !=$member->username):?>
-                                    <form method="post" action="../user/delete_user">
+                                    <form method="post" action="user/delete_user">
                                         <input type="hidden"  name="iddelete" value="<?= $member->id?>" >
                                         <?php if ($member->username != $utilisateur->username): ?>
                                             <input name="delete" type="submit" value="supprimer">
@@ -60,7 +61,7 @@
                     </tr>
                 </table>
                  <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
-                <form method="post" action="../user/add_user">
+                <form method="post" action="user/add_user">
                     <input type="submit" value="ajouter membre" >
                 </form>
                 <?php endif; ?>

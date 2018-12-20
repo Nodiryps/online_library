@@ -3,6 +3,7 @@
     <head>
         <title>Confirmation</title>
         <meta charset="UTF-8">
+        <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="styles.css" rel="stylesheet" type="text/css"/>
     </head>
@@ -12,7 +13,7 @@
         <div class="main">
             <p> Etes-vous sure de vouloir supprimer : <?= $member->fullname; ?> </p>
 
-            <form method="POST" action="../user/delete_user">
+            <form method="POST" action="user/delete_user">
 
                 <input name="conf" type="hidden" value="<?= $member->id ?>">
                 <input name="confirmer" type="submit" value="confirmer">
