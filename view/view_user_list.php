@@ -29,23 +29,26 @@
                   
                     <?php foreach ($members as $member): ?>
                         <tr>
-                    
+                            <?php if ($utilisateur->role == "admin"):?>
+                             <td> <?= $member->id ?></td>
+                             <?php endif; ?>
                             <td> <?= $member->username ?></td>
                             <td> <?= $member->fullname ?></td>
                             <td> <?= $member->email ?></td>
                             <td> <?= $member->birthdate ?></td>
                             <td> <?= $member->role ?></td>
                             <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
-                                <td><form action=edit_profile.php method="POST">
+                                <td><form action="../user/edit_profile" method="POST">
                                         <input type="hidden"  name="idmember" value="<?= $member->id ?>" >
                                         <input name="modifier" type="submit" value="modifier">
                                     </form>
-
-                                    <form method="post" action="confirmation.php">
+                                   <?php  if($utilisateur->role=="admin" && $utilisateur->username !=$member->username):?>
+                                    <form method="post" action="../user/delete_user">
                                         <input type="hidden"  name="iddelete" value="<?= $member->id?>" >
                                         <?php if ($member->username != $utilisateur->username): ?>
                                             <input name="delete" type="submit" value="supprimer">
                                         <?php endif; ?>
+                                            <?php endif; ?>
                                     </form>
                                 </td>
 

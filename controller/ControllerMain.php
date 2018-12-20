@@ -45,8 +45,12 @@ class ControllerMain extends Controller {
         $role="";
         $id="";
         $errors = [];
-     $test= User::validate_unicity("fil");
-     var_dump($test);
+        
+        $test=User::get_user_by_id(1);
+        var_dump($test);
+        $test->setUsername("jean");
+        $test->update_user();
+      
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
             $username = Tools::sanitize(trim($_POST['username']));
             $password = Tools::sanitize($_POST['password']) ;
@@ -56,14 +60,14 @@ class ControllerMain extends Controller {
             $birthdate= Tools::sanitize($_POST["birthdate"]);
             $role="member";
 
-            $member = new User($id,$username, $password, $fullname, $email, $birthdate, $role);
+            $member = new User($id,$username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
             $errors = User::validate_unicity($username);
             $errors = array_merge($errors, $member->validate());
             $errors = array_merge($errors, User::validate_passwords($password, $password_confirm));
 
             if (count($errors) == 0) { 
                 $member->insert(); //sauve l'utilisateur
-               //$this->log_user($member);
+               $this->log_user($member);
             }
         }
         (new View("signup"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm,"fullname"=>$fullname,"email"=>$email,"birthdate"=>$birthdate, "errors" => $errors));

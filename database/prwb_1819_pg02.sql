@@ -90,9 +90,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Constraints for dumped tables
 --
 INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `birthdate`, `role`) VALUES 
-(NULL, 'admin', 'epfc', 'chaffi', 'admin@epfc.com', NULL, 'admin'), 
-(NULL, 'manager', 'epfc', 'Spyridon', 'manager@epfc.com', NULL, 'manager'), 
-(NULL, 'member', 'epfc', 'virginie', 'member@epfc.com', NULL, 'member');
+(NULL, 'admin', '903001ff9a17773d4a0b4cff3666f1e9', 'chaffi', 'admin@epfc.com', NULL, 'admin'), 
+(NULL, 'manager', '903001ff9a17773d4a0b4cff3666f1e9', 'Spyridon', 'manager@epfc.com', NULL, 'manager'), 
+(NULL, 'member', '903001ff9a17773d4a0b4cff3666f1e9', 'virginie', 'member@epfc.com', NULL, 'member');
 --
 -- Constraints for table `rental`
 --

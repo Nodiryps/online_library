@@ -36,6 +36,10 @@ class User extends Model {
     function get_user($id) {
         return sql_fetch("SELECT * FROM user where id = :id", array("id" => $id));
     }
+    
+public function setUsername($nom){
+    $this->username=$nom;
+}
 
     public function validate() {
         $errors = array();
@@ -51,7 +55,7 @@ class User extends Model {
 
     public static function validate_unicity($pseudo) {
         $errors = [];
-        $member = self::is_username_available($pseudo);
+        $member = self::is_username_not_available($pseudo);
         if (!$member) {
             $errors[] = "This user already exists.";
         }
@@ -81,9 +85,8 @@ class User extends Model {
         return $errors;
     }
 
-    private static function check_password($clear_password, $hash) {
-//        return $hash === Tools::my_hash($clear_password);
-        return $hash === $clear_password;
+    public static function check_password($clear_password, $hash) {
+        return $hash === Tools::my_hash($clear_password);
     }
 
     public static function get_all_user() {
@@ -103,7 +106,8 @@ class User extends Model {
     public static function get_user_by_id($id) {
         try {
             $query = self::execute("SELECT * FROM user WHERE id=:id", array("id" => $id));
-            return $member = $query->fetch();
+            $member = $query->fetch();
+            return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
             abort("Problème lors de l'accès a la base de données");
         }
@@ -111,9 +115,9 @@ class User extends Model {
 
     public static function get_user_by_username($username) {
         try {
-            $member = self::execute("SELECT * FROM user WHERE username=:username", array("username" => $username));
-            $query = $member->fetch();
-            return new User($query["id"], $query["username"], $query["password"], $query["fullname"], $query["email"], $query["birthdate"], $query["role"]);
+            $query = self::execute("SELECT * FROM user WHERE username=:username", array("username" => $username));
+            $member = $query->fetch();
+            return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
             abort("Problème lors de l'accès a la base de données");
         }
@@ -139,7 +143,7 @@ class User extends Model {
         }
     }
 
-    public static function is_username_available($username) {
+    public static function is_username_not_available($username) {
 
         try {
             $query = self::execute("SELECT * FROM user WHERE username=:username", array("username" => $username));
@@ -197,31 +201,22 @@ class User extends Model {
         }
     }
 
-    public static function update_user($id, $username, $password, $fullname, $email, $birthdate, $role) {
+    public function update_user() {
+        $query = self::execute("UPDATE user SET username=:username ,password=:password,fullname=:fullname,email=:email,birthdate=:birthdate,role=:role WHERE id=:id", array(
+                        "id" => $this->id,
+                        "username" => $this->username,
+                        "password" => Tools::my_hash($this->hash_password),
+                        "fullname" => $this->fullname,
+                        "email" => $this->email,
+                        "birthdate" => $this->birthdate,
+                       "role" => $this->role));
+           
+            }
+
+    public function delete_user() {
 
         try {
-            $query = self::execute("UPDATE user SET username=:username ,password=:password,fullname=:fullname,email=:email,birthdate=:birthdate,role=:role WHERE id=:id", array(
-                        "id" => $id,
-                        "username" => $username,
-                        "password" => my_hash($password),
-                        "fullname" => $fullname,
-                        "email" => $email,
-                        "birthdate" => $birthdate,
-                        "role" => $role
-            ));
-        } catch (Exception $e) {
-            Tools::abort("Problèmez lors de l'accès a la base de données");
-            $e->getCode();
-            $e->getLine();
-            $e->getTraceAsString();
-        }
-    }
-
-//
-    public static function delete_user($id) {
-
-        try {
-            $query = self::execute("DELETE FROM user WHERE  id=:id", array("id" => $id));
+            self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
             abort("Problème lors de l'accès a la base de données");
         }
@@ -252,34 +247,25 @@ class User extends Model {
 
     public function update() {
 
-        if (!self::is_username_available($this->username))
-            self::execute("UPDATE user SET password = :password, fullname = :fullname, "
-                    . "email = :email , birthdate = :birthdate, role = :role WHERE username = :username ", array("fullname" => $this->fullname, "email" => $this->email,
+        if (!self::is_username_not_available($this->username))
+            self::execute("UPDATE user SET password = :password, fullname = :fullname,email = :email , birthdate = :birthdate, role = :role WHERE username = :username ", array("fullname" => $this->fullname, "email" => $this->email,
                 "birthdate" => $this->birthdate, "password" => $this->hash_password));
-//        else
-//            self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) "
-//                    . "VALUES(:username, :password, :fullname, :email, :birthdate, :role)", 
-//                    array("username" => $this->username, "password" => $this->hash_password, 
-//                        "fullname" => $this->fullname, "email" => $this->email, 
-//                        "birthdate" => $this->birthdate, "role", $this->role));
-//        return $this;
     }
 
     public function insert() {
         try {
-            $this->execute("INSERT INTO user(username, password, fullname, email, birthdate, role) VALUES(:username, :password, :fullname, :email, :birthdate, :role)",
-                array("username" => $this->username, "password" => $this->hash_password,
+            self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) VALUES(:username, :password, :fullname, :email, :birthdate, :role)", array("username" => $this->username, "password" => $this->hash_password,
                 "fullname" => $this->fullname, "email" => $this->email,
-                "birthdate" => $this->birthdate, "role", $this->role));
+                "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
             //die("fibi");
 //            echo $ex->getTraceAsString(); 
-                
-                echo '/////////LIGNE//////////';
-                echo $ex->getLine();
-                 echo '///////msg////////////';
-                echo $ex->getMessage(); 
+
+            echo '/////////LIGNE//////////';
+            echo $ex->getLine();
+            echo '///////msg////////////';
+            echo $ex->getMessage();
         }
     }
 
