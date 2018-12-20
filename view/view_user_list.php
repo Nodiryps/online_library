@@ -11,6 +11,7 @@
         <div class="menu">
              <?php include('menu.html'); ?>
         </div>
+        
          <div class="title"><?= $utilisateur->fullname ?>'s Profile! (<?= $utilisateur->role?>) </div>
            
             <div class="main">

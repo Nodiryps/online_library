@@ -18,7 +18,10 @@ class ControllerUser extends Controller {
 
     public function user_list() {
 
-        $utilisateur = self::get_user_or_redirect();
+        $user = Controller::get_user_or_redirect();
+
+        $utilisateur = User::get_user_by_username($user->username);
+
         $id = $utilisateur->id;
         $members = User::get_all_user();
 
@@ -88,13 +91,13 @@ class ControllerUser extends Controller {
         var_dump($utilisateur);
         $oldpass = User::get_password($id);
         $member = User::get_user_by_id($id);
-         $username = $member->username;
-            $fullname = $member->fullname;
-            $email = $member->email;
-            $birthdate = $member->birthdate;
-            $role = $member->role;
-            $password = $member->hash_password;
-            
+        $username = $member->username;
+        $fullname = $member->fullname;
+        $email = $member->email;
+        $birthdate = $member->birthdate;
+        $role = $member->role;
+        $password = $member->hash_password;
+
         if (Tools::issets("username") || Tools::issets("fullname") || Tools::issets("email") || Tools::issets("birthdate") || Tools::issets("role") || Tools::issets("password") || Tools::issets("confirm_password")) {
             $username = $member->username;
             $fullname = $member->fullname;
@@ -147,9 +150,9 @@ class ControllerUser extends Controller {
                     if ($utilisateur->id === $member->id) {
                         $_SESSION["user"] = $username;
                     }
-                    Controller::redirect("user","user_list");
+                    Controller::redirect("user", "user_list");
                 } catch (Exception $exc) {
-                   // die("problemes lors de l'acces a la base de donnée");
+                    // die("problemes lors de l'acces a la base de donnée");
 //                     echo  $exc->getCode(); echo 666;
 //                     echo  $exc->getFile();echo 666;
 //                     echo  $exc->getLine();echo 666;
@@ -161,19 +164,20 @@ class ControllerUser extends Controller {
                 
             }
         }
-        (new View("edit_profile"))->show(array("username" => $username, "password" => $password, "email" => $email, "role" => $role, "birthdate" => $birthdate, "fullname" => $fullname ,"member" => $member, "id" => $id, "error" => $error, "utilisateur" => $utilisateur));
+        (new View("edit_profile"))->show(array("username" => $username, "password" => $password, "email" => $email, "role" => $role, "birthdate" => $birthdate, "fullname" => $fullname, "member" => $member, "id" => $id, "error" => $error, "utilisateur" => $utilisateur));
     }
 
     public function delete_user() {
         $utilisateur = self::get_user_or_redirect();
+        
         $id = "";
         $memberToDelete = "";
 
-        if (Tools::isset($_POST["iddelete"])) {
+        if (isset($_POST["iddelete"])) {
             $id = $_POST["iddelete"];
             $memberToDelete = User::get_user_by_id($id);
         }
-        if (Tools::isset($_POST["conf"]) &&!empty($_POST["conf"])) {
+        if (isset($_POST["conf"]) && !empty($_POST["conf"])) {
             $id = $_POST["conf"];
             $memberToDelete = User::get_user_by_id($id);
             $memberToDelete->delete_user();
