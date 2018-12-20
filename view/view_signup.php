@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <title>Sign Up</title>
         <meta charset="UTF-8">
         <base href="<?= $web_root ?>"/>

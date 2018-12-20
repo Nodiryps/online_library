@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <meta charset="UTF-8">
         <title>Log In</title>
         <base href="<?= $web_root ?>"/>

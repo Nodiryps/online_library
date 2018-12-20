@@ -1,6 +1,7 @@
 <html>
     <head>
-        <title>Members</title>
+        <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
+        <title>Liste membres</title>
         <base href="<?= $web_root ?>"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,15 +42,19 @@
                             <td> <?= $member->birthdate ?></td>
                             <td> <?= $member->role ?></td>
                             <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
-                                <td><form action="user/edit_profile" method="POST">
+                            <td style="width: 50px;"><form action="user/edit_profile" method="POST">
                                         <input type="hidden"  name="idmember" value="<?= $member->id ?>" >
-                                        <input name="modifier" type="submit" value="modifier">
+                                        <button name="modifier" type="submit" value="modifier">
+                                            <img style="width:50%;" src="img/edit-button.png" atl="modif">
+                                        </button>
                                     </form>
                                    <?php  if($utilisateur->role=="admin" && $utilisateur->username !=$member->username):?>
                                     <form method="post" action="user/delete_user">
                                         <input type="hidden"  name="iddelete" value="<?= $member->id?>" >
                                         <?php if ($member->username != $utilisateur->username): ?>
-                                            <input name="delete" type="submit" value="supprimer">
+                                        <button name="delete" type="submit" value="supprimer">
+                                            <img style="width:50%;" src="img/delete-button.png" atl="poubelle">
+                                        </button>
                                         <?php endif; ?>
                                             <?php endif; ?>
                                     </form>

@@ -96,7 +96,7 @@ class ControllerUser extends Controller {
         $email = $member->email;
         $birthdate = $member->birthdate;
         $role = $member->role;
-        $password = $member->hash_password;
+        $password = "";
 
         if (Tools::issets("username") || Tools::issets("fullname") || Tools::issets("email") || Tools::issets("birthdate") || Tools::issets("role") || Tools::issets("password") || Tools::issets("confirm_password")) {
             $username = $member->username;
@@ -104,7 +104,7 @@ class ControllerUser extends Controller {
             $email = $member->email;
             $birthdate = $member->birthdate;
             $role = $member->role;
-            $member->hash_password;
+            
             $confirm_password = Tools::sanitize(Tools::post("confirm_password"));
 
             if (Tools::issets("birthdate") && Tools::post("birthdate") !== "")
@@ -134,6 +134,8 @@ class ControllerUser extends Controller {
             if ($member->hash_password !== $confirm_password) {
                 $error[] = "Les mots de passe ne correspondent pas!";
             }
+            var_dump($member->hash_password);
+            var_dump($confirm_password);
 
             if (!User::check_password($member->hash_password, $oldpass) && !empty($password)) {
                 $oldpass = $member->hash_password;
@@ -148,7 +150,7 @@ class ControllerUser extends Controller {
                 try {
                     $member->update_user();
                     if ($utilisateur->id === $member->id) {
-                        $_SESSION["user"] = $username;
+                        $_SESSION["user"] = $member;
                     }
                     Controller::redirect("user", "user_list");
                 } catch (Exception $exc) {
@@ -169,7 +171,7 @@ class ControllerUser extends Controller {
 
     public function delete_user() {
         $utilisateur = self::get_user_or_redirect();
-        
+           
         $id = "";
         $memberToDelete = "";
 
