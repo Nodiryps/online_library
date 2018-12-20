@@ -19,25 +19,25 @@
 
                     <tr>
                         <td>username:</td>
-                        <td><input  name="username" type="text" value="<?= $member->username ?>"></td>
+                        <td><input  name="username" type="text" value="<?= $username ?>"></td>
 
                     <tr>
                         <td>fullname:</td>
-                        <td><input  name="fullname" type="text" value="<?= $member->fullname ?>"></td>
+                        <td><input  name="fullname" type="text" value="<?= $fullname ?>"></td>
                     </tr>
                     <tr>
                         <td>email:</td>
-                        <td><input  name="email" type="text" value="<?= $member->email ?>"></td>
+                        <td><input  name="email" type="text" value="<?= $email ?>"></td>
                     </tr>
                     <tr>
                         <td>birthdate</td>
-                        <td><input  name="birthdate" type="date" value="<?= $member->birthdate ?>"></td>
+                        <td><input  name="birthdate" type="date" value="<?= $birthdate ?>"></td>
                     </tr> 
                     <?php if ($utilisateur->role != "manager"): ?>
                         <tr>
                             <td>Role</td>
-                            <td><select name="role" value="<?= $member->role ?>">
-                                    <option value="<?= $member->role ?>"><?= $member->role?></option>
+                            <td><select name="role" value="<?= $role ?>">
+                                    <option value="<?= $role ?>"><?= $role?></option>
                                     <option value="admin">admin</option>
                                     <option value="manager">manager</option>
                                     <option value="member">member</option>
@@ -64,7 +64,7 @@
                 <input type="submit" name="valider" value="Valider">
             </form>
 
-            <br> <a href="../user/user_list">Retour a la liste des membres</a>
+            <br> <a href="user/user_list">Retour a la liste des membres</a>
         </div>
         <?php foreach ($error as $e): ?>
             <div class='errors'><?= $e ?></div>

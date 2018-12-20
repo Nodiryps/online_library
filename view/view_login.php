@@ -15,6 +15,7 @@
         </div>
         <div class="main">
             <form action="main/login" method="post">
+                
                 <table>
                     <tr>
                         <td>Pseudo:</td>

@@ -9,7 +9,9 @@
     </head>
     <body>
         <div class="title"><?php echo $profile->username; ?>'s Profile! (<?= $profile->role ?>) </div>
-        <?php include('menu.html'); ?>
+        <nav> 
+            <?php include('menu.html'); ?>
+        </nav>
         <div class="main">
             <h1>Bienvenue <?= $profile->fullname?></h1>
         </div>

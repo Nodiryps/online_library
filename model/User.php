@@ -69,6 +69,8 @@ public function setUsername($nom){
         $member = self::get_user_by_username($pseudo);
         if ($member) {
             if (!self::check_password($password, $member->hash_password)) {
+                var_dump($member->hash_password);
+                var_dump($password);
                 $errors[] = "Wrong password. Please try again.";
             }
         } else {

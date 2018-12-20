@@ -79,92 +79,89 @@ class ControllerUser extends Controller {
     }
 
     public function edit_profile() {
-        $id = "";
         $error = [];
-        $utilisateur = Controller::get_user_or_redirect();
-        
+        $confirm_password = "";
+        $user = Controller::get_user_or_redirect();
+        $utilisateur = User::get_user_by_username($user->username);
         if (Tools::issets("idmember"))
             $id = Tools::post("idmember");
+        var_dump($utilisateur);
         $oldpass = User::get_password($id);
-       
         $member = User::get_user_by_id($id);
-        
-        if (isset($_POST["username"]) || isset($_POST["fullname"]) && !empty($_POST["fullname"]) || isset($_POST["email"]) || Tools::issets("birthdate") || Tools::issets("role") || Tools::issets("password") || Tools::issets("confirm_password")) {
-            $idmember = $member->id;
-            $member->fullname = Tools::sanitize(Tools::post("fullname"));
-            $member->username=$_POST["username"];
-            $birthdate = "0000-00-00";
-            $role = User::get_role_by_id($idmember);
-            $password = Tools::sanitize(Tools::post("password"));
+         $username = $member->username;
+            $fullname = $member->fullname;
+            $email = $member->email;
+            $birthdate = $member->birthdate;
+            $role = $member->role;
+            $password = $member->hash_password;
+            
+        if (Tools::issets("username") || Tools::issets("fullname") || Tools::issets("email") || Tools::issets("birthdate") || Tools::issets("role") || Tools::issets("password") || Tools::issets("confirm_password")) {
+            $username = $member->username;
+            $fullname = $member->fullname;
+            $email = $member->email;
+            $birthdate = $member->birthdate;
+            $role = $member->role;
+            $member->hash_password;
             $confirm_password = Tools::sanitize(Tools::post("confirm_password"));
 
-
-
             if (Tools::issets("birthdate") && Tools::post("birthdate") !== "")
-               $member->birthdate=Tools::post("birthdate");
-
+                $member->birthdate = Tools::sanitize(Tools::post("birthdate"));
             if (Tools::issets("role") && Tools::post("role") !== "")
-                $member->role= Tools::post("role");
-
-
-            if (Tools::issets("username") &&Tools:: post("username") !== "")
+                $member->role = Tools::post("role");
+            if (Tools::issets("username") && Tools::post("username") !== "")
                 $member->username = Tools::sanitize(Tools::post("username"));
             else
                 $error[] = "Il faut indiquer un username!";
-
-
-            if (Tools::issets("email") &&Tools::post("email") !== "")
+            if (Tools::issets("email") && Tools::post("email") !== "")
                 $member->email = Tools::sanitize(Tools::post("email"));
             else
                 $error[] = "Il faut indiquer un email!";
-
-
             if (Tools::issets("password") && empty(trim(Tools::post("password"))))
-                $member->hash_password= Tools::sanitize(Tools::post("password"));
-
-
+                $member->hash_password = Tools::sanitize(Tools::post("password"));
             if (Tools::issets("confirm_password") && Tools::post("confirm_password") !== "")
                 $confirm_password = Tools::sanitize(Tools::post("confirm_password"));
-
-
-            if (empty($fullname))
+            if (Tools::issets("email") && Tools::post("email") !== "")
+                $member->fullname = Tools::sanitize(Tools::post("fullname"));
+            if (empty($member->fullname))
                 $error[] = "Le champ \"fullname\" est obligatoire!";
-
-            if (empty($role))
+            if (empty($member->role))
                 $error[] = "Il faut indiquer un role!";
-
-            if (strlen($username) < 3)
+            if (strlen($member->username) < 3)
                 $error[] = "Le username doit faire plus de 3 caractères";
-
-
-
-            if ($password !== $confirm_password) {
+            if ($member->hash_password !== $confirm_password) {
                 $error[] = "Les mots de passe ne correspondent pas!";
             }
 
-            if (!User::check_password($password, $oldpass) && !empty($password)) {
-                $oldpass = $password;
+            if (!User::check_password($member->hash_password, $oldpass) && !empty($password)) {
+                $oldpass = $member->hash_password;
+                var_dump($oldpass);
             } else {
-                $password = $oldpass;
+                $member->hash_password = $oldpass;
             }
 
 
 
             if (empty($error)) {
                 try {
-                    var_dump($member);
                     $member->update_user();
-                    
                     if ($utilisateur->id === $member->id) {
                         $_SESSION["user"] = $username;
                     }
-                   // Controller::redirect("user", "user_list");
+                    Controller::redirect("user","user_list");
                 } catch (Exception $exc) {
-                    die("problemes lors de l'acces a la base de donnée");
+                   // die("problemes lors de l'acces a la base de donnée");
+//                     echo  $exc->getCode(); echo 666;
+//                     echo  $exc->getFile();echo 666;
+//                     echo  $exc->getLine();echo 666;
+//                     echo  $exc->getMessage();echo 666;
+//                     echo  $exc->getPrevious();echo 666;
+//                     echo  $exc->getTraceAsString();echo 666;
                 }
-            } 
+            } else {
+                
+            }
         }
-        (new View("edit_profile"))->show(array("member" => $member, "id" => $id, "error" => $error, "utilisateur" => $utilisateur));
+        (new View("edit_profile"))->show(array("username" => $username, "password" => $password, "email" => $email, "role" => $role, "birthdate" => $birthdate, "fullname" => $fullname ,"member" => $member, "id" => $id, "error" => $error, "utilisateur" => $utilisateur));
     }
 
     public function delete_user() {
@@ -172,11 +169,11 @@ class ControllerUser extends Controller {
         $id = "";
         $memberToDelete = "";
 
-        if (isset($_POST["iddelete"])) {
+        if (Tools::isset($_POST["iddelete"])) {
             $id = $_POST["iddelete"];
             $memberToDelete = User::get_user_by_id($id);
         }
-        if (isset($_POST["conf"]) && !empty($_POST["conf"])) {
+        if (Tools::isset($_POST["conf"]) &&!empty($_POST["conf"])) {
             $id = $_POST["conf"];
             $memberToDelete = User::get_user_by_id($id);
             $memberToDelete->delete_user();
