@@ -30,7 +30,7 @@ abstract class Controller {
         if ($controller == "") {
             $controller = $default_controller;
         }
-
+      
         header('Location: ' . $web_root . $controller . "/" . $action . "/" . $id, true, $statusCode);
         die();
     }

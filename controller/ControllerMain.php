@@ -10,7 +10,7 @@ class ControllerMain extends Controller {
     //sinon, produit la vue d'accueil.
     public function index() {
         if ($this->user_logged()) {
-            $this->redirect("member", "profile");
+            $this->redirect("user", "profil");
         } else {
             (new View("index"))->show();
         }
@@ -43,10 +43,12 @@ class ControllerMain extends Controller {
         $email="";
         $birthdate="";
         $role="";
+        $id="";
         $errors = [];
-
+     $test= User::validate_unicity("fil");
+     var_dump($test);
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
-            $username = sanitize(trim($_POST['username']));
+            $username = Tools::sanitize(trim($_POST['username']));
             $password = Tools::sanitize($_POST['password']) ;
             $password_confirm = Tools::sanitize($_POST['password_confirm']);
             $fullname= Tools::sanitize($_POST["fullname"]);
@@ -54,17 +56,19 @@ class ControllerMain extends Controller {
             $birthdate= Tools::sanitize($_POST["birthdate"]);
             $role="member";
 
-            $member = new User($username, $password, $fullname, $email, $birthdate, $role);
+            $member = new User($id,$username, $password, $fullname, $email, $birthdate, $role);
             $errors = User::validate_unicity($username);
             $errors = array_merge($errors, $member->validate());
             $errors = array_merge($errors, User::validate_passwords($password, $password_confirm));
 
             if (count($errors) == 0) { 
-                $member->update(); //sauve l'utilisateur
-                $this->log_user($member);
+                $member->insert(); //sauve l'utilisateur
+               //$this->log_user($member);
             }
         }
         (new View("signup"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm,"fullname"=>$fullname,"email"=>$email,"birthdate"=>$birthdate, "errors" => $errors));
     }
+    
+    
 
 }
