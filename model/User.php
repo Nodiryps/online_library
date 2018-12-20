@@ -32,15 +32,7 @@ class User extends Model {
         $this->birthdate = $birthdate;
         $this->role = $role;
     }
-
-    function get_user($id) {
-        return sql_fetch("SELECT * FROM user where id = :id", array("id" => $id));
-    }
     
-public function setUsername($nom){
-    $this->username=$nom;
-}
-
     public function validate() {
         $errors = array();
         if (!(isset($this->username) && is_string($this->username) && strlen($this->username) > 0)) {
