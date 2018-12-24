@@ -17,6 +17,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
+         <div class="title"><?php echo $profile->username; ?>'s Profile! (<?= $profile->role ?>) </div>
+        <nav> 
+            <?php include('menu.html'); ?>
+        </nav>
         <div id="titre" class="container" class="row" >
             <h1  >Location des livres</h1>
         </div >
@@ -30,7 +34,7 @@
         </div>
 
         <div class="container">
-            <table class="table table-dark">
+            <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
                     <tr >
                         <th scope="col">ISNB</th>

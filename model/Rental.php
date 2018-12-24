@@ -1,6 +1,8 @@
 <?php
 
 require_once 'framework/Model.php';
+require_once 'model/User.php';
+require_once 'model/Book.php';
 
 class Rental extends Model {
 
@@ -47,8 +49,24 @@ class Rental extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
+    // faire une requete de jointure
+    public  static function get_this_rental($id){
+         $results = [];
+        try {
+            $books = self::execute("SELECT * FROM rental join book WHERE user=:id", array("id"=>$id));
+            $query = $books->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+        
+    }
         
     
     
     
-}
+

@@ -1,5 +1,5 @@
 <?php
-
+require_once 'model/User.php';
 require_once 'model/Book.php';
 require_once 'model/Rental.php';
 require_once 'framework/View.php';
@@ -21,7 +21,7 @@ class ControllerBook extends Controller {
         if (empty($_POST["search"])) {
             $books = Book::get_all_books();
         }
-        (new View("book_manager"))->show(array("books" => $books));
+        (new View("book_manager"))->show(array("books" => $books,"profile"=>$user));
     }
 
     public function books_manager() {

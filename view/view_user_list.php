@@ -15,10 +15,11 @@
         
          <div class="title"><?= $utilisateur->fullname ?>'s Profile! (<?= $utilisateur->role?>) </div>
            
-            <div class="main">
+            <div class="container">
              
-                <table >
+                <table class="table table-striped table-condensed" >
                     <caption class="main">Liste de membre inscrit</caption>
+                     <thead class="thead-dark">
                     <tr> 
                         <th>Id</th>
                         <th>User</th>
@@ -30,6 +31,7 @@
                             <th>Actions</th>
                         <?php endif; ?>
                     </tr>
+                     </thead>
                   
                     <?php foreach ($members as $member): ?>
                         <tr>
@@ -44,7 +46,7 @@
                             <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
                             <td style="width: 50px;"><form action="user/edit_profile" method="POST">
                                         <input type="hidden"  name="idmember" value="<?= $member->id ?>" >
-                                        <button name="modifier" type="submit" value="modifier">
+                                        <button name="modifier" type="submit" value="modifier"  class="btn btn-info">
                                             <img style="width:50%;" src="img/edit-button.png" atl="modif">
                                         </button>
                                     </form>
@@ -52,7 +54,7 @@
                                     <form method="post" action="user/delete_user">
                                         <input type="hidden"  name="iddelete" value="<?= $member->id?>" >
                                         <?php if ($member->username != $utilisateur->username): ?>
-                                        <button name="delete" type="submit" value="supprimer">
+                                        <button name="delete" type="submit" value="supprimer"  class="btn btn-info">
                                             <img style="width:50%;" src="img/delete-button.png" atl="poubelle">
                                         </button>
                                         <?php endif; ?>
