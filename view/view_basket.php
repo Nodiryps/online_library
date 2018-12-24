@@ -10,8 +10,6 @@
     </head>
     <body>
         <h1>Gérer livres et Réservation</h1>
-        <?php
-        // put your code here
-        ?>
+       
     </body>
 </html>

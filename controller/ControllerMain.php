@@ -46,10 +46,10 @@ class ControllerMain extends Controller {
         $id="";
         $errors = [];
         
-        $test=User::get_user_by_id(1);
-        var_dump($test);
-        $test->setUsername("jean");
-        $test->update_user();
+//        $test=User::get_user_by_id(1);
+//        var_dump($test);
+//        $test->setUsername("jean");
+//        $test->update_user();
       
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
             $username = Tools::sanitize(trim($_POST['username']));

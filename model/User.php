@@ -14,7 +14,6 @@
 require_once 'framework/Model.php';
 
 class User extends Model {
-
     var $id;
     var $username;
     var $hash_password;

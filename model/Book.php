@@ -19,5 +19,61 @@ class Book extends Model {
         $this->editor = $editor;
         $this->picture = $picture;
     }
+    
+    
+    
+      public static function get_all_books() {
+        $results = [];
+        try {
+            $books = self::execute("SELECT * FROM book", array());
+            $query = $books->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+    
+    public static function get_book_by_title($title) {
+        try {
+            $query = self::execute("SELECT * FROM book WHERE title=:title", array("title" => $title));
+            $book = $query->fetch();
+            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"]);
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+    
+    public static function get_book_by_critere($critere) {
+        $results = [];
+        try {
+            $books = self::execute("SELECT * FROM book WHERE title LIKE :critere OR author LIKE :critere OR editor LIKE :critere", array(":critere" =>"%".$critere."%"));
+            $query = $books->fetchAll();
+           foreach ($query as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+    public static function get_book_by_id($id) {
+        try {
+            $query = self::execute("SELECT * FROM book WHERE id=:id", array("id" => $id));
+            $book = $query->fetch();
+            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"]);
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+    
+    
+    
 }
 
