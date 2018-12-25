@@ -12,8 +12,11 @@
  * @author Spy
  */
 require_once 'framework/Model.php';
+require_once 'model/Book.php';
+require_once 'model/rental.php';
 
 class User extends Model {
+
     var $id;
     var $username;
     var $hash_password;
@@ -31,7 +34,7 @@ class User extends Model {
         $this->birthdate = $birthdate;
         $this->role = $role;
     }
-    
+
     public function validate() {
         $errors = array();
         if (!(isset($this->username) && is_string($this->username) && strlen($this->username) > 0)) {
@@ -196,15 +199,14 @@ class User extends Model {
 
     public function update_user() {
         $query = self::execute("UPDATE user SET username=:username ,password=:password,fullname=:fullname,email=:email,birthdate=:birthdate,role=:role WHERE id=:id", array(
-                        "id" => $this->id,
-                        "username" => $this->username,
-                        "password" => Tools::my_hash($this->hash_password),
-                        "fullname" => $this->fullname,
-                        "email" => $this->email,
-                        "birthdate" => $this->birthdate,
-                       "role" => $this->role));
-           
-            }
+                    "id" => $this->id,
+                    "username" => $this->username,
+                    "password" => Tools::my_hash($this->hash_password),
+                    "fullname" => $this->fullname,
+                    "email" => $this->email,
+                    "birthdate" => $this->birthdate,
+                    "role" => $this->role));
+    }
 
     public function delete_user() {
 
@@ -261,5 +263,22 @@ class User extends Model {
             echo $ex->getMessage();
         }
     }
+
+    public function get_rental_join_book_join_user_by_user() {
+        $results = [];
+        try {
+            $books = self::execute("select book.id,book.isbn,book.title,book.author,book.editor,book.picture FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id", array("id" => $this->id));
+            $query = $books->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+            return $query;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
+    
 
 }

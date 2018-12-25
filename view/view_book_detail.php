@@ -38,7 +38,7 @@
                 </tr>
                     
             </table>
-            <button class="btn btn-info"><a href="book/index" style="color: white ">retour a la liste des livres</a></button>
+            <button class="btn btn-info"><span   class="glyphicon glyphicon-arrow-left"><a href="book/index" style="color: white "> Retour</a></span></button>
         </div>
     </body>
 </html>

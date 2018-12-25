@@ -17,12 +17,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-         <div class="title"><?php echo $profile->username; ?>'s Profile! (<?= $profile->role ?>) </div>
+       
         <nav> 
             <?php include('menu.html'); ?>
         </nav>
         <div id="titre" class="container" class="row" >
-            <h1  >Location des livres</h1>
+            <h1  >Location de livres</h1>
         </div >
         <div id="search_bar "class="container" class="row" >
             <nav class="navbar navbar-light bg-light"  class="col-lg-12" >
@@ -62,24 +62,24 @@
                         <td> 
                             <form  method="post" action="book/add_rental">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                <button type="submit"  name="idsubmit" class="btn btn-info"><span>panier</span></button>
+                                <button type="submit"  name="idsubmit" class="btn btn-success"><span>panier</span></button>
                             </form>
                         </td>
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                   
+                    <td style="color: red;"><?= $msg?></td>
+                    
             </table>
         </div>
         <br>
         <br>
 
-        <div id="titre" class="container" class="row" >
-            <h1>Votre panier de location</h1>
-        </div >
         <div class="container">
-            
-            <table class="table table-dark">
-                <thead class="thead-dark"></thead>
+            <table class="table table-striped table-condensed">
+                <thead class="thead-dark">
+                 <legend><h1>Votre panier de location</h1></legend>
                <tr >
                         <th scope="col">ISNB</th>
                         <th scope="col">TITLE</th>
@@ -88,7 +88,39 @@
                         <th scope="col">PICTURE</th>
                         <th scope="col">ACTION</th>
                     </tr>
+                    </thead>
+                  <?php if(!empty($UserRentals)): ?>
+                    <?php foreach ($UserRentals as $rent): ?>
+                    <tr>
+                       <td><?= $rent->isbn ?></td>
+                        <td><?= $rent->title ?></td>
+                        <td><?= $rent->author ?></td>
+                        <td><?= $rent->editor ?></td>
+                        <td><?= $rent->picture ?></td>
+                         <td>
+                            <form  method="post" action="book/book_detail">
+                                <input type="hidden" name="idbook" value="<?= $rent->id ?>">
+                                <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
+                            </form>
+                        </td>
+                        <td> 
+                            <form  method="post" action="book/del_one_rent">
+                                <input type="hidden" name="delrent" value="<?= $rent->id ?>">
+                                <button type="submit"  name="idsubmit" class="btn btn-danger"><span >supprimer du panier</span></button>
+                            </form>
+                        </td>
+                        </td>
+                    </tr>
+                    </tr>
+                    <?php endforeach; ?>
+                    <?php endif ; ?>
             </table>
+            <form>
+                <button class="btn btn-info"><span class="glyphicon glyphicon-check"> Louer</span></button>
+                <button class="btn btn-danger"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+            </form>
+            <br>
+            <br>
         </div>
     </body>
 </html>

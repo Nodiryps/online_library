@@ -17,28 +17,32 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     </head>
-    <body class="container">
-        <div class="title" class="container-fluid" class="h1">Log In</div>
-        <nav class="navbar-form navbar-right inline-form">
-        <div class="menu"  >
-            <a href="main/index" class="nav-link active">Home</a>
-            <a href="main/signup"  class="nav-link active">Sign Up</a>
+    <body class="container " >
+        <div  class=" container h3">Log In</div>
+        <div class=" container nav navbar-nav"  >
+        <nav class="navbar-form navbar-default">
+            <ul   class="nav navbar-nav">
+                <li> <a href="main/index" class="nav-link active">Home</a><li>
+                <li> <a href="main/signup"  class="nav-link active">Sign Up</a><li>
+            </ul>
             </nav>
         </div>
-        <div class="main"  class="navbar-form navbar-right inline-form">
-            <form action="main/login" method="post">
-
+        <div class="container">
+            <form action="main/login" method="post" class="form-group text-center">
+          <legend>Log in</legend>
                 <table>
                     <tr>
-                        <td>Pseudo:</td>
+                        
+                         <td><label class="col-md-4 control-label" for="passwordinput">Pseudo: </label></td>
                         <td><input id="pseudo" name="pseudo" type="text" value="<?= $pseudo ?>"></td>
                     </tr>
                     <tr>
-                        <td>Password:</td>
+                      
+                         <td><label class="col-md-4 control-label" for="passwordinput">Password: </label></td>
                         <td><input id="password" name="password" type="password" value="<?= $password ?>"></td>
                     </tr>
                 </table>
-                <button type="submit" value="log in"   class="btn btn-light"><span   class="glyphicon glyphicon-eye-open">Login</span></button>
+                <button type="submit" class="btn btn-succes"><span >Login</span></button>
             </form>
             <?php if (count($errors) != 0): ?>
                 <div class='errors'>

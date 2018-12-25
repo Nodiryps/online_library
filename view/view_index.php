@@ -18,7 +18,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="title">Welcome to MSN (My Social Network)!</div>
+        <div class="text-center">Welcome to EPFC Library!</div>
         <div class="navbar navbar-default">
             <nav  class="nav navbar-nav">
                 <ul class="nav navbar-nav">
@@ -27,7 +27,7 @@
             </nav>
 </ul>
         </div>
-        <div class="main">
+        <div class="text-center text-success">
             Please log in or sign up!
         </div>
     </body>
