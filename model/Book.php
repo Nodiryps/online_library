@@ -19,10 +19,8 @@ class Book extends Model {
         $this->editor = $editor;
         $this->picture = $picture;
     }
-    
-    
-    
-      public static function get_all_books() {
+
+    public static function get_all_books() {
         $results = [];
         try {
             $books = self::execute("SELECT * FROM book", array());
@@ -35,8 +33,7 @@ class Book extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-    
+
     public static function get_book_by_title($title) {
         try {
             $query = self::execute("SELECT * FROM book WHERE title=:title", array("title" => $title));
@@ -46,14 +43,13 @@ class Book extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-    
+
     public static function get_book_by_critere($critere) {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book WHERE title LIKE :critere OR author LIKE :critere OR editor LIKE :critere", array(":critere" =>"%".$critere."%"));
+            $books = self::execute("SELECT * FROM book WHERE title LIKE :critere OR author LIKE :critere OR editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
-           foreach ($query as $row) {
+            foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
             }
             return $results;
@@ -61,7 +57,7 @@ class Book extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
-    
+
     public static function get_book_by_id($id) {
         try {
             $query = self::execute("SELECT * FROM book WHERE id=:id", array("id" => $id));
@@ -71,9 +67,34 @@ class Book extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-    
-    
-    
-}
 
+    public function delete_book() {
+        try {
+            self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
+            self::execute("DELETE FROM book WHERE  id=:id", array("id" => $this->id));
+            
+        } catch (Exception $ex) {
+            $ex->getCode();
+            echo "//////////////////////////////";
+            echo $ex->getMessage();
+            //Tools::abort("Problème lors de l'accès a la base de données");
+        }
+    }
+     public function delete_book_rent() {
+        try {
+            self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
+        } catch (Exception $ex) {
+            $ex->getCode();
+            echo "//////////////////////////////";
+            echo $ex->getMessage();
+            //Tools::abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+    public function book_existe(){
+        
+        
+    }
+
+
+}

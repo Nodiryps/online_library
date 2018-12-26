@@ -81,7 +81,7 @@ class Rental extends Model {
             $books = self::execute("select * FROM rental where user=:id", array("id" => $id));
             $query = $books->fetchAll();
 
-            return count($query) <= 5;
+            return count($query) <= 4;
         } catch (Exception $ex) {
             die("soucis de db");
         }

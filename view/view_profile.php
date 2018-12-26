@@ -9,10 +9,11 @@
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <div class="title"><?php echo $profile->username; ?>'s Profile! (<?= $profile->role ?>) </div>
+      
         <nav> 
             <?php include('menu.html'); ?>
         </nav>
+          <div class="title"><?php echo $profile->username; ?>'s Profile! (<?= $profile->role ?>) </div>
         <div class="main">
             <h1>Bienvenue <?= $profile->fullname?></h1>
         </div>

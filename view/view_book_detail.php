@@ -38,7 +38,9 @@
                 </tr>
                     
             </table>
-            <button class="btn btn-info"><span   class="glyphicon glyphicon-arrow-left"><a href="book/index" style="color: white "> Retour</a></span></button>
+            <form method="get" action="book/index">
+            <button  class="btn btn-info"><span   class="glyphicon glyphicon-arrow-left">  Retour</span></button>
+            </form>
         </div>
     </body>
 </html>
