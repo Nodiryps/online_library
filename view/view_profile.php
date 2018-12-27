@@ -12,9 +12,9 @@
       
         <nav> 
             <?php 
-                if($profile->role === "member")
+                if($profile->is_member())
                     include('menuMember.html'); 
-                if($profile->role === "admin" || $profile->role === "manager")
+                if($profile->is_admin() || $profile->is_manager())
                     include('menu.html'); 
                 ?>
         </nav>

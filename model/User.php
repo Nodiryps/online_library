@@ -129,7 +129,6 @@ class User extends Model {
         }
     }
 
-//
     public static function get_user_by_mail($email) {
         try {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
@@ -140,7 +139,6 @@ class User extends Model {
     }
 
     public static function is_username_not_available($username) {
-
         try {
             $query = self::execute("SELECT * FROM user WHERE username=:username", array("username" => $username));
             $result = $query->fetchAll();
@@ -151,7 +149,6 @@ class User extends Model {
     }
 
     public static function is_email_available($email) {
-
         try {
             $query = self::execute("SELECT email FROM user WHERE email=:email", array("email" => $email));
             $result = $query->fetchAll();
@@ -162,7 +159,6 @@ class User extends Model {
     }
 
     public static function add_user($username, $password, $fullname, $email, $birthdate) {
-
         $role = "member";
         $query = "";
         try {
@@ -180,7 +176,6 @@ class User extends Model {
         }
     }
 
-//
     public static function admin_add_user($username, $password, $fullname, $email, $birthdate, $role) {
         try {
             $query = self::execute("INSERT INTO user(username,password,fullname,email,birthdate,role)
@@ -293,7 +288,16 @@ class User extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
-
     
-
+    public function is_admin() {
+        return $this->role === "admin";
+    }
+    
+    public function is_manager() {
+        return $this->role === "manager";
+    }
+    
+    public function is_member() {
+        return $this->role === "member";
+    }
 }
