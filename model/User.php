@@ -278,6 +278,21 @@ class User extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
+    
+    public function get_rental_join_book_join_user_by_user_not_rented(){
+        $results = [];
+        try {
+            $books = self::execute("select book.id,book.isbn,book.title,book.author,book.editor,book.picture FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND returndate=null", array("id" => $this->id));
+            $query = $books->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+            return $query;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
 
     
 

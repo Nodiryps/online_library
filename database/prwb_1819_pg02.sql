@@ -49,7 +49,10 @@ INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`) VALUES
 (NULL, '2222222222222', 'Mobyz Dick', 'Jules Verge', 'Pocket', NULL), 
 (NULL, '3333333333333', 'Les Fleurs Du Mâle', 'Beau De Lair', 'Pocket', NULL), 
 (NULL, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 
-(NULL, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', NULL);
+(NULL, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', NULL),
+(NULL, '6666666666666', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 
+(NULL, '7777777777777', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL);
+
 --
 -- Table structure for table `rental`
 --

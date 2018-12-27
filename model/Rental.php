@@ -50,7 +50,7 @@ class Rental extends Model {
         }
     }
 
-    // faire une requete de jointure
+    // faire une requete de jointure 
     public static function get_this_rental($id) {
         $results = [];
         try {
@@ -107,6 +107,18 @@ class Rental extends Model {
         } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
+    }
+    
+    public static function is_not_alone($book,$user) {
+        try {
+            $books = self::execute("select * FROM rental where book=:book AND user=:user", array("book" => $book,"user"=>$user));
+            $query = $books->fetchAll();
+
+            return count($query) != 0;
+        } catch (Exception $ex) {
+            die("soucis de db");
+        }
+       
     }
 
 }

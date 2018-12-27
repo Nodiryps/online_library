@@ -53,18 +53,19 @@
                         <td><?= $book->author ?></td>
                         <td><?= $book->editor ?></td>
                         <td><?= $book->picture ?></td>
-                         <?php if($profile->role != "admin" || $profile->role != "manager"):?>
+                         <?php if($profile->role == "admin"):?>
+                          <td>
+                            <form  method="post" action="book/edit_book">
+                                <input type="hidden" name="editbook" value="<?= $book->id ?>">
+                                <button type="submit" name="idsubmit" class="btn btn-info"><span >editer</span ></button>
+                            </form>
+                        </td>
+                       
+                       <?php else: ?>
                         <td>
                             <form  method="post" action="book/book_detail">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
                                 <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
-                            </form>
-                        </td>
-                       <?php elseif ($profile->role ==="admin"): ?>
-                         <td>
-                            <form  method="post" action="book/edit_book">
-                                <input type="hidden" name="editbook" value="<?= $book->id ?>">
-                                <button type="submit" name="idsubmit" class="btn btn-info"><span >editer</span ></button>
                             </form>
                         </td>
                         <?php endif; ?>
@@ -86,12 +87,12 @@
                     </tr>
                 <?php endforeach; ?>
 
-                <td style="color: red;"><?= $msg ?></td>
+                    <td style="color: red;"><?= strtoupper($msg) ?></td>
 
             </table>
         </div>
         <div class="container text-right">
-            <form method="get" action="">
+            <form method="get" action="book/create_book">
              <button type="submit"  name="idsubmit" class="btn btn-success"><span>creer un livre</span></button>
             </form>
         </div>
@@ -138,30 +139,28 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
             </table>
-            <?php if ($profile->role == "admin" || $profile->role == "manager" ): ?>
-                <form class="form-horizontal">
-                    <fieldset>
-                    <div class="form-group">
+         
+
+          
+            <div class="container text-right row">
+                <form class="form-horizontal " method="post" action="book/add_rental_for_user">
+                   <?php if ($profile->role == "admin" || $profile->role == "manager" ): ?>
+                  <div class="form-group">
                         <label class="col-md-4 control-label" for="selectbasic">le panier est pour</label>
                         <div class="col-md-4">
-                            <select id="selectbasic" name="selectbasic" class="form-control">
+                            <select id="selectbasic" name="member_rent" class="form-control">
                                 
-                                <?php foreach ($members as $memberz): ?>
-                                <option value="<?php $memberz->id?>"><?= $memberz->username?></option>
+                                <?php foreach ($members as $member): ?>
+                                <option   value="<?php $member->id?>"><?= $member->username?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    </fieldset>
-
-                </form>
-
-            <?php endif; ?>
-            <div class="container text-right row">
-            <form class="form-horizontal ">
-                <button class="btn btn-success" class="form-group "><span class="glyphicon glyphicon-check"> Louer</span></button>
+                  <?php endif; ?>
+              
+                <button class="btn btn-success" class="form-group " value="<?php $UserRentals?>"><span class="glyphicon glyphicon-check"> Louer</span></button>
                 <button class="btn btn-danger" class="form-group"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
-            </form>
+              </form>
             </div>
             <br>
             <br>

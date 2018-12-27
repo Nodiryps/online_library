@@ -18,7 +18,7 @@
         <div class="container">
 
             <table class="table table-striped table-condensed" >
-                <caption class="main">Liste de membre inscrit</caption>
+                <legend class="main">Liste des membres inscrit</legend>
                 <thead class="thead-dark">
                     <tr> 
                         <?php if ($utilisateur->role == "admin"): ?>

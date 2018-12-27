@@ -69,8 +69,9 @@ class ControllerBook extends Controller {
         (new View("book_detail"))->show(array("book" => $book, "profile" => $user));
     }
 
-    public function add_rental() {
+    public function add_rental() {// on recupere un user mais le champ id est vide
         $user = Controller::get_user_or_redirect();
+        $users = User::get_user_by_username($user->username);
         $books = Book::get_all_books();
         $id = 0;
         $datetime = date("Y-m-d H:i:s");
@@ -81,13 +82,32 @@ class ControllerBook extends Controller {
         if (isset($_POST["idbook"])) {
             $value = $_POST["idbook"];
             $rent = Book::get_book_by_id($value);
-            if (Rental::rent_valid($user->id)) {
-                $rental = new Rental($id, $user->id, $rent->id, $datetime, NULL);
+            if (!Rental::rent_valid($users->id)) 
+               $msg = " vous ne pouvez pas louer plus de 5 livres";
+            if(Rental::is_not_alone($value,$users->id)){
+                   $msg="Vous avez deja louer ce livre";
+               }
+             else {
+                $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
                 $rental->insert_book_without_rent();
-            } else {
-                $msg = " vous ne pouvez pas llouer plus de 5 livres";
             }
-            $getUserRental = $user->get_rental_join_book_join_user_by_user();
+            $getUserRental = $users->get_rental_join_book_join_user_by_user();
+        }
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
+    }
+
+    public function add_rental_for_user() {
+        $user = Controller::get_user_or_redirect();
+        $books = Book::get_all_books();
+        $getUserRental = $user->get_rental_join_book_join_user_by_user();
+        $msg = " ";
+        $members = User::get_all_user();
+     
+       
+        if (isset($_POST["member_rent"])) {
+            $value = $_POST["member_rent"];
+            var_dump($value);
+            //$getUserRental="";
         }
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
@@ -102,23 +122,42 @@ class ControllerBook extends Controller {
         if (isset($_POST["delrent"])) {
             $value = $_POST["delrent"];
             $delrent = Rental::get_rental_by_id($value);
-
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }
             $getUserRental = $user->get_rental_join_book_join_user_by_user();
         }
-
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
-    
-    public function edit_book(){
-          $user = Controller::get_user_or_redirect();
-          if (isset($_POST["editbook"])) {
-                 $value = $_POST["editbook"];
-                 var_dump($value);
-          }
-         
+
+    public function edit_book() {
+        $user = Controller::get_user_or_redirect();
+        $editbook = "";
+        $isbn = "";
+        $titre = "";
+        $author = "";
+        $editor = "";
+        $picture = "";
+        $test = "test";
+
+        if (isset($_POST["editbook"])) {
+            $value = $_POST["editbook"];
+            $editbook = Book::get_book_by_id($value);
+        }
+        (new View("edit_book"))->show(array("editbook" => $editbook, "test" => $test));
+    }
+
+    public function create_book() {
+        $user = Controller::get_user_or_redirect();
+        $editbook = "";
+        $isbn = "";
+        $titre = "";
+        $author = "";
+        $editor = "";
+        $picture = "";
+        $test = "test";
+
+        (new View("add_book"))->show(array("editbook" => $editbook, "test" => $test));
     }
 
 }
