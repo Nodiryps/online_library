@@ -15,5 +15,4 @@ class ControllerRental extends Controller {
     public function returns() {
         (new View("returns"))->show();
     }
-
 }

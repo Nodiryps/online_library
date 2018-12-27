@@ -13,25 +13,20 @@ class ControllerUser extends Controller {
 
     public function profil() {
         $profile = self::get_user_or_redirect();
-        (new View("profile"))->show(array("profile" => $profile));
+        $userRentals = $this->rentals_by_user($profile);
+        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals));
     }
 
     public function user_list() {
-
         $user = Controller::get_user_or_redirect();
-
         $utilisateur = User::get_user_by_username($user->username);
-
         $id = $utilisateur->id;
         $members = User::get_all_user();
-
-
         (new View("user_list"))->show(array("utilisateur" => $utilisateur, "members" => $members, "id" => $id));
     }
 
     public function add_user() {
         $utilisateur = self::get_user_or_redirect();
-
         $id = "";
         $username = '';
         $password = '';
@@ -49,14 +44,10 @@ class ControllerUser extends Controller {
             $email = Tools::sanitize($_POST["mail"]);
             $birthdate = Tools::sanitize($_POST["birthdate"]);
             $role = Tools::sanitize($_POST["role"]);
-
-            /////////////////////////////
             $query = User::get_user_by_username($username);
-
 
             if (!User::is_username_not_available($username))
                 $errors[] = "l'utilisateur existe deja";
-
 
             if (trim($username) == '')
                 $errors[] = "Le username est obligatoire";
@@ -64,7 +55,6 @@ class ControllerUser extends Controller {
                 $errors[] = "Le username doit contenir 3 caractères au minimum";
             if ($password != $password_confirm)
                 $errors[] = "Les mots de passe doivent être identiques";
-
 
             $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
             if (!isset($errors)) {
@@ -104,7 +94,7 @@ class ControllerUser extends Controller {
             $email = $member->email;
             $birthdate = $member->birthdate;
             $role = $member->role;
-            
+
             $confirm_password = Tools::sanitize(Tools::post("confirm_password"));
 
             if (Tools::issets("birthdate") && Tools::post("birthdate") !== "")
@@ -171,7 +161,7 @@ class ControllerUser extends Controller {
 
     public function delete_user() {
         $utilisateur = self::get_user_or_redirect();
-           
+
         $id = "";
         $memberToDelete = "";
 
@@ -188,4 +178,7 @@ class ControllerUser extends Controller {
         (new View("delete_confirm"))->show(array("utilisateur" => $utilisateur, "member" => $memberToDelete));
     }
 
+    public function rentals_by_user($user) {
+        return Rental::get_rentals_by_user($user);
+    }
 }

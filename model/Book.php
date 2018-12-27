@@ -91,7 +91,7 @@ class Book extends Model {
         }
     }
     
-    public function book_existe(){
+    public function book_exists(){
         
         
     }

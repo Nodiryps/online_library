@@ -45,13 +45,20 @@ CREATE TABLE IF NOT EXISTS `book` (
 
 -- --------------------------------------------------------
 INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`) VALUES 
-(NULL, '1111111111111', 'Harry Potter à lécole des sorciers', 'JK Rowlings', 'Pocket', NULL), 
+(NULL, '1111111111111', 'Harry Potter a�l Ecole des Sorciers', 'JK Rowlings', 'Pocket', NULL), 
 (NULL, '2222222222222', 'Mobyz Dick', 'Jules Verge', 'Pocket', NULL), 
-(NULL, '3333333333333', 'Les Fleurs Du Mâle', 'Beau De Lair', 'Pocket', NULL), 
+(NULL, '3333333333333', 'Les Fleurs du Male', 'Beau De Lair', 'Pocket', NULL), 
 (NULL, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 
 (NULL, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', NULL),
-(NULL, '6666666666666', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 
-(NULL, '7777777777777', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL);
+(NULL, '6666666666666', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', NULL), 
+(NULL, '7777777777777', '1984', 'George Orwell', 'Pocket', NULL),
+(NULL, '8888888888888', 'To Kill a Mockingbird', 'Harper Lee', 'Pocket', NULL),
+(NULL, '9999999999999', 'Lord of the Flies', 'William Golding', 'Pocket', NULL),
+(NULL, '1111111111110', 'La Danse de la Colere', 'Lerner', 'Pocket', NULL),
+(NULL, '2222222222220', 'Why Does He Do That', 'Lundy Bancroft', 'Pocket', NULL),
+(NULL, '3333333333330', 'The Stranger', 'Albert Camus', 'Pocket', NULL),
+(NULL, '4444444444440', 'Heart of Darkness', 'Joseph Conrad', 'Pocket', NULL),
+(NULL, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL);
 
 --
 -- Table structure for table `rental`

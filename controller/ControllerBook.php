@@ -76,18 +76,17 @@ class ControllerBook extends Controller {
         $id = 0;
         $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
-        $msg = " ";
+        $msg = "";
         $members = User::get_all_user();
 
         if (isset($_POST["idbook"])) {
             $value = $_POST["idbook"];
             $rent = Book::get_book_by_id($value);
-            if (!Rental::rent_valid($users->id)) 
-               $msg = " vous ne pouvez pas louer plus de 5 livres";
-            if(Rental::is_not_alone($value,$users->id)){
-                   $msg="Vous avez deja louer ce livre";
-               }
-             else {
+            if (!Rental::rent_valid($users->id))
+                $msg = "Vous ne pouvez pas louer plus de 5 livres";
+            if (Rental::is_already_rented($value, $users->id)) 
+                $msg = "Vous avez déjà loué ce livre";
+            else {
                 $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
                 $rental->insert_book_without_rent();
             }
@@ -102,8 +101,8 @@ class ControllerBook extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $msg = " ";
         $members = User::get_all_user();
-     
-       
+
+
         if (isset($_POST["member_rent"])) {
             $value = $_POST["member_rent"];
             var_dump($value);
