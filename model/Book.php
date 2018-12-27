@@ -68,11 +68,54 @@ class Book extends Model {
         }
     }
 
+    public function create_book() {
+        
+    }
+
+    public function update_book($isbn, $title, $author, $editor, $picture) {
+        try {
+            $query = self::execute("UPDATE book "
+                            . "SET isbn = :isbn, title = :title, "
+                            . "author = :author, editor = :editor, picture = :picture", array("isbn" => $isbn, "title" => $title, "author" => $author,
+                        "editor" => $editor, "picture" => $picture));
+        } catch (Exception $ex) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
+    public function edit_picture($user) {
+        if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != '')
+            if ($_FILES['image']['error'] == 0) {
+                $error = " ";
+                $ok = TRUE;
+                $path = $this->save_to($user);
+                if ($path == " ") {
+                    $ok = FALSE;
+                    $error = "Format non-supporté! (gif, jpeg ou png !)";
+                }
+                if ($ok) {
+                    move_uploaded_file($_FILES['image']['tmp_name'], $path);
+                }
+            } else 
+                $error = "Erreur lors du téléchargement du fichier.";
+            return $error;
+    }
+
+    private function save_to($user) {
+        $saveTo = " ";
+        if ($_FILES['image']['type'] == "image/gif")
+            $saveTo = $user . ".gif";
+        else if ($_FILES['image']['type'] == "image/jpeg")
+            $saveTo = $user . ".jpg";
+        else if ($_FILES['image']['type'] == "image/png")
+            $saveTo = $user . ".png";
+        return $saveTo;
+    }
+
     public function delete_book() {
         try {
             self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
             self::execute("DELETE FROM book WHERE  id=:id", array("id" => $this->id));
-            
         } catch (Exception $ex) {
             $ex->getCode();
             echo "//////////////////////////////";
@@ -80,7 +123,8 @@ class Book extends Model {
             //Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-     public function delete_book_rent() {
+
+    public function delete_book_rent() {
         try {
             self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
         } catch (Exception $ex) {
@@ -90,11 +134,9 @@ class Book extends Model {
             //Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-    public function book_exists(){
-        
+
+    public function book_exists() {
         
     }
-
 
 }

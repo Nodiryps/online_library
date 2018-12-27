@@ -94,7 +94,6 @@ class ControllerUser extends Controller {
             $email = $member->email;
             $birthdate = $member->birthdate;
             $role = $member->role;
-
             $confirm_password = Tools::sanitize(Tools::post("confirm_password"));
 
             if (Tools::issets("birthdate") && Tools::post("birthdate") !== "")
@@ -109,6 +108,7 @@ class ControllerUser extends Controller {
                 $member->email = Tools::sanitize(Tools::post("email"));
             else
                 $error[] = "Il faut indiquer un email!";
+            
             if (Tools::issets("password") && empty(trim(Tools::post("password"))))
                 $member->hash_password = Tools::sanitize(Tools::post("password"));
             if (Tools::issets("confirm_password") && Tools::post("confirm_password") !== "")
@@ -133,8 +133,6 @@ class ControllerUser extends Controller {
             } else {
                 $member->hash_password = $oldpass;
             }
-
-
 
             if (empty($error)) {
                 try {

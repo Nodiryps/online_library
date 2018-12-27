@@ -62,7 +62,7 @@
                         <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                         <div class="col-md-4">
                             <input id="picture" name="picture" class="input-file" type="file">
-                            <button  name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-"> effacer</span></button>
+                            <button  name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-">effacer</span></button>
                         </div>
                     </div>
 <!--                    <div class="container text-center">

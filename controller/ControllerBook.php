@@ -21,11 +21,8 @@ class ControllerBook extends Controller {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
         }
-        if (empty($_POST["search"])) {
+        if (empty($_POST["search"])) 
             $books = Book::get_all_books();
-        }
-
-
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
@@ -76,7 +73,7 @@ class ControllerBook extends Controller {
         $id = 0;
         $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
-        $msg = "";
+        $msg = " ";
         $members = User::get_all_user();
 
         if (isset($_POST["idbook"])) {
@@ -157,6 +154,10 @@ class ControllerBook extends Controller {
         $test = "test";
 
         (new View("add_book"))->show(array("editbook" => $editbook, "test" => $test));
+    }
+    
+    public function update_book() {
+        
     }
 
 }

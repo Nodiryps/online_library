@@ -160,7 +160,7 @@ class User extends Model {
 
     public static function add_user($username, $password, $fullname, $email, $birthdate) {
         $role = "member";
-        $query = "";
+//        $query = "";
         try {
             $query = self::execute("INSERT INTO user(username,password,fullname,email,birthdate,role)
                                         VALUES(:username,:password,:fullname,:email,:birthdate,:role)", array(
@@ -193,18 +193,17 @@ class User extends Model {
     }
 
     public function update_user() {
-        $query = self::execute("UPDATE user SET username=:username ,password=:password,fullname=:fullname,email=:email,birthdate=:birthdate,role=:role WHERE id=:id", array(
-                    "id" => $this->id,
-                    "username" => $this->username,
+        $query = self::execute("UPDATE user "
+                . "SET username=:username, password=:password, fullname=:fullname, "
+                    . "email=:email, birthdate=:birthdate, role=:role "
+                . "WHERE id=:id", array(
+                    "id" => $this->id, "username" => $this->username,
                     "password" => Tools::my_hash($this->hash_password),
-                    "fullname" => $this->fullname,
-                    "email" => $this->email,
-                    "birthdate" => $this->birthdate,
-                    "role" => $this->role));
+                    "fullname" => $this->fullname, "email" => $this->email,
+                    "birthdate" => $this->birthdate, "role" => $this->role));
     }
 
     public function delete_user() {
-
         try {
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
