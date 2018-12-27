@@ -11,7 +11,12 @@
     <body>
       
         <nav> 
-            <?php include('menu.html'); ?>
+            <?php 
+                if($profile->role === "member")
+                    include('menuMember.html'); 
+                if($profile->role === "admin" || $profile->role === "manager")
+                    include('menu.html'); 
+                ?>
         </nav>
           <div class="title"><?php echo $profile->username; ?>'s Profile! (<?= $profile->role ?>) </div>
         <div class="main">

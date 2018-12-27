@@ -19,9 +19,6 @@
           <nav> 
             <?php include('menu.html'); ?>
         </nav>
-        <div class="container text-center">
-            <h1>Affichage, Création et Edition de livre</h1>
-        </div>
         
             <form class="form-horizontal">
                 <fieldset>
@@ -68,9 +65,9 @@
                             <button  name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-"> effacer</span></button>
                         </div>
                     </div>
-                    <div class="container text-center">
+<!--                    <div class="container text-center">
                         <img src="img/bibli_logo.png" alt="<?= $editbook->title?>" height="42" width="42">
-                    </div>
+                    </div>-->
 
                     <!-- Button (Double) -->
                     <div class="form-group">
