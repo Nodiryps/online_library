@@ -24,7 +24,7 @@
                 </ul>
             </nav>
         </div>
-    
+
         <div class="container text-center">
             <div class="row ">
                 <div class="col-md-10">
@@ -32,26 +32,31 @@
                         <legend> <div class="text-left"><h2> Please enter your details to sign up </h2></div></legend>
                         <form action="main/signup" method="post" >
                             <div class="form-group">
-                                <input type="text" name="username"  class="form-control my-input" id="name" placeholder="username">
+                                <label for="fullname">Nom complet</label>
+                                <input type="text" name="fullname"  class="form-control my-input" id="name">
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password"  class="form-control my-input" id="name" placeholder="password">
+                                <label for="username">Pseudo</label>
+                                <input type="text" name="username"  class="form-control my-input" id="name">
                             </div>
                             <div class="form-group">
-                                <input type="password" name="password_confirm"  class="form-control my-input" id="name" placeholder="confirm password">
+                                <label for="email">Email</label>
+                                <input type="email" name="email"  class="form-control my-input" id="email">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="fullname"  class="form-control my-input" id="name" placeholder="confirm password">
-                            </div>
-
-                            <div class="form-group">
-                                <input type="email" name="email"  class="form-control my-input" id="email" placeholder="Email">
+                                <label for="birthdate">Date de naissance</label>
+                                <input type="date"  name="birthdate" id="phone"  class="form-control my-input">
                             </div>
                             <div class="form-group">
-                                <input type="date"  name="birthdate" id="phone"  class="form-control my-input" placeholder="birthdate">
+                                <label for="password">MdP</label>
+                                <input type="password" name="password"  class="form-control my-input" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="password_confirm">Confirmation mdp</label>
+                                <input type="password" name="password_confirm"  class="form-control my-input" id="name">
                             </div>
                             <div class="text-center ">
-                                <button type="submit" class=" btn btn-block send-button tx-tfm btn-success">Create an account</button>
+                                <button type="submit" class=" btn btn-block send-button tx-tfm btn-success">Valider inscription</button>
                             </div>
 
                     </div>
@@ -59,12 +64,12 @@
             </div>
         </div>
     </form>
-                        <div class="text-center">
+    <div class="text-center">
         <?php
         if (isset($errors)) {
             echo "<div class='errors'>
-                          <p>Please correct the following error(s) :</p>
-                          <ul>";
+                              <p>Erreur(s) à corriger:</p>
+                              <ul>";
             foreach ($errors as $error) {
                 echo "<li>" . $error . "</li>";
             }

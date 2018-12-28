@@ -4,7 +4,7 @@
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <meta charset="UTF-8">
-        <title>books Manager!</title>
+        <title>bibli</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -19,12 +19,18 @@
     <body>
 
         <nav> 
-            <?php include('menu.html'); ?>
+            <?php
+            if ($profile->is_member())
+                include('menuMember.html');
+            if ($profile->is_admin() || $profile->is_manager())
+                include('menu.html');
+            ?>
+            <div class="title" style="position:absolute;top:20px;right:10px;">
+                <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+            </div>
         </nav>
 
-
         <form class="" method="post"  action="book/index">
-            <legend class="text-center"><h1 >Location de livres</h1></legend>
             <div class="container">
                 <div class="row">
                     <div id="custom-search-input">
@@ -39,31 +45,29 @@
                     </div>
                 </div>
             </div>
-            <br>
-            <br>
-            <br>
+            <br><br><br>
         </form>
 
         <div class="container">
             <table class="table table-striped table-condensed">
-                <thead class="thead-dark">
-                    <tr >
-                        <th scope="col">ISNB</th>
-                        <th scope="col">TITLE</th>
-                        <th scope="col">AUTHOR</th>
-                        <th scope="col">EDITOR</th>
-                        <th scope="col">PICTURE</th>
-                        <th scope="col">ACTION</th>
-                    </tr>
-                </thead>
+                <legend class="text-center"><h1>Bibliothèque</h1></legend>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center" scope="col">ISNB</th>
+                            <th class="text-center" scope="col">TITRE</th>
+                            <th class="text-center" scope="col">AUTEUR.E</th>
+                            <th class="text-center" scope="col">EDITION</th>
+                            <th class="text-center" scope="col">COUVERTURE</th>
+                        </tr>
+                    </thead>
 
                 <?php foreach ($books as $book): ?>
                     <tr >
-                        <td><?= $book->isbn ?></td>
-                        <td><?= $book->title ?></td>
-                        <td><?= strtoupper($book->author) ?></td>
-                        <td><?= $book->editor ?></td>
-                        <td><?= $book->picture ?></td>
+                        <td class="text-center"><?= $book->isbn ?></td>
+                        <td class="text-center"><?= $book->title ?></td>
+                        <td class="text-center"><?= strtoupper($book->author) ?></td>
+                        <td class="text-center"><?= $book->editor ?></td>
+                        <td class="text-center"><?= $book->picture ?></td>
                         <?php if ($profile->role == "admin"): ?>
                             <td>
                                 <form  method="post" action="book/edit_book">

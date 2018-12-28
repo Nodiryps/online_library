@@ -16,76 +16,87 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-          <nav> 
+        <nav> 
             <?php include('menu.html'); ?>
         </nav>
-        
-            <form class="form-horizontal">
-                <fieldset>
 
-                    <legend class="text-center">EDITION DE <?= strtoupper($editbook->title)?> </legend>
+        <form class="form-horizontal">
+            <fieldset>
 
-                    <!-- Text input-->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
-                        <div class="col-md-5">
-                            <input id="ISBN" name="ISBN" type="text" placeholder="placeholder" class="form-control input-md" value="<?= $editbook->isbn ?>">
-                        </div>
+                <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
+                    <div class="col-md-5">
+                        <input id="ISBN" name="ISBN" type="text" 
+                               class="form-control input-md" value="<?= $book->isbn ?>">
                     </div>
+                </div>
 
-                    <!-- Text input-->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="textinput">AUTHOR</label>  
-                        <div class="col-md-5">
-                            <input id="textinput" name="textinput" type="text" placeholder="placeholder" class="form-control input-md" value="<?= $editbook->author ?>">
-                        </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="textinput">AUTHOR</label>  
+                    <div class="col-md-5">
+                        <input id="textinput" name="textinput" type="text"  
+                               class="form-control input-md" value="<?= $book->author ?>">
                     </div>
+                </div>
 
-                    <!-- Text input-->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="TITRE">TITRE</label>  
-                        <div class="col-md-5">
-                            <input id="textinput" name="textinput" type="text" placeholder="placeholder" class="form-control input-md" value="<?= $editbook->title ?>">
-                        </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="TITRE">TITRE</label>  
+                    <div class="col-md-5">
+                        <input id="textinput" name="textinput" type="text" 
+                               class="form-control input-md" value="<?= $book->title ?>">
                     </div>
+                </div>
 
-                    <!-- Text input-->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="textinput">EDITOR</label>  
-                        <div class="col-md-5">
-                            <input id="textinput" name="textinput" type="text" placeholder="placeholder" class="form-control input-md" value="<?= $editbook->editor ?>">
-                        </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="textinput">EDITOR</label>  
+                    <div class="col-md-5">
+                        <input id="textinput" name="textinput" type="text" 
+                               class="form-control input-md" value="<?= $book->editor ?>">
                     </div>
+                </div>
 
-                    <!-- File Button --> 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
-                        <div class="col-md-4">
-                            <input id="picture" name="picture" class="input-file" type="file">
-                            <button  name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-">effacer</span></button>
-                        </div>
+                <!-- File Button --> 
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
+                    <div class="col-md-4">
+                        <input id="picture" name="picture" class="input-file" type="file">
+                        <button  name="button2id" class="btn btn-warning">
+                            <span class="glyphicon glyphicon-">effacer</span>
+                        </button>
                     </div>
-<!--                    <div class="container text-center">
-                        <img src="img/bibli_logo.png" alt="<?= $editbook->title?>" height="42" width="42">
-                    </div>-->
+                </div>
+                <!--                    <div class="container text-center">
+                                        <img src="img/bibli_logo.png" alt="<?= $book->title ?>" height="42" width="42">
+                                    </div>-->
 
-                    <!-- Button (Double) -->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="idbook"></label>
-                        <div class="col-md-8">
-                            <form method="post" action="book/index">
-                            <button id="idbook" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
-                            </form>
-                            
-                            <button id="button2id" name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-remove"><a href="book/index" alt="book manager" > Annuler</a></span></button>
-                        </div>
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="idbook"></label>
+                    <div class="col-md-8">
+                        <form method="post" action="book/index">
+                            <button id="idbook" name="idbook" class="btn btn-success">
+                                <span class="glyphicon glyphicon-ok"> Valider</span>
+                            </button>
+                        </form>
+
+                        <button id="button2id" name="button2id" class="btn btn-warning">
+                            <span class="glyphicon glyphicon-remove">
+                                <a href="book/index" alt="book manager" >Annuler</a>
+                            </span>
+                        </button>
                     </div>
-                </fieldset>
-            </form>
-
-        
+                </div>
+            </fieldset>
+        </form>
         <?php
-        // put your code here
+            if ($error !== "")
+                echo "<p><span class='errors'>$error</span></p>";
         ?>
     </body>
 </html>

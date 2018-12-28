@@ -110,7 +110,9 @@ class Rental extends Model {
     public static function get_rentals_by_user($user) {
         $res = [];
         try{
-            $query = self::execute("SELECT * FROM rental WHERE user = :user", array("user" => $user->id));
+            $query = self::execute("SELECT * FROM rental "
+                                 . "WHERE user = :user AND rentaldate != NULL", 
+                                    array("user" => $user->id));
             $rentals = $query->fetchAll();
             foreach ($rentals as $rental)
                 $res[] = new Rental ($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);

@@ -21,7 +21,7 @@ class ControllerBook extends Controller {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
         }
-        if (empty($_POST["search"])) 
+        if (empty($_POST["search"]))
             $books = Book::get_all_books();
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
@@ -73,16 +73,16 @@ class ControllerBook extends Controller {
         $id = 0;
         $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
-      
+
         $msg = " ";
         $members = User::get_all_user();
 
         if (isset($_POST["idbook"])) {
             $value = $_POST["idbook"];
             $rent = Book::get_book_by_id($value);
-            if (!Rental::rent_valid($users->id)){
+            if (!Rental::rent_valid($users->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres";
-            }else {
+            } else {
                 $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
                 $rental->insert_book_without_rent();
             }
@@ -126,20 +126,17 @@ class ControllerBook extends Controller {
     }
 
     public function edit_book() {
-        $user = Controller::get_user_or_redirect();
-        $editbook = "";
-        $isbn = "";
-        $titre = "";
-        $author = "";
-        $editor = "";
-        $picture = "";
-        $test = "test";
-
+        $book = Book::get_book_by_id($_POST["editbook"]);
+        $error = "";
+        
         if (isset($_POST["editbook"])) {
-            $value = $_POST["editbook"];
-            $editbook = Book::get_book_by_id($value);
+            $book = Book::get_book_by_id($_POST["editbook"]);
         }
-        (new View("edit_book"))->show(array("editbook" => $editbook, "test" => $test));
+        if (isset($_POST["idbook"]) && $book !== "") {
+            if (!$book->edit_book($book->id))
+                $error = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
+        }
+        (new View("edit_book"))->show(array("book" => $book, "error" => $error));
     }
 
     public function create_book() {
@@ -153,10 +150,6 @@ class ControllerBook extends Controller {
         $test = "test";
 
         (new View("add_book"))->show(array("editbook" => $editbook, "test" => $test));
-    }
-    
-    public function update_book() {
-        
     }
 
 }

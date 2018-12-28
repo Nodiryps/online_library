@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
     </head>
     <body >
         <div  class="h3 text-center">Log In</div>
@@ -25,47 +24,39 @@
                 </ul>
             </nav>
         </div>
-        
-        
         <div class="container">	
-	<div class="row">
-	<h2><strong>Log in </strong><br/></h2><br/>
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<!-- Start form -->
+            <div class="row">
+                <h2><strong>Log in </strong></h2>
+                <br/><br/>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- Start form -->
                     <form action="main/login" method="post">
-                      <div class="form-group">
-                        <label for="username">username</label>
-                        <input type="text" class="form-control"  value="<?= $pseudo ?>" placeholder="Enter username" name="pseudo">
-                      </div>
-                      <div class="form-group">
-                        <label for="Password">Password</label>
-                        <input type="password" class="form-control" name="password" value="<?= $password ?>" placeholder="Password">
-                      </div>
-                      <div class="form-check">
-                          <button class="btn btn-block send-button tx-tfm btn-success" type="submit" name="showpassword" id="showpassword" value="Show Password">se connecter</button> 
-                        
-                      </div>
-                      
+                        <div class="form-group">
+                            <label for="username">Pseudo</label>
+                            <input type="text" class="form-control"  value="<?= $pseudo ?>" name="pseudo">
+                        </div>
+                        <div class="form-group">
+                            <label for="Password">Mot de passe</label>
+                            <input type="password" class="form-control" name="password" value="<?= $password ?>">
+                        </div>
+                        <div class="form-check">
+                            <button class="btn btn-block send-button tx-tfm btn-success" type="submit" 
+                                    name="connect" id="connect" value="connect">Connection</button> 
+                        </div>
                     </form>
-
-
-			<!-- End form -->
-		</div>
-        
-         <?php if (count($errors) != 0): ?>
-                <div class='errors'>
-                    <p>Please correct the following error(s) :</p>
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li><?= $error ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+                    <!-- End form -->
                 </div>
-            <?php endif; ?>
-		
-	
-		
-	</div>
-</div>
+                <?php if (count($errors) != 0): ?>
+                    <div class='errors'>
+                        <p>Erreur(s) à corriger:</p>
+                        <ul>
+                            <?php foreach ($errors as $error): ?>
+                                <li><?= $error ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </body>
 </html>

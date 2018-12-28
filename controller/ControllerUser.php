@@ -35,6 +35,7 @@ class ControllerUser extends Controller {
         $email = "";
         $birthdate = "";
         $query = "";
+        
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) &&
                 isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
             $username = Tools::sanitize($_POST['username']);

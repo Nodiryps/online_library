@@ -72,44 +72,42 @@ class Book extends Model {
         
     }
 
-    public function update_book($isbn, $title, $author, $editor, $picture) {
+    public function edit_book($bookId) {
+        if (isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '')
+            if ($_FILES['picture']['error'] == 0) {
+                $path = $this->is_path_ok($bookId);
+                if ($path !== " ") {
+                    move_uploaded_file($_FILES['picture']['tmp_name'], $path);
+                    $this->update($isbn, $title, $author, $editor, $path);
+                    return TRUE;
+                } else 
+                    return FALSE;
+            } else
+                return FALSE;
+    }
+    
+    private function update($isbn, $title, $author, $editor, $picture) {
         try {
             $query = self::execute("UPDATE book "
                             . "SET isbn = :isbn, title = :title, "
                             . "author = :author, editor = :editor, picture = :picture", array("isbn" => $isbn, "title" => $title, "author" => $author,
                         "editor" => $editor, "picture" => $picture));
+            return TRUE;
         } catch (Exception $ex) {
             abort("Problème lors de l'accès a la base de données");
+            return FALSE;
         }
     }
 
-    public function edit_picture($user) {
-        if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != '')
-            if ($_FILES['image']['error'] == 0) {
-                $error = " ";
-                $ok = TRUE;
-                $path = $this->save_to($user);
-                if ($path == " ") {
-                    $ok = FALSE;
-                    $error = "Format non-supporté! (gif, jpeg ou png !)";
-                }
-                if ($ok) {
-                    move_uploaded_file($_FILES['image']['tmp_name'], $path);
-                }
-            } else 
-                $error = "Erreur lors du téléchargement du fichier.";
-            return $error;
-    }
-
-    private function save_to($user) {
-        $saveTo = " ";
-        if ($_FILES['image']['type'] == "image/gif")
-            $saveTo = $user . ".gif";
-        else if ($_FILES['image']['type'] == "image/jpeg")
-            $saveTo = $user . ".jpg";
-        else if ($_FILES['image']['type'] == "image/png")
-            $saveTo = $user . ".png";
-        return $saveTo;
+    private function is_path_ok($bookId) {
+        $path = " ";
+        if ($_FILES['picture']['type'] == "picture/gif")
+            $path = $bookId . ".gif";
+        else if ($_FILES['picture']['type'] == "picture/jpeg")
+            $path = $bookId . ".jpg";
+        else if ($_FILES['picture']['type'] == "picture/png")
+            $path = $bookId . ".png";
+        return $path;
     }
 
     public function delete_book() {
