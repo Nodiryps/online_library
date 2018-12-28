@@ -21,25 +21,28 @@
         <nav> 
             <?php include('menu.html'); ?>
         </nav>
-       
-        
-         <form class="" method="post"  action="book/index">
-             <legend class="text-center"><h1 >Location de livres</h1></legend>
-       <div class="container">
-	<div class="row">
-           <div id="custom-search-input">
-                            <div class="input-group col-md-12">
-                                <input type="text" class="  search-query form-control" placeholder="Search" name="search"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-info" type="submit" value="rechercher">
-                                        <span class=" glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
-                            </div>
+
+
+        <form class="" method="post"  action="book/index">
+            <legend class="text-center"><h1 >Location de livres</h1></legend>
+            <div class="container">
+                <div class="row">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="  search-query form-control" placeholder="rechercher un livre" name="search"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="submit" value="rechercher">
+                                    <span class=" glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
                         </div>
-	</div>
-</div>
-         </form>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+        </form>
 
         <div class="container">
             <table class="table table-striped table-condensed">
@@ -61,21 +64,21 @@
                         <td><?= strtoupper($book->author) ?></td>
                         <td><?= $book->editor ?></td>
                         <td><?= $book->picture ?></td>
-                         <?php if($profile->role == "admin"):?>
-                          <td>
-                            <form  method="post" action="book/edit_book">
-                                <input type="hidden" name="editbook" value="<?= $book->id ?>">
-                                <button type="submit" name="idsubmit" class="btn btn-info"><span >editer</span ></button>
-                            </form>
-                        </td>
-                       
-                       <?php else: ?>
-                        <td>
-                            <form  method="post" action="book/book_detail">
-                                <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
-                            </form>
-                        </td>
+                        <?php if ($profile->role == "admin"): ?>
+                            <td>
+                                <form  method="post" action="book/edit_book">
+                                    <input type="hidden" name="editbook" value="<?= $book->id ?>">
+                                    <button type="submit" name="idsubmit" class="btn btn-info"><span >editer</span ></button>
+                                </form>
+                            </td>
+
+                        <?php else: ?>
+                            <td>
+                                <form  method="post" action="book/book_detail">
+                                    <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                    <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
+                                </form>
+                            </td>
                         <?php endif; ?>
                         <?php if ($profile->role == "admin"): ?>
                             <td>
@@ -95,13 +98,13 @@
                     </tr>
                 <?php endforeach; ?>
 
-                    <td style="color: red;"><?= strtoupper($msg) ?></td>
+                <td style="color: red;"><?= strtoupper($msg) ?></td>
 
             </table>
         </div>
         <div class="container text-right">
             <form method="get" action="book/create_book">
-             <button type="submit"  name="idsubmit" class="btn btn-success"><span>creer un livre</span></button>
+                <button type="submit"  name="idsubmit" class="btn btn-success"><span>creer un livre</span></button>
             </form>
         </div>
         <br>
@@ -147,34 +150,34 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
             </table>
-         
 
-          
-            
-                <form class="form-horizontal " method="post" action="book/add_rental_for_user">
-                   <?php if ($profile->role == "admin" || $profile->role == "manager" ): ?>
-                 
-                        <label>le panier est pour: </label>
-                      
-                            <select id="selectbasic" name="member_rent" class="form-control">
-                                
-                                <?php foreach ($members as $member): ?>
-                                <option  value="<?php $member->id?>"><?= $member->username?></option>
-                                
-                                <?php endforeach; ?>
-                            </select>
-                        
-                    
-                  <?php endif; ?>
-                        <br>
-                        <br>
-                        <div class="text-right">
-                        <input type="hidden" name="value" value="<?php $UserRentals ?>">
-                        <button class="btn btn-success" class="form-group " ><span class="glyphicon glyphicon-check"> Louer</span></button>
-                <button class="btn btn-danger" class="form-group"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
-                        </div>
-              </form>
-          
+
+
+
+            <form class="form-horizontal " method="post" action="book/add_rental_for_user">
+                <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
+
+                    <label>le panier est pour: </label>
+
+                    <select id="selectbasic" name="member_rent" class="form-control">
+
+                        <?php foreach ($members as $member): ?>
+                            <option  value="<?php $member->id ?>"><?= $member->username ?></option>
+
+                        <?php endforeach; ?>
+                    </select>
+
+
+                <?php endif; ?>
+                <br>
+                <br>
+                <div class="text-right">
+                    <input type="hidden" name="value" value="<?php $UserRentals ?>">
+                    <button class="btn btn-success" class="form-group " ><span class="glyphicon glyphicon-check"> Louer</span></button>
+                    <button class="btn btn-danger" class="form-group"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+                </div>
+            </form>
+
             <br>
             <br>
         </div>
