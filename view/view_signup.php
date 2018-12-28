@@ -16,7 +16,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-        
+
         <div  class="navbar navbar-default">
             <nav>
                 <ul  class="nav navbar-nav">
@@ -24,61 +24,53 @@
                 </ul>
             </nav>
         </div>
-        <div class="container ">
-            <h2> Please enter your details to sign up :</h2>
-            <br><br>
-            <form action="main/signup" method="post" class="form-horizontal ">
-                  <legend>Sign up</legend>
-                  <table>
-                    <tr>
-                    <div class="form-group text-center">
-                          
-                        <td><label class="col-md-4 control-label" for="passwordinput">Username: </label></td>
-                        <td><input id="username" name="username" type="text" value="<?= $username; ?>" class="form-control"></td>
+    
+        <div class="container text-center">
+            <div class="row ">
+                <div class="col-md-10">
+                    <div class="myform form  ">
+                        <legend> <div class="text-left"><h2> Please enter your details to sign up </h2></div></legend>
+                        <form action="main/signup" method="post" >
+                            <div class="form-group">
+                                <input type="text" name="username"  class="form-control my-input" id="name" placeholder="username">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password"  class="form-control my-input" id="name" placeholder="password">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" name="password_confirm"  class="form-control my-input" id="name" placeholder="confirm password">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="fullname"  class="form-control my-input" id="name" placeholder="confirm password">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="email" name="email"  class="form-control my-input" id="email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <input type="date"  name="birthdate" id="phone"  class="form-control my-input" placeholder="birthdate">
+                            </div>
+                            <div class="text-center ">
+                                <button type="submit" class=" btn btn-block send-button tx-tfm btn-success">Create an account</button>
+                            </div>
+
                     </div>
-                    </tr>
-                    <tr>
-                        <td><label class="col-md-4 control-label" for="passwordinput">Password:</label></td>
-                        <td><input id="password" name="password" type="password" value="<?= $password; ?>" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        
-                        <td> <label class="col-md-5 control-label" for="passwordinput">Confirm Password:</label></td>
-                        <td><input id="password_confirm" name="password_confirm" type="password" value="<?= $password_confirm; ?>" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        
-                         <td> <label class="col-md-5 control-label" for="passwordinput">Fullname</label></td>
-                        <td><input id="fullname" name="fullname" type="text" value="<?= $fullname; ?>" class="form-control"></td>
-                    </tr>
-                    <tr>
-                    
-                         <td> <label class="col-md-5 control-label" for="passwordinput">Email:</label></td>
-                        <td><input id="email" name="email" type="email" value="<?= $email; ?>" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        
-                         <td> <label class="col-md-5 control-label" for="passwordinput">Birthdate:</label></td>
-                        <td><input id="birthdate" name="birthdate" type="date" value="<?= $birthdate; ?>" class="form-control"></td>
-                    </tr>
-                </table>
-                  <br>
-                  <br>
-                  <div class="text-center">
-                <button type="submit" value="Sign Up" class="btn btn-success "><span>SignUp</span></button>
-                  </div>
-            </form>
-            <?php 
-                if(isset($errors)){
-                    echo "<div class='errors'>
+                </div>
+            </div>
+        </div>
+    </form>
+                        <div class="text-center">
+        <?php
+        if (isset($errors)) {
+            echo "<div class='errors'>
                           <p>Please correct the following error(s) :</p>
                           <ul>";
-                    foreach($errors as $error){
-                        echo "<li>".$error."</li>";
-                    }
-                    echo '</ul></div>';
-                } 
-            ?>
-        </div>
-    </body>
+            foreach ($errors as $error) {
+                echo "<li>" . $error . "</li>";
+            }
+            echo '</ul></div>';
+        }
+        ?>
+    </div>
+</body>
 </html>

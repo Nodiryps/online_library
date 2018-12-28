@@ -21,17 +21,25 @@
         <nav> 
             <?php include('menu.html'); ?>
         </nav>
-        <div id="titre" class="container" class="row" >
-            <h1  >Location de livres</h1>
-        </div >
-        <div id="search_bar "class="container" class="row" >
-            <nav class="navbar navbar-light bg-light"  class="col-lg-5" >
-                <form class="form-group-lg" method="post"  action="book/index">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-                    <button class="btn btn-outline-success my-2 " type="submit" value="rechercher">Search</button>
-                </form>
-            </nav>
-        </div>
+       
+        
+         <form class="" method="post"  action="book/index">
+             <legend class="text-center"><h1 >Location de livres</h1></legend>
+       <div class="container">
+	<div class="row">
+           <div id="custom-search-input">
+                            <div class="input-group col-md-12">
+                                <input type="text" class="  search-query form-control" placeholder="Search" name="search"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info" type="submit" value="rechercher">
+                                        <span class=" glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+	</div>
+</div>
+         </form>
 
         <div class="container">
             <table class="table table-striped table-condensed">
@@ -50,7 +58,7 @@
                     <tr >
                         <td><?= $book->isbn ?></td>
                         <td><?= $book->title ?></td>
-                        <td><?= $book->author ?></td>
+                        <td><?= strtoupper($book->author) ?></td>
                         <td><?= $book->editor ?></td>
                         <td><?= $book->picture ?></td>
                          <?php if($profile->role == "admin"):?>
@@ -117,7 +125,7 @@
                         <tr>
                             <td><?= $rent->isbn ?></td>
                             <td><?= $rent->title ?></td>
-                            <td><?= $rent->author ?></td>
+                            <td><?= strtoupper($rent->author) ?></td>
                             <td><?= $rent->editor ?></td>
                             <td><?= $rent->picture ?></td>
                             <td>
@@ -142,26 +150,31 @@
          
 
           
-            <div class="container text-right row">
+            
                 <form class="form-horizontal " method="post" action="book/add_rental_for_user">
                    <?php if ($profile->role == "admin" || $profile->role == "manager" ): ?>
-                  <div class="form-group">
-                        <label class="col-md-4 control-label" for="selectbasic">le panier est pour</label>
-                        <div class="col-md-4">
+                 
+                        <label>le panier est pour: </label>
+                      
                             <select id="selectbasic" name="member_rent" class="form-control">
                                 
                                 <?php foreach ($members as $member): ?>
-                                <option   value="<?php $member->id?>"><?= $member->username?></option>
+                                <option  value="<?php $member->id?>"><?= $member->username?></option>
+                                
                                 <?php endforeach; ?>
                             </select>
-                        </div>
-                    </div>
+                        
+                    
                   <?php endif; ?>
-              
-                <button class="btn btn-success" class="form-group " value="<?php $UserRentals?>"><span class="glyphicon glyphicon-check"> Louer</span></button>
+                        <br>
+                        <br>
+                        <div class="text-right">
+                        <input type="hidden" name="value" value="<?php $UserRentals ?>">
+                        <button class="btn btn-success" class="form-group " ><span class="glyphicon glyphicon-check"> Louer</span></button>
                 <button class="btn btn-danger" class="form-group"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+                        </div>
               </form>
-            </div>
+          
             <br>
             <br>
         </div>

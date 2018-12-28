@@ -69,7 +69,7 @@ class Rental extends Model {
 
     public static function get_rental_join_book_join_user() {
         try {
-            $query = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id", array());
+            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id", array());
             $books = $query->fetchAll();
             return $books;
         } catch (Exception $e) {
@@ -79,7 +79,7 @@ class Rental extends Model {
 
     public static function rent_valid($id) {
         try {
-            $query = self::execute("SELCT * FROM rental WHERE user=:id", array("id" => $id));
+            $query = self::execute("SELECT * FROM rental WHERE user=:id", array("id" => $id));
             $books = $query->fetchAll();
             return 
 //            count ($books) >=1 && 
@@ -87,6 +87,9 @@ class Rental extends Model {
             
         } catch (Exception $ex) {
             die("soucis de db");
+            echo $ex->getLine();
+            echo '/////';
+            echo $ex->getMessage();
         }
     }
 

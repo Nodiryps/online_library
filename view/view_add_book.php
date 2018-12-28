@@ -76,7 +76,7 @@
                             <button id="idbook" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
                             </form>
                             
-                            <button id="button2id" name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-remove"><a href="book/index" alt="book manager" > Annuler</a></span></button>
+                            <button id="button2id" name="button2id" class="btn btn-warning"><span style="color: white" class="glyphicon glyphicon-remove"><a href="book/index" alt="book manager" > Annuler</a></span></button>
                         </div>
                     </div>
                 </fieldset>
