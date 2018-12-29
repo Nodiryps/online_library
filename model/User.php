@@ -63,12 +63,10 @@ class User extends Model {
         $member = self::get_user_by_username($pseudo);
         if ($member) {
             if (!self::check_password($password, $member->hash_password)) {
-                var_dump($member->hash_password);
-                var_dump($password);
-                $errors[] = "Wrong password. Please try again.";
+                $errors[] = "Mauvais MdP. Veuillez réessayer.";
             }
         } else {
-            $errors[] = "Can't find a member with the pseudo '$pseudo'. Please sign up.";
+            $errors[] = "Membre '$pseudo' introuvable. Inscrivez-vous :).";
         }
         return $errors;
     }
@@ -76,7 +74,7 @@ class User extends Model {
     public static function validate_passwords($password, $password_confirm) {
         $errors = [];
         if ($password != $password_confirm) {
-            $errors[] = "You have to enter twice the same password.";
+            $errors[] = "Les MdP doivent être identiques!";
         }
         return $errors;
     }
@@ -116,11 +114,11 @@ class User extends Model {
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
             abort("Problème lors de l'accès a la base de données");
+            return false;
         }
     }
 
     public static function get_email_by_id($id) {
-
         try {
             $query = self::execute("SELECT email FROM user WHERE id=:id", array("id" => $id));
             return $email = $query->fetch();
@@ -248,13 +246,7 @@ class User extends Model {
                 "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
-            //die("fibi");
-//            echo $ex->getTraceAsString(); 
-
-            echo '/////////LIGNE//////////';
-            echo $ex->getLine();
-            echo '///////msg////////////';
-            echo $ex->getMessage();
+            abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -273,20 +265,20 @@ class User extends Model {
         }
     }
     
-    public function get_rental_join_book_join_user_by_user_not_rented(){
-        $results = [];
-        try {
-            $books = self::execute("select book.id,book.isbn,book.title,book.author,book.editor,book.picture FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND returndate=null", array("id" => $this->id));
-            $query = $books->fetchAll();
-            foreach ($query as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
-            }
-            return $results;
-            return $query;
-        } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
-        }
-    }
+//    public function get_rental_join_book_join_user_by_user_not_rented(){
+//        $results = [];
+//        try {
+//            $books = self::execute("select book.id,book.isbn,book.title,book.author,book.editor,book.picture FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND returndate=null", array("id" => $this->id));
+//            $query = $books->fetchAll();
+//            foreach ($query as $row) {
+//                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+//            }
+//            return $results;
+//            return $query;
+//        } catch (Exception $e) {
+//            abort("Problème lors de l'accès a la base de données");
+//        }
+//    }
     
     public function is_admin() {
         return $this->role === "admin";

@@ -15,7 +15,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body >
-        <div  class="h3 text-center">Log In</div>
+       <div  class="h3 text-center">Log In</div>
         <div class=""  >
             <nav class="nav navbar-form navbar-default">
                 <ul   class="nav navbar-nav">
@@ -26,7 +26,7 @@
         </div>
         <div class="container">	
             <div class="row">
-                <h2><strong>Log in </strong></h2>
+                <h2><strong>Connexion</strong></h2>
                 <br/><br/>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <!-- Start form -->
@@ -41,12 +41,12 @@
                         </div>
                         <div class="form-check">
                             <button class="btn btn-block send-button tx-tfm btn-success" type="submit" 
-                                    name="connect" id="connect" value="connect">Connection</button> 
+                                    name="connect" id="connect" value="connect">Connexion</button> 
                         </div>
                     </form>
                     <!-- End form -->
                 </div>
-                <?php if (count($errors) != 0): ?>
+                <?php if ($errors !== []): ?>
                     <div class='errors'>
                         <p>Erreur(s) à corriger:</p>
                         <ul>

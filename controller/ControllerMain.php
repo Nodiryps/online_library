@@ -9,10 +9,10 @@ class ControllerMain extends Controller {
     //si l'utilisateur est conecté, redirige vers son profil.
     //sinon, produit la vue d'accueil.
     public function index() {
-        if ($this->user_logged()) {
-            $this->redirect("user", "profil");
+        if (!$this->user_logged()) {
+            $this->login();
         } else {
-            (new View("index"))->show();
+            $this->redirect("user", "profil");
         }
     }
 
@@ -21,8 +21,8 @@ class ControllerMain extends Controller {
         $pseudo = '';
         $password = '';
         $errors = [];
-        if (isset($_POST['pseudo']) && isset($_POST['password'])) { //note : pourraient contenir
-        //des chaînes vides
+        if (isset($_POST['pseudo']) && isset($_POST['password'])
+                ) { 
             $pseudo = $_POST['pseudo'];
             $password = $_POST['password'];
              
@@ -31,9 +31,9 @@ class ControllerMain extends Controller {
                 $this->log_user(User::get_user_by_username($pseudo));
             }
         }
-        (new View("login"))->show(array("pseudo" => $pseudo, "password" => $password, "errors" => $errors));
+        (new View("index"))->show(array("pseudo" => $pseudo, "password" => $password, "errors" => $errors));
     }
-
+    
     //gestion de l'inscription d'un utilisateur
     public function signup() {
         $username = '';

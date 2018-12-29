@@ -35,7 +35,7 @@ abstract class Controller {
         die();
     }
 
-    //indique un l'utilisateur est connecté
+    //indique si un utilisateur est connecté
     public function user_logged() {
         if (!isset($_SESSION['user'])) {
             return false;

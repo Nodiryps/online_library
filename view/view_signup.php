@@ -3,7 +3,7 @@
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <meta charset="UTF-8">
-        <title>SignUp</title>
+        <title>Inscription</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -20,16 +20,16 @@
         <div  class="navbar navbar-default">
             <nav>
                 <ul  class="nav navbar-nav">
-                    <li> <a href="main/index">Home</a></li>
+                    <li> <a href="main/index" class="glyphicon glyphicon-arrow-left"></a></li>
                 </ul>
             </nav>
         </div>
 
         <div class="container text-center">
-            <div class="row ">
+<!--            <div class="row ">
                 <div class="col-md-10">
-                    <div class="myform form  ">
-                        <legend> <div class="text-left"><h2> Please enter your details to sign up </h2></div></legend>
+                    <div class="myform form  ">-->
+                        <legend> <div class="text-center"><h2>Insrciption</h2></div></legend>
                         <form action="main/signup" method="post" >
                             <div class="form-group">
                                 <label for="fullname">Nom complet</label>
@@ -58,24 +58,22 @@
                             <div class="text-center ">
                                 <button type="submit" class=" btn btn-block send-button tx-tfm btn-success">Valider inscription</button>
                             </div>
-
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-    <div class="text-center">
-        <?php
-        if (isset($errors)) {
-            echo "<div class='errors'>
+        <div class="text-center">
+            <?php
+            if ($errors !== []) {
+                echo "<div class='errors'>
                               <p>Erreur(s) à corriger:</p>
                               <ul>";
-            foreach ($errors as $error) {
-                echo "<li>" . $error . "</li>";
+                foreach ($errors as $error) {
+                    echo "<li>" . $error . "</li>";
+                }
+                echo '</ul></div>';
             }
-            echo '</ul></div>';
-        }
-        ?>
-    </div>
-</body>
+            ?>
+        </div>
+    </body>
 </html>

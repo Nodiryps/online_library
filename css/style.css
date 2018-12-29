@@ -4,11 +4,11 @@ html, body {
 }
 
 body {
-    background-color:silver;
+    background-color:lightgoldenrodyellow;
     margin:10px 5px 10px 15px;
 }
 
-h1 {
+/*h1 {
     font-family:arial, sans-serif;
     font-size:100%;
     color:black;
@@ -91,4 +91,4 @@ td {
     border-color:white;
     border-style:solid;
     border-width:1px;
-}
+}*/

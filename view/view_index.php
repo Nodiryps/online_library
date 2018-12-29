@@ -16,17 +16,50 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="text-center">Welcome to EPFC Library!</div>
-        <div class="navbar navbar-default">
-            <nav  class="nav navbar-nav">
-                <ul class="nav navbar-nav">
-                    <li><a href="main/login">Log In</a></li>
-                    <li> <a href="main/signup">Sign Up</a></li>
-            </nav>
-        </ul>
-    </div>
-    <div class="text-center text-success">
-        Please log in or sign up!
-    </div>
-</body>
+        <!--        <div class="text-center">Welcome to EPFC Library!</div>
+                <div class="navbar navbar-default">
+                    <nav  class="nav navbar-nav">
+                        <ul class="nav navbar-nav">
+                            <li><a href="main/login">Log In</a></li>
+                            <li> <a href="main/signup">Sign Up</a></li>
+                    </nav>
+                </ul>
+            </div>
+            <div class="text-center text-success">
+                Please log in or sign up!
+            </div>-->
+        <div class="container">	
+            <div class="row">
+                <h2 class="text-center"><strong>Connexion</strong></h2>
+                <br/><br/>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <form action="main/login" method="post">
+                        <div class="form-group">
+                            <label for="username">Pseudo</label>
+                            <input type="text" class="form-control"  value="<?= $pseudo ?>" name="pseudo">
+                        </div>
+                        <div class="form-group">
+                            <label for="Password">Mot de passe</label>
+                            <input type="password" class="form-control" name="password" value="<?= $password ?>">
+                        </div>
+                        <div class="form-check">
+                            <button class="btn btn-block send-button tx-tfm btn-success" type="submit" 
+                                    name="connect" id="connect" value="connect">Connexion</button> 
+                        </div>
+                        <a href="main/signup">Vous ne possédez pas de compte chez nous? C'est par ici :)</a>
+                    </form>
+                </div>
+                <?php if ($errors !== []): ?>
+                    <div class='errors'>
+                        <p>Erreur(s) à corriger:</p>
+                        <ul>
+                            <?php foreach ($errors as $error): ?>
+                                <li><?= $error ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </body>
 </html>

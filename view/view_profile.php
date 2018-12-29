@@ -21,7 +21,7 @@
             <?php
             if ($profile->is_member())
                 include('menuMember.html');
-            if ($profile->is_admin() || $profile->is_manager())
+//            if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
             <div class="title" style="position:absolute;top:20px;right:10px;">
