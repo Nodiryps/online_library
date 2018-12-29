@@ -6,12 +6,21 @@
         <meta charset="UTF-8">
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link href="css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <h1>Gestion de retour des livres</h1>
-        <?php
-        // put your code here
-        ?>
+        <nav> 
+            <?php
+            if ($profile->is_member())
+                include('menuMember.html');
+            if ($profile->is_admin() || $profile->is_manager())
+                include('menu.html');
+            ?>
+            <div class="title" style="position:absolute;top:20px;right:10px;">
+                <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+            </div>
+        </nav>
+        
+        <h1>Gestion de retours</h1>
+        
     </body>
 </html>

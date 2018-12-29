@@ -72,7 +72,7 @@
                             <td>
                                 <form  method="post" action="book/edit_book">
                                     <input type="hidden" name="editbook" value="<?= $book->id ?>">
-                                    <button type="submit" name="idsubmit" class="btn btn-info"><span >editer</span ></button>
+                                    <button type="submit" name="idsubmit" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span ></button>
                                 </form>
                             </td>
 
@@ -80,7 +80,7 @@
                             <td>
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                    <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
+                                    <button type="submit" name="idsubmit" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></button>
                                 </form>
                             </td>
                         <?php endif; ?>
@@ -88,16 +88,15 @@
                             <td>
                                 <form  method="post" action="book/delete_book">
                                     <input type="hidden" name="delbook" value="<?= $book->id ?>">
-                                    <button type="submit" name="idsubmit" class="btn btn-danger"><span >supprimer</span ></button>
+                                    <button type="submit" name="idsubmit" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span ></button>
                                 </form>
                             </td>
                         <?php endif; ?>
-                        <td> 
+                        <td>
                             <form  method="post" action="book/add_rental">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                <button type="submit"  name="idsubmit" class="btn btn-success"><span>panier</span></button>
+                                <button type="submit"  name="idsubmit" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span></button>
                             </form>
-                        </td>
                         </td>
                     </tr>
                 <?php endforeach; ?>

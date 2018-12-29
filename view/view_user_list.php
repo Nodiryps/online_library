@@ -1,7 +1,7 @@
 <html>
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
-        <title>Liste membres</title>
+        <title>membres</title>
         <base href="<?= $web_root ?>"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,10 +23,10 @@
             </div>
         </nav>
 
-        <div class="container" style="margin-top:120px;">
+        <div class="container" style="margin-top:110px;">
 
             <table class="table table-striped table-condensed" >
-                <legend class="text-center"><h1>Liste des membres</h1></legend>
+                <legend class="text-center"><h1>Membres</h1></legend>
                 <thead class="thead-dark">
                     <tr> 
                         <?php if ($utilisateur->role == "admin"): ?>
@@ -52,30 +52,28 @@
                         <td class="text-center"> <?= $member->birthdate ?></td>
                         <td class="text-center"> <?= $member->role ?></td>
                         <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
-                            <td style="width: 50px;">
-                                <form action="user/edit_profile" method="POST">
-                                    <input type="hidden" name="idmember" value="<?= $member->id ?>" >
-                                    <button class="btn btn-default" name="modifier" type="submit" value="modifier"  >
-                                        <img style="width:80%;" src="img/edit-button.png" atl="modif">
-                                    </button>
-                                </form>
-                                <?php if ($utilisateur->role == "admin" && $utilisateur->username != $member->username): ?>
-                                    <form method="post" action="user/delete_user">
-                                        <input type="hidden"  name="iddelete" value="<?= $member->id ?>" >
-                                        <?php if ($member->username != $utilisateur->username): ?>
-                                            <button class="btn btn-danger" name="delete" type="submit" value="supprimer">
-                                                <img  style="width:80%;" src="img/delete-button.png" >
-                                            </button>
+                            <td style="width: 120px;height:30px;">
+                                <div class="btn">
+                                    <form action="user/edit_profile" method="POST">
+                                        <input type="hidden" name="idmember" value="<?= $member->id ?>" >
+                                        <button  style="display:inline-block;float:left;"class="btn btn-default" name="modifier" type="submit" value="modifier"  >
+                                            <img style="width:20px;" src="img/edit-button.png" atl="modif">
+                                        </button>
+                                    </form>
+                                    <?php if ($utilisateur->role == "admin" && $utilisateur->username != $member->username): ?>
+                                        <form method="post" action="user/delete_user">
+                                            <input type="hidden"  name="iddelete" value="<?= $member->id ?>" >
+                                            <?php if ($member->username != $utilisateur->username): ?>
+                                                <button style="display:inline-block;" class="btn btn-danger" name="delete" type="submit" value="supprimer">
+                                                    <img  style="width:20px;" src="img/delete-button.png" >
+                                                </button>
+                                            <?php endif; ?>
                                         <?php endif; ?>
-                                    <?php endif; ?>
-                                </form>
+                                    </form>
+                                </div>
                             </td>
-
-
                         <?php endif; ?>
-
                     <?php endforeach; ?>
-
                 </tr>
             </table>
             <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>

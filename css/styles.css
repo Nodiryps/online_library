@@ -1,11 +1,11 @@
-html, body {
+/*html, body {
     margin:0; 
     padding:0
-}
+}*/
 
-body {
-    background-color:lightgoldenrodyellow;
-    margin:10px 5px 10px 15px;
+html, body {
+    background-color:purple;
+    margin:10px 2000px 10px 2000px;
 }
 
 /*h1 {

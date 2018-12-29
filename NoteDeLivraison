@@ -1,0 +1,7 @@
+index == page de login (lien vers signup si pas encrore membre)
+
+MENU:
+    - Home         => liste de vos locations (view_profile)
+    - Bibliothèque => liste des livres de la bibliothèque (view_book_manager)
+    - Membres      => liste des membres (view_users_list)
+    
