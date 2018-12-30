@@ -73,7 +73,7 @@ class ControllerBook extends Controller {
         $id = 0;
         $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
-
+         
         $msg = " ";
         $members = User::get_all_user();
 
@@ -97,14 +97,24 @@ class ControllerBook extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $msg = " ";
         $members = User::get_all_user();
-
-
+         $datetime = date("Y-m-d H:i:s");
         if (isset($_POST["member_rent"])) {
             $value = $_POST["member_rent"];
-            var_dump($value);
-            //$getUserRental="";
-        }
-        //(new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
+            $usertoAddRent = User::get_user_by_username($value);
+            var_dump($usertoAddRent);
+//            if ($user->id != $usertoAddRent->id) {
+//               $allrentofUser= Rental::get_this_rental($usertoAddRent->id);
+//               foreach ($allrentofUser as $rent){
+//                   $rent->update_rental_rentdate($datetime);
+//               }
+               $getUserRental="";
+                   
+               }else{
+                   
+//               }
+            }
+        
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
     public function del_one_rent() {
@@ -116,7 +126,7 @@ class ControllerBook extends Controller {
 
         if (isset($_POST["delrent"])) {
             $value = $_POST["delrent"];
-            $delrent = Rental::get_rental_by_id($value);
+            $delrent = Renget_rental_by_id_bookby_id($value);
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }
@@ -128,7 +138,7 @@ class ControllerBook extends Controller {
     public function edit_book() {
         $book = Book::get_book_by_id($_POST["editbook"]);
         $error = "";
-        
+
         if (isset($_POST["editbook"])) {
             $book = Book::get_book_by_id($_POST["editbook"]);
         }

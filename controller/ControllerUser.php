@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/User.php';
+require_once 'model/Rental.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 require_once 'framework/Tools.php';
@@ -13,7 +14,7 @@ class ControllerUser extends Controller {
 
     public function profil() {
         $profile = self::get_user_or_redirect();
-        $userRentals = $this->rentals_by_user($profile);
+        $userRentals = Rental::get_rentals_by_user($profile->id);// j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals));
     }
 
@@ -79,7 +80,6 @@ class ControllerUser extends Controller {
         $utilisateur = User::get_user_by_username($user->username);
         if (Tools::issets("idmember"))
             $id = Tools::post("idmember");
-        var_dump($utilisateur);
         $oldpass = User::get_password($id);
         $member = User::get_user_by_id($id);
         $username = $member->username;
@@ -125,12 +125,9 @@ class ControllerUser extends Controller {
             if ($member->hash_password !== $confirm_password) {
                 $error[] = "Les mots de passe ne correspondent pas!";
             }
-            var_dump($member->hash_password);
-            var_dump($confirm_password);
 
             if (!User::check_password($member->hash_password, $oldpass) && !empty($password)) {
                 $oldpass = $member->hash_password;
-                var_dump($oldpass);
             } else {
                 $member->hash_password = $oldpass;
             }

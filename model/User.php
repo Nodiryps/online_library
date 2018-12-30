@@ -93,7 +93,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -103,7 +103,7 @@ class User extends Model {
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -113,7 +113,7 @@ class User extends Model {
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données");
             return false;
         }
     }
@@ -123,7 +123,7 @@ class User extends Model {
             $query = self::execute("SELECT email FROM user WHERE id=:id", array("id" => $id));
             return $email = $query->fetch();
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -132,7 +132,7 @@ class User extends Model {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
             return $email = $query->fetch();
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -142,7 +142,7 @@ class User extends Model {
             $result = $query->fetchAll();
             return count($result) === 0;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -152,7 +152,7 @@ class User extends Model {
             $result = $query->fetchAll();
             return count($result) === 0;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -170,7 +170,7 @@ class User extends Model {
                         "role" => $role
             ));
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -186,7 +186,7 @@ class User extends Model {
                         "role" => $role
             ));
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -205,7 +205,7 @@ class User extends Model {
         try {
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -216,7 +216,7 @@ class User extends Model {
             $password = $query->fetch();
             return $password["password"];
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -228,7 +228,7 @@ class User extends Model {
             $role = $query->fetch();
             return $role["role"];
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -246,14 +246,14 @@ class User extends Model {
                 "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
-            abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
     public function get_rental_join_book_join_user_by_user() {
         $results = [];
         try {
-            $books = self::execute("select DISTINCT book.id,book.isbn,book.title,book.author,book.editor,book.picture FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id", array("id" => $this->id));
+            $books = self::execute("select DISTINCT book.id,book.isbn,book.title,book.author,book.editor,book.picture FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id ", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
@@ -261,7 +261,7 @@ class User extends Model {
             return $results;
             return $query;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
     

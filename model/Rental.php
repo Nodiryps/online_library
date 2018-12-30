@@ -57,7 +57,7 @@ class Rental extends Model {
         $results = [];
         try {
             $query = self::execute("SELECT * FROM rental join book WHERE user=:id", array("id" => $id));
-            $books = $books->fetchAll();
+            $books = $query->fetchAll();
             foreach ($books as $row) {
                 $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
             }
@@ -93,7 +93,7 @@ class Rental extends Model {
         }
     }
 
-    public static function get_rental_by_id($id) {
+    public static function get_rental_by_id_book($id) {
        $results=[];
         try {
             $query = self::execute("SELECT * FROM rental WHERE book=:id", array("id" => $id));
@@ -112,18 +112,19 @@ class Rental extends Model {
         try{
             $query = self::execute("SELECT * FROM rental "
                                  . "WHERE user = :user AND rentaldate != NULL", 
-                                    array("user" => $user->id));
+                                    array("user" => $user));
             $rentals = $query->fetchAll();
             foreach ($rentals as $rental)
                 $res[] = new Rental ($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
             return $res;
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès à la base de données.");
+            //Tools::abort("Problème lors de l'accès à la base de données.");
+            $ex->getMessage();
         }
     }
     
     
-    
+    // methode pas a la bonne place
     public function get_book() {
         try{
             $query = self::execute("SELECT * FROM book WHERE id = :id", array("id" => $this->book));
@@ -151,4 +152,10 @@ class Rental extends Model {
             die("Soucis de db");
         }
     }
+    
+     public function update_rental_rentdate($rentaldate) {
+         self::execute("UPDATE rental SET rentaldate = :rentaldate WHERE id=:id  ", array("rentaldate"=>$rentaldate,"id"=> $this->id));
+               
+    
+}
 }

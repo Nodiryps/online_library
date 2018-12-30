@@ -165,8 +165,9 @@
                     <select id="selectbasic" name="member_rent" class="form-control">
 
                         <?php foreach ($members as $member): ?>
-                            <option  value="<?php $member->id ?>"><?= $member->username ?></option>
-
+                        
+                        <option><?= $member->username ?></option>
+                      
                         <?php endforeach; ?>
                     </select>
 
@@ -175,9 +176,9 @@
                 <br>
                 <br>
                 <div class="text-right">
-                    <input type="hidden" name="value" value="<?php $UserRentals ?>">
-                    <button class="btn btn-success" class="form-group " ><span class="glyphicon glyphicon-check"> Louer</span></button>
-                    <button class="btn btn-danger" class="form-group"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+                   
+                    <button class="btn btn-success" class="form-group " type="submit" ><span class="glyphicon glyphicon-check"> Louer</span></button>
+                    <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                 </div>
             </form>
 
