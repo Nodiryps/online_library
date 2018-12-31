@@ -101,22 +101,40 @@ class ControllerBook extends Controller {
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
 
+
         if (isset($_POST["member_rent"])) {
             $value = $_POST["member_rent"];
-
+            var_dump($value);
             $usertoAddRent = User::get_user_by_username($value);
             if ($user->id != $usertoAddRent->id) {
-                $allrentofUser = Rental::get_this_rental($usertoAddRent->id);
+                $allrentofUser = Rental::get_this_rental($user->id);
+                var_dump($value);
                 foreach ($allrentofUser as $rent) {
                     $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
                 }
                 $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
             } else {
                 $allrentofUser = Rental::get_this_rental($user->id);
+                // var_dump($allrentofUser);
                 foreach ($allrentofUser as $rent) {
                     $rent->update_rental_rentdate($datetime);
                 }
                 $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
+            }
+        }
+        if (isset($_POST["member_rents"])) {
+            $allrentofUser = Rental::get_this_rental($user->id);
+            foreach ($allrentofUser as $rent) {
+                $rent->update_rental_rentdate($datetime);
+            }
+            $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
+        
+        }
+
+        if (isset($_POST["annuler"])) {
+            $allrentofUser = Rental::get_this_rental($user->id);
+            foreach ($allrentofUser as $rent) {
+                $rent->delete_rental();
             }
         }
 
@@ -132,7 +150,7 @@ class ControllerBook extends Controller {
 
         if (isset($_POST["delrent"])) {
             $value = $_POST["delrent"];
-            $delrent = Renget_rental_by_id_bookby_id($value);
+            $delrent = Rental::get_rental_by_id_book($value);
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }

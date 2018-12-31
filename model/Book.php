@@ -43,11 +43,12 @@ class Book extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
+   
 
     public static function get_book_by_critere($critere) {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book WHERE title LIKE :critere OR author LIKE :critere OR editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
+            $books = self::execute("SELECT * FROM book WHERE isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);

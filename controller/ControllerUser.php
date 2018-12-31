@@ -21,7 +21,6 @@ class ControllerUser extends Controller {
             $datetoreturn[]= date('Y-m-d',strtotime('+1 month',strtotime($rent->rentaldate)));
             }
             
-        var_dump($returndate);
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate));
     }
 

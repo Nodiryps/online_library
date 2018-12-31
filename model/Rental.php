@@ -100,7 +100,7 @@ class Rental extends Model {
                 $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
             }
             return $results;
-        } catch (Exception $e) {
+        } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
@@ -116,6 +116,8 @@ class Rental extends Model {
         } catch (Exception $ex) {
             //Tools::abort("Problème lors de l'accès à la base de données.");
             $ex->getMessage();
+            $ex->getLine();
+            $ex->getFile();
         }
     }
 
@@ -129,10 +131,12 @@ class Rental extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
+    
+    
 
     public function delete_rental() {
         try {
-            self::execute("DELETE FROM rental WHERE  id=:id", array("id" => $this->id));
+            self::execute("DELETE FROM rental WHERE  id=:id AND rentaldate IS NULL", array("id" => $this->id));
         } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
@@ -153,7 +157,9 @@ class Rental extends Model {
     }
 
     public function update_rental_rentdate_for_user($user,$rentaldate) {
-        self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id  ", array("user"=>$user,"rentaldate" => $rentaldate, "id" => $this->id));
+        self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id AND rentaldate IS NULL ", array("user"=>$user,"rentaldate" => $rentaldate, "id" => $this->id));
     }
+    
+     
 
 }

@@ -19,8 +19,10 @@
             <h1>Detail de <?= $book->title ?></h1>
         </div>
         <h1></h1>
-        <div class="container" class="row">
-            <table class="table table-dark" class="col-lg-6">
+        <div class="container ">
+            <div class="row">
+                 <div class="col-lgl-9">
+            <table class="table table-dark col-lg-6">
                 <thead class="thead-dark">
                 <tr>
                     <th>ISBN</th>
@@ -40,5 +42,8 @@
                 <button  class="btn btn-info"><span   class="glyphicon glyphicon-arrow-left"></span></button>
             </form>
         </div>
+        </div>
+        </div>
+    
     </body>
 </html>

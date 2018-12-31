@@ -29,15 +29,17 @@
                         </ul>
                     </nav>
                 </div>-->
+        <form action="book/index" method="post">
         <div class="container text-center" style="width:350px;margin:5% auto;">
             <!--            <div class="row ">
                             <div class="col-md-10">
                                 <div class="myform form  ">-->
-            <div class="btn btn-default" style="position:absolute;top:5%;right:auto;">
+            <div class="btn btn-default " style="position:absolute;top:5%;right:auto;">
                 <a href="main/index" class="glyphicon glyphicon-arrow-left"></a>
             </div>
-            <div class="text-center"><h1>Insrciption</h1></div>
+            <div class="text-center"><h1>Inscription</h1></div>
             <br>
+            </form>
             <form action="main/signup" method="post" >
                 <div class="form-group">
                     <label for="fullname">Nom complet</label>

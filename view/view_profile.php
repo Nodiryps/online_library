@@ -44,9 +44,9 @@
                 <?php foreach ($rentals as $rental): ?>
 
                     <tr>
-                        <td><?= $rental->get_book()->title ?></td>
+                        <td><?= $rental->get_book()->title ?>   (<?=  $rental->get_book()->author ?>)</td>
                         <td><?= $rental->rentaldate ?></td>
-                        <td><?=date('Y-m-d',strtotime('+1 month',strtotime($rental->rentaldate)));?></td>
+                        <td><?=date('d/m/Y',strtotime('+1 month',strtotime($rental->rentaldate)));?></td>
                     <?php endforeach; ?>
 
                 </tr>
