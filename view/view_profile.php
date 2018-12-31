@@ -42,17 +42,15 @@
                     </tr>
                 </thead>
                 <?php foreach ($rentals as $rental): ?>
- <?php foreach ($returndate as $return): ?>
+
                     <tr>
                         <td><?= $rental->get_book()->title ?></td>
                         <td><?= $rental->rentaldate ?></td>
-                        
-                       
-                            <td><?= $return ?></td>
-                             <?php endforeach; ?>
-                        <?php endforeach; ?>
-                    </tr>
-               
+                        <td><?=date('Y-m-d',strtotime('+1 month',strtotime($rental->rentaldate)));?></td>
+                    <?php endforeach; ?>
+
+                </tr>
+
             </table>
         </div>
     </body>

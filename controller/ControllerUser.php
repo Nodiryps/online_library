@@ -18,7 +18,7 @@ class ControllerUser extends Controller {
         $datetoreturn=[];
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
         foreach ($userRentals as $rent) {
-            $returndate[] = $datetoreturn[]= date('Y-m-d',strtotime('+1 month',strtotime($rent->rentaldate)));
+            $datetoreturn[]= date('Y-m-d',strtotime('+1 month',strtotime($rent->rentaldate)));
             }
             
         var_dump($returndate);
