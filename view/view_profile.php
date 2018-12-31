@@ -42,15 +42,17 @@
                     </tr>
                 </thead>
                 <?php foreach ($rentals as $rental): ?>
-
+ <?php foreach ($returndate as $return): ?>
                     <tr>
                         <td><?= $rental->get_book()->title ?></td>
                         <td><?= $rental->rentaldate ?></td>
-                        <?php foreach ($returndate as $return): ?>
+                        
+                       
                             <td><?= $return ?></td>
+                             <?php endforeach; ?>
                         <?php endforeach; ?>
                     </tr>
-                <?php endforeach; ?>
+               
             </table>
         </div>
     </body>
