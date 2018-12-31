@@ -72,20 +72,64 @@ class Book extends Model {
         
     }
 
-    public function edit_book($bookId) {
-        if (isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '')
-            if ($_FILES['picture']['error'] == 0) {
-                $path = $this->is_path_ok($bookId);
-                if ($path !== " ") {
-                    move_uploaded_file($_FILES['picture']['tmp_name'], $path);
-                    $this->update($isbn, $title, $author, $editor, $path);
-                    return TRUE;
-                } else 
-                    return FALSE;
-            } else
-                return FALSE;
+    public function update_by_id() {
+        check_login();
+        $profile = '';
+        $picture_path = '';
+
+        if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != '') {
+            if ($_FILES['image']['error'] == 0) {
+
+                $typeOK = TRUE;
+
+                if ($_FILES['image']['type'] == "image/gif")
+                    $saveTo = $user . ".gif";
+                else if ($_FILES['image']['type'] == "image/jpeg")
+                    $saveTo = $user . ".jpg";
+                else if ($_FILES['image']['type'] == "image/png")
+                    $saveTo = $user . ".png";
+                else {
+                    $typeOK = FALSE;
+                    $error = "Unsupported image format : gif, jpeg ou png !";
+                }
+
+                if ($typeOK) {
+                    move_uploaded_file($_FILES['image']['tmp_name'], $saveTo);
+                    if (update_member($user, NULL, $saveTo)) {
+                        $success = "Your profile has been successfully updated.";
+                    }
+                }
+            } else {
+                $error = "Error while uploading file.";
+            }
+        }
+
+        if (isset($_POST['profile'])) {
+            $profile = sanitize($_POST['profile']);
+            if (update_member($user, $profile, NULL)) {
+                $success = "Your profile has been successfully updated.";
+            }
+        }
+
+        $member = get_member($user);
+        $profile = $member['profile'];
+        $picture_path = $member['picture_path'];
     }
-    
+
+//    public function edit_book($bookId) {
+//        if (isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '')
+//            if ($_FILES['picture']['error'] == 0) {
+//                $path = $this->is_path_ok($bookId);
+//                if ($path !== " ") {
+//                    move_uploaded_file($_FILES['picture']['tmp_name'], $path);
+//                    $this->update($isbn, $title, $author, $editor, $path);
+//                    return TRUE;
+//                } else
+//                    return FALSE;
+//            } else
+//                return FALSE;
+//    }
+
     private function update($isbn, $title, $author, $editor, $picture) {
         try {
             $query = self::execute("UPDATE book "
