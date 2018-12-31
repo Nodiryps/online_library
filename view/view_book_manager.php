@@ -158,6 +158,7 @@
 
 
             <form class="form-horizontal " method="post" action="book/add_rental_for_user">
+                <input type="hidden" name="member_rent" value="<?php $profile->username ?>" >
                 <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
 
                     <label>le panier est pour: </label>
@@ -177,7 +178,7 @@
                 <br>
                 <div class="text-right">
                    
-                    <button class="btn btn-success" class="form-group " type="submit" ><span class="glyphicon glyphicon-check"> Louer</span></button>
+                    <button class="btn btn-success" class="form-group " type="submit" value="louer"><span class="glyphicon glyphicon-check"> Louer</span></button>
                     <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                 </div>
             </form>

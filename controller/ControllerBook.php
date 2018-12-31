@@ -13,7 +13,7 @@ class ControllerBook extends Controller {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
         $pannier = "";
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
+        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
         $members = User::get_all_user();
 
@@ -30,7 +30,7 @@ class ControllerBook extends Controller {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
         $pannier = "";
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
+        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
         $members = User::get_all_user();
         if (isset($_POST["delbook"])) {
@@ -71,9 +71,9 @@ class ControllerBook extends Controller {
         $users = User::get_user_by_username($user->username);
         $books = Book::get_all_books();
         $id = 0;
-        $datetime = date("Y-m-d H:i:s");
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
-         
+//$datetime = date("Y-m-d H:i:s");
+        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
+
         $msg = " ";
         $members = User::get_all_user();
 
@@ -94,33 +94,39 @@ class ControllerBook extends Controller {
     public function add_rental_for_user() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
+        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
+        $usertoAddRent = "";
+        $allrentofUser = "";
         $members = User::get_all_user();
-         $datetime = date("Y-m-d H:i:s");
+        $datetime = date("Y-m-d H:i:s");
+
         if (isset($_POST["member_rent"])) {
             $value = $_POST["member_rent"];
+
             $usertoAddRent = User::get_user_by_username($value);
-            var_dump($usertoAddRent);
-//            if ($user->id != $usertoAddRent->id) {
-//               $allrentofUser= Rental::get_this_rental($usertoAddRent->id);
-//               foreach ($allrentofUser as $rent){
-//                   $rent->update_rental_rentdate($datetime);
-//               }
-               $getUserRental="";
-                   
-               }else{
-                   
-//               }
+            if ($user->id != $usertoAddRent->id) {
+                $allrentofUser = Rental::get_this_rental($usertoAddRent->id);
+                foreach ($allrentofUser as $rent) {
+                    $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
+                }
+                $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
+            } else {
+                $allrentofUser = Rental::get_this_rental($user->id);
+                foreach ($allrentofUser as $rent) {
+                    $rent->update_rental_rentdate($datetime);
+                }
+                $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
             }
-        
+        }
+
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
     public function del_one_rent() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
+        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
         $members = User::get_all_user();
 
@@ -130,7 +136,7 @@ class ControllerBook extends Controller {
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }
-            $getUserRental = $user->get_rental_join_book_join_user_by_user();
+            $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         }
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }

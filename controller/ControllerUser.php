@@ -14,8 +14,15 @@ class ControllerUser extends Controller {
 
     public function profil() {
         $profile = self::get_user_or_redirect();
-        $userRentals = Rental::get_rentals_by_user($profile->id);// j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
-        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals));
+        $returndate = [];
+        $datetoreturn=[];
+        $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
+        foreach ($userRentals as $rent) {
+            $returndate[] = $datetoreturn[]= date('Y-m-d',strtotime('+1 month',strtotime($rent->rentaldate)));
+            }
+            
+        var_dump($returndate);
+        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate));
     }
 
     public function user_list() {
@@ -36,7 +43,7 @@ class ControllerUser extends Controller {
         $email = "";
         $birthdate = "";
         $query = "";
-        
+
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) &&
                 isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
             $username = Tools::sanitize($_POST['username']);
@@ -109,7 +116,7 @@ class ControllerUser extends Controller {
                 $member->email = Tools::sanitize(Tools::post("email"));
             else
                 $error[] = "Il faut indiquer un email!";
-            
+
             if (Tools::issets("password") && empty(trim(Tools::post("password"))))
                 $member->hash_password = Tools::sanitize(Tools::post("password"));
             if (Tools::issets("confirm_password") && Tools::post("confirm_password") !== "")
@@ -177,4 +184,5 @@ class ControllerUser extends Controller {
     public function rentals_by_user($user) {
         return Rental::get_rentals_by_user($user);
     }
+
 }

@@ -22,7 +22,7 @@
 
         <form class="form-horizontal">
             <fieldset>
-
+        
                 <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
 
                 <!-- Text input-->
@@ -84,8 +84,8 @@
                                 <span class="glyphicon glyphicon-ok"> Valider</span>
                             </button>
                         </form>
-
-                        <button id="button2id" name="button2id" class="btn btn-warning">
+                        
+                          <button id="button2id" name="button2id" class="btn btn-warning" type="submit">
                             <span class="glyphicon glyphicon-remove">
                                 <a href="book/index" alt="book manager" >Annuler</a>
                             </span>
@@ -94,6 +94,11 @@
                 </div>
             </fieldset>
         </form>
+       
+       
+           
+     
+           
         <?php
             if ($error !== "")
                 echo "<p><span class='errors'>$error</span></p>";
