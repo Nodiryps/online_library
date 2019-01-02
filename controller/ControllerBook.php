@@ -122,6 +122,7 @@ class ControllerBook extends Controller {
         }
         if (isset($_POST["annuler"])) {
             foreach ($allrentofUser as $rent) {
+                
                 $rent->delete_rental();
             }
         }
