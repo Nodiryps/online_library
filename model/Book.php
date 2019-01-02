@@ -43,6 +43,7 @@ class Book extends Model {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
+   
 
     public static function get_book_by_critere($critere) {
         $results = [];

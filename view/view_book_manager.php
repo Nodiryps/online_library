@@ -4,7 +4,7 @@
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <meta charset="UTF-8">
-        <title>bibli</title>
+        <title>bibliothèque</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -166,26 +166,30 @@
 
                 <label>le panier est pour: </label>
 
-                <select id="selectbasic" name="member_rent" class="form-control">
-
-                    <?php foreach ($members as $member): ?>
-
-                    <option><?= $member->username ?></option>
-
-                    <?php endforeach; ?>
-                </select>
-
-
-                <?php endif; ?>
+                    <select id="selectbasic" name="member_rent" class="form-control">
+                       <option><?= $profile->username ?></option>
+                        <?php foreach ($members as $member): ?>
+                        
+                        <option><?= $member->username ?></option>
+                      
+                        <?php endforeach; ?>
+                    </select>
                 <br>
                 <br>
                 <div class="text-right">
-
-                    <button class="btn btn-success" class="form-group " type="submit" ><span class="glyphicon glyphicon-check"> Louer</span></button>
+                    <button class="btn btn-success" class="form-group " type="submit" name="test" value="<?php $profile->username ?>"><span class="glyphicon glyphicon-check"> Louer</span></button>
                     <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                 </div>
             </form>
-
+ <?php else: ?>
+            <form  class="form-horizontal " method="post" action="book/add_rental_for_user">
+            <div class="text-right">
+                    <input type="hidden" name="member_rents" value="<?php $profile->username ?>" >
+                    <button class="btn btn-success" class="form-group " type="submit" name="test" ><span class="glyphicon glyphicon-check"> Louer</span></button>
+                    <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+                </div>
+            </form>
+            <?php endif; ?>
             <br>
             <br>
         </div>

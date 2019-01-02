@@ -17,10 +17,18 @@
     </head>
     <body>
         <nav> 
-            <?php include('menu.html'); ?>
+            <?php
+            if ($profile->is_member())
+                include('menuMember.html');
+            if ($profile->is_admin() || $profile->is_manager())
+                include('menu.html');
+            ?>
+            <div class="title" style="position:absolute;top:20px;right:10px;">
+                <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+            </div>
         </nav>
 
-        <form class="form-horizontal">
+        <form class="form-horizontal" action="book/edit_book">
             <fieldset>
 
                 <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
@@ -66,27 +74,27 @@
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
                         <input style="float:left;" id="picture" name="picture" class="input-file" type="file">
+                        <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
+                        <?php if ($book->picture): ?>
+                            <img src='upload/<?= $book->picture ?>' width="100" alt="Profile image">
+                            <br><br>
+                        <?php endif; ?>
                         <button  name="button2id" class="btn btn-warning">
                             <span class="glyphicon glyphicon-remove">effacer</span>
                         </button>
-                        <image src='<?= $book->picture; ?>' width="100" height="250"> 
                     </div>
                 </div>
-                <!--                    <div class="container text-center">
-                                        <img src="img/bibli_logo.png" alt="<?= $book->title ?>" height="42" width="42">
-                                    </div>-->
 
-                <!-- Button (Double) -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
-                        <form method="post" action="book/index">
-                            <button id="idbook" name="idbook" class="btn btn-success">
-                                <span class="glyphicon glyphicon-ok"> Valider</span>
-                            </button>
+
+                        <button id="idbook" class="btn btn-success" name="valider" type="submit">
+                            <span class="glyphicon glyphicon-ok"> Valider</span>
+                        </button>
                         </form>
 
-                        <button id="button2id" name="button2id" class="btn btn-warning">
+                        <button id="button2id" name="button2id" class="btn btn-warning" type="submit" name="annuller">
                             <span class="glyphicon glyphicon-remove">
                                 <a href="book/index" alt="book manager" >Annuler</a>
                             </span>
@@ -96,8 +104,8 @@
             </fieldset>
         </form>
         <?php
-            if ($error !== "")
-                echo "<p><span class='errors'>$error</span></p>";
+        if ($error !== "")
+            echo "<p><span class='errors'>$error</span></p>";
         ?>
     </body>
 </html>
