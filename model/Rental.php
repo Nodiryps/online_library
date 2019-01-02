@@ -136,7 +136,7 @@ class Rental extends Model {
 
     public function delete_rental() {
         try {
-            self::execute("DELETE FROM rental WHERE  id=:id AND rentaldate IS NULL", array("id" => $this->id));
+            self::execute("DELETE FROM rental WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }

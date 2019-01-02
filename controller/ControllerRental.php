@@ -13,6 +13,8 @@ class ControllerRental extends Controller {
     }
     
     public function returns() {
-        (new View("returns"))->show();
+        $profile= Controller::get_user_or_redirect();
+        
+        (new View("returns"))->show(array("profile"=>$profile));
     }
 }
