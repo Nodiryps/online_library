@@ -28,12 +28,12 @@
         </nav>
 
         <div class="container">
-            <div class="text-center"><h2 style="margin-left:15px;">Bonjour, <?= $profile->fullname ?> :)</h2></div>
+            <div><h2 style="">Bonjour, <?= $profile->fullname ?> :)</h2></div>
         </div>
 
-        <div class="container" style="margin-top:60px;">
+        <div class="container" style="margin-top:30px;">
             <table class="table table-striped table-condensed">
-                <legend class="text-center"><h1>Mes locations</h1></legend>
+                <legend class="text-center"><strong><h1>Mes locations</h1></strong></legend>
                 <thead class="thead-dark">
                     <tr>
                         <th>Livres</th>
