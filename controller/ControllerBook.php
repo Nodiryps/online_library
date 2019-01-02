@@ -149,6 +149,7 @@ class ControllerBook extends Controller {
     }
 
     public function edit_book() {
+        $user = Controller::get_user_or_redirect();
         $book = Book::get_book_by_id($_POST["editbook"]);
         $error = "";
 
@@ -159,7 +160,22 @@ class ControllerBook extends Controller {
             if (!$book->edit_book($book->id))
                 $error = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
         }
-        (new View("edit_book"))->show(array("book" => $book, "error" => $error));
+        //repris de msn vue en classe a adapter au projet pour uploader une image
+          if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
+            $errors = Member::validate_photo($_FILES['image']);
+            if (empty($errors)) {
+                $saveTo = $member->generate_photo_name($_FILES['image']);
+                $oldFileName = $member->picture_path;
+                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
+                    unlink("upload/" . $oldFileName);
+                }
+                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
+                $member->picture_path = $saveTo;
+                $member->update();
+                $success = "Your profile has been successfully updated.";
+            } 
+        }
+        (new View("edit_book"))->show(array("book" => $book, "error" => $error,"profile"=>$user));
     }
 
     public function create_book() {
