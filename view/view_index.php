@@ -14,26 +14,19 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <style>
-            input {
-                text-align:center;
-            }
-        </style>
     </head>
     <body>
-        <div class="container" style="width:250px;margin:10% auto;">	
+        <div class="container" style="width:350px;margin:5% auto;">	
             <div class="row">
                 <h1 class="text-center"><strong>Connexion</strong></h1>
-                <br/>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <form action="main/login" method="post">
-                        <div class="form-group text-center">
-                            <label for="username">Pseudo</label>
-                            <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" >
+                <br>
+                <div >
+                    <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo">
                         </div>
-                        <div class="form-group text-center">
-                            <label for="password">Mot de passe</label>
-                            <input type="password" class="form-control" name="password" value="<?= $password ?>">
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" value="<?= $password ?>" placeholder="Mot de passe">
                         </div>
                         <div class="form-check">
                             <button class="btn btn-block send-button tx-tfm btn-success" type="submit" 
@@ -41,7 +34,7 @@
                                     style="margin:auto;width:150px;">Connexion
                             </button> 
                         </div>
-                        <a href="main/signup" style="position:absolute;bottom:-30px;right:91px;">Inscription</a>
+                        <a href="main/signup" style="position:absolute;bottom:-30px;left:120px;">Créer un compte</a>
                     </form>
                 </div>
                 <?php if ($errors !== []): ?>

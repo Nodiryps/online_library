@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
                     <div class="col-md-5">
-                        <input id="ISBN" name="ISBN" type="text" 
+                        <input id="ISBN" name="isbn" type="text" 
                                class="form-control input-md" value="<?= $book->isbn ?>">
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="textinput">AUTHOR</label>  
                     <div class="col-md-5">
-                        <input id="textinput" name="textinput" type="text"  
+                        <input id="textinput" name="author" type="text"  
                                class="form-control input-md" value="<?= $book->author ?>">
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="TITRE">TITRE</label>  
                     <div class="col-md-5">
-                        <input id="textinput" name="textinput" type="text" 
+                        <input id="textinput" name="title" type="text" 
                                class="form-control input-md" value="<?= $book->title ?>">
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="textinput">EDITOR</label>  
                     <div class="col-md-5">
-                        <input id="textinput" name="textinput" type="text" 
+                        <input id="textinput" name="editor" type="text" 
                                class="form-control input-md" value="<?= $book->editor ?>">
                     </div>
                 </div>
@@ -65,10 +65,11 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
-                        <input id="picture" name="picture" class="input-file" type="file">
+                        <input style="float:left;" id="picture" name="picture" class="input-file" type="file">
                         <button  name="button2id" class="btn btn-warning">
-                            <span class="glyphicon glyphicon-">effacer</span>
+                            <span class="glyphicon glyphicon-remove">effacer</span>
                         </button>
+                        <image src='<?= $book->picture; ?>' width="100" height="250"> 
                     </div>
                 </div>
                 <!--                    <div class="container text-center">

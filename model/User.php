@@ -190,17 +190,6 @@ class User extends Model {
         }
     }
 
-    public function update_user() {
-        $query = self::execute("UPDATE user "
-                . "SET username=:username, password=:password, fullname=:fullname, "
-                    . "email=:email, birthdate=:birthdate, role=:role "
-                . "WHERE id=:id", array(
-                    "id" => $this->id, "username" => $this->username,
-                    "password" => Tools::my_hash($this->hash_password),
-                    "fullname" => $this->fullname, "email" => $this->email,
-                    "birthdate" => $this->birthdate, "role" => $this->role));
-    }
-
     public function delete_user() {
         try {
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
@@ -222,7 +211,6 @@ class User extends Model {
 
 //
     public static function get_role_by_id($id) {
-
         try {
             $query = self::execute("SELECT role FROM user WHERE id=:id", array("id" => $id));
             $role = $query->fetch();
@@ -233,17 +221,25 @@ class User extends Model {
     }
 
     public function update() {
-
+        $birthdate = $this->birthdate;
+        if($birthdate === "")
+            $birthdate = NULL;
+        
         if (!self::is_username_not_available($this->username))
-            self::execute("UPDATE user SET password = :password, fullname = :fullname,email = :email , birthdate = :birthdate, role = :role WHERE username = :username ", array("fullname" => $this->fullname, "email" => $this->email,
-                "birthdate" => $this->birthdate, "password" => $this->hash_password));
+            self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
+                        . "email = :email , birthdate = :birthdate, role = :role "
+                        . "WHERE username = :username", 
+                    array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
+                        "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role));
     }
 
     public function insert() {
         try {
-            self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) VALUES(:username, :password, :fullname, :email, :birthdate, :role)", array("username" => $this->username, "password" => $this->hash_password,
-                "fullname" => $this->fullname, "email" => $this->email,
-                "birthdate" => $this->birthdate, "role" => $this->role));
+            self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) "
+                        . "VALUES(:username, :password, :fullname, :email, :birthdate, :role)", 
+                    array("username" => $this->username, "password" => $this->hash_password,
+                          "fullname" => $this->fullname, "email" => $this->email,
+                          "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
              Tools::abort("Problème lors de l'accès a la base de données");

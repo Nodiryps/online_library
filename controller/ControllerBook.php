@@ -26,10 +26,103 @@ class ControllerBook extends Controller {
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
+    // on créé un livre sans img => comme ds msn
+    public function add_book() {
+        $user = self::get_user_or_redirect();
+        $isbn = "";
+        $title = "";
+        $author = "";
+        $editor = "";
+        $errors = [];
+
+        if ($user->is_admin() || $user->is_manager())
+            if (isset($_POST["createBook"]))
+                if (Tools::isset_notEmpty($_POST["isbn"]) && Tools::isset_notEmpty($_POST["author"]) 
+                        && Tools::isset_notEmpty($_POST["title"]) && Tools::isset_notEmpty($_POST["editor"])) {
+                    $isbn = Tools::sanitize($_POST["isbn"]);
+                    $title = Tools::sanitize($_POST["title"]);
+                    $author = Tools::sanitize($_POST["author"]);
+                    $editor = Tools::sanitize($_POST["editor"]);
+
+                    $errors[] = $this->rules_add_book($isbn);
+                }
+        (new View("add_book"))->show(array("errors" => $errors, "isbn"));
+    }
+
+    private function rules_add_book($isbn, $title, $author) {
+        $errors = [];
+        if (strlen($isbn) !== 13)
+            $errors[] = "isbn: incorrect (13)!";
+        if(strlen($title) < 2)
+            $errors[] = "titre: trop court (2 min.)!";
+        if(strlen($author) < 5)
+            $errors[] = "auteur.e: trop court (5 min.)!";
+        if(strlen($author) < 2)
+            $errors[] = "édition: trop court (2 min.)!";
+        return $errors;
+    }
+
+    public function edit_book($book) {
+        $profile = '';
+        $picture_path = '';
+
+        if (isset($_POST["editbook"]) && $_POST["editbook"] !== "") {
+            if (isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
+                if ($_FILES['picture']['error'] == 0) {
+                    $typeOK = TRUE;
+                    $path = $this->is_path_ok($book);
+
+                    if ($path === "") {
+                        $typeOK = FALSE;
+                        $error = "Formats supportés: gif, jpeg ou png !";
+                    }
+                    if ($typeOK) {
+                        move_uploaded_file($_FILES['picture']['tmp_name'], $path);
+                        if ($book->update($book->isbn, $book->title, $book->author, $book->editor, $book->picture)) {
+                            $success = "Your profile has been successfully updated.";
+                        }
+                    }
+                } else {
+                    $error = "Une erreur est survenue lors du téléchargement de l'image.";
+                }
+                return $error;
+            }
+        }
+        if (isset($_POST['profile'])) {
+            $profile = sanitize($_POST['profile']);
+            if (update_member($user, $profile, NULL)) {
+                $success = "Your profile has been successfully updated.";
+            }
+        }
+
+        $member = get_member($user);
+        $profile = $member['profile'];
+        $picture_path = $member['picture_path'];
+    }
+
+    private function is_path_ok($book) {
+        $path = "";
+        if ($_FILES['picture']['type'] == "picture/gif")
+            $path = $book . ".gif";
+        else if ($_FILES['picture']['type'] == "picture/jpeg")
+            $path = $book . ".jpg";
+        else if ($_FILES['picture']['type'] == "picture/png")
+            $path = $book . ".png";
+        return $path;
+    }
+
+//    public function edit_book() {
+//        $error = "";
+//        if (isset($_POST["editbook"]) && $_POST["editbook"] !== "") {
+//            $book = Book::get_book_by_id($_POST["editbook"]);
+//            $error = $this->update($book);
+//        }
+//        (new View("edit_book"))->show(array("book" => $book, "error" => $error));
+//    }
+
     public function delete_book() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
-        $pannier = "";
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $msg = " ";
         $members = User::get_all_user();
@@ -64,102 +157,6 @@ class ControllerBook extends Controller {
             $book = Book::get_book_by_id($value);
         }
         (new View("book_detail"))->show(array("book" => $book, "profile" => $user));
-    }
-
-    public function add_rental() {// on recupere un user mais le champ id est vide
-        $user = Controller::get_user_or_redirect();
-        $users = User::get_user_by_username($user->username);
-        $books = Book::get_all_books();
-        $id = 0;
-        $datetime = date("Y-m-d H:i:s");
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
-         
-        $msg = " ";
-        $members = User::get_all_user();
-
-        if (isset($_POST["idbook"])) {
-            $value = $_POST["idbook"];
-            $rent = Book::get_book_by_id($value);
-            if (!Rental::rent_valid($users->id)) {
-                $msg = "Vous ne pouvez pas louer plus de 5 livres";
-            } else {
-                $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
-                $rental->insert_book_without_rent();
-            }
-            $getUserRental = $users->get_rental_join_book_join_user_by_user();
-        }
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
-    }
-
-    public function add_rental_for_user() {
-        $user = Controller::get_user_or_redirect();
-        $books = Book::get_all_books();
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
-        $msg = " ";
-        $members = User::get_all_user();
-         $datetime = date("Y-m-d H:i:s");
-        if (isset($_POST["member_rent"])) {
-            $value = $_POST["member_rent"];
-            $usertoAddRent = User::get_user_by_username($value);
-            var_dump($usertoAddRent);
-//            if ($user->id != $usertoAddRent->id) {
-//               $allrentofUser= Rental::get_this_rental($usertoAddRent->id);
-//               foreach ($allrentofUser as $rent){
-//                   $rent->update_rental_rentdate($datetime);
-//               }
-               $getUserRental="";
-                   
-               }else{
-                   
-//               }
-            }
-        
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
-    }
-
-    public function del_one_rent() {
-        $user = Controller::get_user_or_redirect();
-        $books = Book::get_all_books();
-        $getUserRental = $user->get_rental_join_book_join_user_by_user();
-        $msg = " ";
-        $members = User::get_all_user();
-
-        if (isset($_POST["delrent"])) {
-            $value = $_POST["delrent"];
-            $delrent = Renget_rental_by_id_bookby_id($value);
-            foreach ($delrent as $del) {
-                $del->delete_rental();
-            }
-            $getUserRental = $user->get_rental_join_book_join_user_by_user();
-        }
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
-    }
-
-    public function edit_book() {
-        $book = Book::get_book_by_id($_POST["editbook"]);
-        $error = "";
-
-        if (isset($_POST["editbook"])) {
-            $book = Book::get_book_by_id($_POST["editbook"]);
-        }
-        if (isset($_POST["idbook"]) && $book !== "") {
-            if (!$book->edit_book($book->id))
-                $error = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
-        }
-        (new View("edit_book"))->show(array("book" => $book, "error" => $error));
-    }
-
-    public function create_book() {
-        $user = Controller::get_user_or_redirect();
-        $editbook = "";
-        $isbn = "";
-        $titre = "";
-        $author = "";
-        $editor = "";
-        $picture = "";
-        $test = "test";
-
-        (new View("add_book"))->show(array("editbook" => $editbook, "test" => $test));
     }
 
 }

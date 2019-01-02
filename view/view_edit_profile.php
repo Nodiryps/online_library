@@ -33,7 +33,7 @@
                         <td>birthdate</td>
                         <td><input  name="birthdate" type="date" value="<?= $birthdate ?>"></td>
                     </tr> 
-                    <?php if ($utilisateur->role != "manager"): ?>
+                    <?php if (!$utilisateur->is_manager()): ?>
                         <tr>
                             <td>Role</td>
                             <td><select name="role" value="<?= $role ?>">
@@ -46,6 +46,7 @@
                         </tr>
 
                     <?php endif; ?> 
+                    <?php // if (($utilisateur->is_admin() || $utilisateur->is_manager()) && $utilisateur->username === $member->username): ?>
                     <tr>
                         <td>Password</td>
                         <td><input  name="password" type="password" ></td>
@@ -55,6 +56,7 @@
                         <td>Confirmation du password</td>
                         <td><input  name="confirm_password" type="password" ></td>
                     </tr>
+                    <?php //endif; ?>
 
 
 

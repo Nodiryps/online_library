@@ -30,7 +30,7 @@ class Book extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -40,21 +40,23 @@ class Book extends Model {
             $book = $query->fetch();
             return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"]);
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
     public static function get_book_by_critere($critere) {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book WHERE title LIKE :critere OR author LIKE :critere OR editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
+            $books = self::execute("SELECT * FROM book "
+                    . "WHERE title LIKE :critere OR author LIKE :critere OR "
+                    . "editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -64,73 +66,22 @@ class Book extends Model {
             $book = $query->fetch();
             return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"]);
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+    public function create() {
+        try{
+            self::execute("INSERT INTO book(id, isbn, title, author, editor, picture)"
+                        . "VALUES(:id, :isbn, :title, :author, :editor, :picture)", 
+                    array("id" => $this->id, "isbn" => $this->isbn, "title" => $this->title, 
+                        "author" => $this->author, "editor" => $this->editor, "picture" => $this->picture));
+        } catch (Exception $ex) {
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
-    public function create_book() {
-        
-    }
-
-    public function update_by_id() {
-        check_login();
-        $profile = '';
-        $picture_path = '';
-
-        if (isset($_FILES['image']['name']) && $_FILES['image']['name'] != '') {
-            if ($_FILES['image']['error'] == 0) {
-
-                $typeOK = TRUE;
-
-                if ($_FILES['image']['type'] == "image/gif")
-                    $saveTo = $user . ".gif";
-                else if ($_FILES['image']['type'] == "image/jpeg")
-                    $saveTo = $user . ".jpg";
-                else if ($_FILES['image']['type'] == "image/png")
-                    $saveTo = $user . ".png";
-                else {
-                    $typeOK = FALSE;
-                    $error = "Unsupported image format : gif, jpeg ou png !";
-                }
-
-                if ($typeOK) {
-                    move_uploaded_file($_FILES['image']['tmp_name'], $saveTo);
-                    if (update_member($user, NULL, $saveTo)) {
-                        $success = "Your profile has been successfully updated.";
-                    }
-                }
-            } else {
-                $error = "Error while uploading file.";
-            }
-        }
-
-        if (isset($_POST['profile'])) {
-            $profile = sanitize($_POST['profile']);
-            if (update_member($user, $profile, NULL)) {
-                $success = "Your profile has been successfully updated.";
-            }
-        }
-
-        $member = get_member($user);
-        $profile = $member['profile'];
-        $picture_path = $member['picture_path'];
-    }
-
-//    public function edit_book($bookId) {
-//        if (isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '')
-//            if ($_FILES['picture']['error'] == 0) {
-//                $path = $this->is_path_ok($bookId);
-//                if ($path !== " ") {
-//                    move_uploaded_file($_FILES['picture']['tmp_name'], $path);
-//                    $this->update($isbn, $title, $author, $editor, $path);
-//                    return TRUE;
-//                } else
-//                    return FALSE;
-//            } else
-//                return FALSE;
-//    }
-
-    private function update($isbn, $title, $author, $editor, $picture) {
+    public function update($isbn, $title, $author, $editor, $picture) {
         try {
             $query = self::execute("UPDATE book "
                             . "SET isbn = :isbn, title = :title, "
@@ -138,20 +89,9 @@ class Book extends Model {
                         "editor" => $editor, "picture" => $picture));
             return TRUE;
         } catch (Exception $ex) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
             return FALSE;
         }
-    }
-
-    private function is_path_ok($bookId) {
-        $path = " ";
-        if ($_FILES['picture']['type'] == "picture/gif")
-            $path = $bookId . ".gif";
-        else if ($_FILES['picture']['type'] == "picture/jpeg")
-            $path = $bookId . ".jpg";
-        else if ($_FILES['picture']['type'] == "picture/png")
-            $path = $bookId . ".png";
-        return $path;
     }
 
     public function delete_book() {
@@ -166,7 +106,7 @@ class Book extends Model {
         }
     }
 
-    public function delete_book_rent() {
+    public function delete_book_rented() {
         try {
             self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
         } catch (Exception $ex) {

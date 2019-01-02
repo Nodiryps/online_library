@@ -14,11 +14,6 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <style>
-            input {
-                text-align:center;
-            }
-        </style>
     </head>
     <body>
 
@@ -29,50 +24,39 @@
                         </ul>
                     </nav>
                 </div>-->
-        <div class="container text-center" style="width:350px;margin:5% auto;">
-            <!--            <div class="row ">
-                            <div class="col-md-10">
-                                <div class="myform form  ">-->
-            <div class="btn btn-default" style="position:absolute;top:5%;right:auto;">
-                <a href="main/index" class="glyphicon glyphicon-arrow-left"></a>
-            </div>
-            <div class="text-center"><h1>Insrciption</h1></div>
+        <div class="container" style="width:350px;margin:5% auto;">
+            <div class="row">
+            <h1 class="text-center"><strong>Inscription</strong></h1>
             <br>
-            <form action="main/signup" method="post" >
+            <form action="main/signup" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group">
-                    <label for="fullname">Nom complet</label>
-                    <input type="text" name="fullname"  class="form-control my-input" id="fullname">
+                    <input type="text" name="fullname"  class="form-control my-input" id="fullname" placeholder="Nom complet">
                 </div>
                 <div class="form-group">
-                    <label for="username">Pseudo</label>
-                    <input type="text" name="username"  class="form-control my-input" id="username">
+                    <input type="text" name="username"  class="form-control my-input" id="username" placeholder="Pseudo">
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email"  class="form-control my-input" id="email">
+                    <input type="email" name="email"  class="form-control my-input" id="email" placeholder="Email">
                 </div>
                 <div class="form-group">
-                    <label for="birthdate">Date de naissance</label>
-                    <input type="date" name="birthdate" id="birthdate"  class="form-control my-input">
+                    <input type="date" name="birthdate" id="birthdate"  class="form-control my-input" placeholder="Date de naissance">
                 </div>
                 <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" name="password"  class="form-control my-input" id="password">
+                    <input type="password" name="password"  class="form-control my-input" id="password" placeholder="Mot(phrase!) de passe">
                 </div>
                 <div class="form-group">
-                    <label for="password_confirm">Confirmation</label>
-                    <input type="password" name="password_confirm"  class="form-control my-input" id="password_confirm">
+                    <input type="password" name="password_confirm"  class="form-control my-input" id="password_confirm" placeholder="Répétez votre mot(phrase!) de passe">
                 </div>
+                <br>
                 <div class="text-center">
-                    <button type="submit" class=" btn btn-block send-button tx-tfm btn-success"
-                            style="margin:auto;width:150px;">
+                    <button type="submit" class=" btn btn-block send-button tx-tfm btn-success" style="margin:auto;width:150px;">
                         Valider
                     </button>
+                    <a href="main/index" style="position:absolute;bottom:-30px;left:127px;">Déjà inscrit.e?</a>
                 </div>
+                
+            </form>
         </div>
-        <!--    </div>
-        </div>
-        </div>-->
         <div class="text-center">
             <?php
             if ($errors !== []) {
