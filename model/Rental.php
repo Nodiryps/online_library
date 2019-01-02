@@ -52,10 +52,10 @@ class Rental extends Model {
     }
 
     // faire une requete de jointure 
-    public static function get_this_rental($id) {
+    public static function get_this_rental_not_validate($id) {
         $results = [];
         try {
-            $query = self::execute("SELECT * FROM rental join book WHERE user=:id AND rentaldate IS NULL", array("id" => $id));
+            $query = self::execute("SELECT * FROM rental WHERE user=:id AND rentaldate IS NULL", array("id" => $id));
             $books = $query->fetchAll();
             foreach ($books as $row) {
                 $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
@@ -157,7 +157,7 @@ class Rental extends Model {
     }
 
     public function update_rental_rentdate_for_user($user,$rentaldate) {
-        self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id AND rentaldate IS NULL ", array("user"=>$user,"rentaldate" => $rentaldate, "id" => $this->id));
+        self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id ", array("user"=>$user,"rentaldate" => $rentaldate, "id" => $this->id));
     }
     
      

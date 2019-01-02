@@ -29,7 +29,7 @@
                         </ul>
                     </nav>
                 </div>-->
-        <form action="book/index" method="post">
+        <form action="main/index" method="post">
         <div class="container text-center" style="width:350px;margin:5% auto;">
             <!--            <div class="row ">
                             <div class="col-md-10">

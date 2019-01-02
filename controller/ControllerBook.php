@@ -100,44 +100,34 @@ class ControllerBook extends Controller {
         $allrentofUser = "";
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
-
+        $allrentofUser = Rental::get_this_rental_not_validate($user->id);
+        var_dump($allrentofUser);
 
         if (isset($_POST["member_rent"])) {
             $value = $_POST["member_rent"];
-            var_dump($value);
             $usertoAddRent = User::get_user_by_username($value);
             if ($user->id != $usertoAddRent->id) {
-                $allrentofUser = Rental::get_this_rental($user->id);
-                var_dump($value);
+                var_dump($user);
                 foreach ($allrentofUser as $rent) {
                     $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
                 }
-                $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
             } else {
-                $allrentofUser = Rental::get_this_rental($user->id);
-                // var_dump($allrentofUser);
                 foreach ($allrentofUser as $rent) {
                     $rent->update_rental_rentdate($datetime);
                 }
-                $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
             }
         }
         if (isset($_POST["member_rents"])) {
-            $allrentofUser = Rental::get_this_rental($user->id);
             foreach ($allrentofUser as $rent) {
                 $rent->update_rental_rentdate($datetime);
             }
-            $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
-        
         }
-
         if (isset($_POST["annuler"])) {
-            $allrentofUser = Rental::get_this_rental($user->id);
             foreach ($allrentofUser as $rent) {
                 $rent->delete_rental();
             }
         }
-
+        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
