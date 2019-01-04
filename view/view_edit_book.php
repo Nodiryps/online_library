@@ -73,14 +73,13 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
-                        <input style="float:left;" id="picture" name="picture" class="input-file" type="file">
-                        <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
+                        <input id="picture" name="image" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
                         <?php if ($book->picture): ?>
-                            <img src='upload/<?= $book->picture ?>' width="100" alt="Profile image">
+                            <img src='upload/<?= $book->picture ?>' width="100" alt="Book image">
                             <br><br>
                         <?php endif; ?>
                         <button  name="button2id" class="btn btn-warning">
-                            <span class="glyphicon glyphicon-remove">effacer</span>
+                            <span class="glyphicon glyphicon-remove"> effacer</span>
                         </button>
                     </div>
                 </div>
@@ -88,11 +87,9 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
-
-                        <button id="idbook" class="btn btn-success" name="valider" type="submit">
+                        <button id="idbook" class="btn btn-success" name="idbook" type="submit">
                             <span class="glyphicon glyphicon-ok"> Valider</span>
                         </button>
-                        </form>
 
                         <button id="button2id" name="button2id" class="btn btn-warning" type="submit" name="annuller">
                             <span class="glyphicon glyphicon-remove">
@@ -103,9 +100,17 @@
                 </div>
             </fieldset>
         </form>
-        <?php
-        if ($error !== "")
-            echo "<p><span class='errors'>$error</span></p>";
-        ?>
+        <?php if ($errors !== []): ?>
+            <div class='errors'>
+                <p>Erreur(s) à corriger:</p>
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?= $error ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php elseif (strlen($success) != 0): ?>
+            <p><span class='success'><?= $success ?></span></p>
+        <?php endif; ?>
     </body>
 </html>

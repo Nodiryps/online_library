@@ -9,6 +9,8 @@ require_once 'framework/Tools.php';
 
 class ControllerBook extends Controller {
 
+    const UPLOAD_ERR_OK = 0;
+    
     public function index() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
@@ -62,55 +64,6 @@ class ControllerBook extends Controller {
         return $errors;
     }
 
-//    public function edit_book($book) {
-//        $profile = '';
-//        $picture_path = '';
-//
-//        if (isset($_POST["editbook"]) && $_POST["editbook"] !== "") {
-//            if (isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
-//                if ($_FILES['picture']['error'] == 0) {
-//                    $typeOK = TRUE;
-//                    $path = $this->is_path_ok($book);
-//
-//                    if ($path === "") {
-//                        $typeOK = FALSE;
-//                        $error = "Formats supportés: gif, jpeg ou png !";
-//                    }
-//                    if ($typeOK) {
-//                        move_uploaded_file($_FILES['picture']['tmp_name'], $path);
-//                        if ($book->update($book->isbn, $book->title, $book->author, $book->editor, $book->picture)) {
-//                            $success = "Your profile has been successfully updated.";
-//                        }
-//                    }
-//                } else {
-//                    $error = "Une erreur est survenue lors du téléchargement de l'image.";
-//                }
-//                return $error;
-//            }
-//        }
-//        if (isset($_POST['profile'])) {
-//            $profile = sanitize($_POST['profile']);
-//            if (update_member($user, $profile, NULL)) {
-//                $success = "Your profile has been successfully updated.";
-//            }
-//        }
-//
-//        $member = get_member($user);
-//        $profile = $member['profile'];
-//        $picture_path = $member['picture_path'];
-//    }
-
-//    private function is_path_ok($book) {
-//        $path = "";
-//        if ($_FILES['picture']['type'] == "picture/gif")
-//            $path = $book . ".gif";
-//        else if ($_FILES['picture']['type'] == "picture/jpeg")
-//            $path = $book . ".jpg";
-//        else if ($_FILES['picture']['type'] == "picture/png")
-//            $path = $book . ".png";
-//        return $path;
-//    }
-
     public function delete_book() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
@@ -148,37 +101,7 @@ class ControllerBook extends Controller {
         }
         (new View("book_detail"))->show(array("book" => $book, "profile" => $user));
     }
-
-    public function edit_book() {
-        $user = Controller::get_user_or_redirect();
-        $book = Book::get_book_by_id($_POST["editbook"]);
-        $error = "";
-
-        if (isset($_POST["editbook"])) {
-            $book = Book::get_book_by_id($_POST["editbook"]);
-        }
-        if (isset($_POST["idbook"]) && $book !== "") {
-            if (!$book->edit_book($book->id))
-                $error = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
-        }
-        //repris de msn vue en classe a adapter au projet pour uploader une image
-          if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
-            $errors = Member::validate_photo($_FILES['image']);
-            if (empty($errors)) {
-                $saveTo = $member->generate_photo_name($_FILES['image']);
-                $oldFileName = $member->picture_path;
-                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
-                    unlink("upload/" . $oldFileName);
-                }
-                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
-                $member->picture_path = $saveTo;
-                $member->update();
-                $success = "Your profile has been successfully updated.";
-            } 
-        }
-        (new View("edit_book"))->show(array("book" => $book, "error" => $error,"profile"=>$user));
-    }
-
+    
     public function create_book() {
         $user = Controller::get_user_or_redirect();
         $editbook = "";
@@ -190,5 +113,36 @@ class ControllerBook extends Controller {
         $test = "test";
 
         (new View("add_book"))->show(array("editbook" => $editbook, "test" => $test));
+    }
+
+    public function edit_book() {
+        $user = $this->get_user_or_redirect();
+        $book = "";
+        $errors = [];
+        $success = "";
+
+        if (isset($_POST["editbook"])) {
+            $book = Book::get_book_by_id($_POST["editbook"]);
+        }
+        if (isset($_POST["idbook"]) && $book !== "") {
+            if (!$book->edit_book($book->id))
+                $errors = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
+        }
+        //repris de msn vue en classe a adapter au projet pour uploader une image
+          if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
+            $errors = Book::validate_image($_FILES['image']);
+            if ($errors = []) {
+                $saveTo = $book->generate_image_name($_FILES['image']);
+                $oldFileName = $book->picture;
+                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
+                    unlink("upload/" . $oldFileName);
+                }
+                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
+                $book->picture = $saveTo;
+                $book->update();
+                $success = "Le bouquin a bien été mis à jour.";
+            } 
+        }
+        (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile"=>$user, "success" => $success));
     }
 }
