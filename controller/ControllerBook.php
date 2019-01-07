@@ -10,7 +10,7 @@ require_once 'framework/Tools.php';
 class ControllerBook extends Controller {
 
     const UPLOAD_ERR_OK = 0;
-    
+
     public function index() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
@@ -39,8 +39,7 @@ class ControllerBook extends Controller {
 
         if ($user->is_admin() || $user->is_manager())
             if (isset($_POST["createBook"]))
-                if (Tools::isset_notEmpty($_POST["isbn"]) && Tools::isset_notEmpty($_POST["author"]) 
-                        && Tools::isset_notEmpty($_POST["title"]) && Tools::isset_notEmpty($_POST["editor"])) {
+                if (Tools::isset_notEmpty($_POST["isbn"]) && Tools::isset_notEmpty($_POST["author"]) && Tools::isset_notEmpty($_POST["title"]) && Tools::isset_notEmpty($_POST["editor"])) {
                     $isbn = Tools::sanitize($_POST["isbn"]);
                     $title = Tools::sanitize($_POST["title"]);
                     $author = Tools::sanitize($_POST["author"]);
@@ -55,11 +54,11 @@ class ControllerBook extends Controller {
         $errors = [];
         if (strlen($isbn) !== 13)
             $errors[] = "isbn: incorrect (13)!";
-        if(strlen($title) < 2)
+        if (strlen($title) < 2)
             $errors[] = "titre: trop court (2 min.)!";
-        if(strlen($author) < 5)
+        if (strlen($author) < 5)
             $errors[] = "auteur.e: trop court (5 min.)!";
-        if(strlen($author) < 2)
+        if (strlen($author) < 2)
             $errors[] = "édition: trop court (2 min.)!";
         return $errors;
     }
@@ -101,7 +100,7 @@ class ControllerBook extends Controller {
         }
         (new View("book_detail"))->show(array("book" => $book, "profile" => $user));
     }
-    
+
     public function create_book() {
         $user = Controller::get_user_or_redirect();
         $editbook = "";
@@ -123,15 +122,15 @@ class ControllerBook extends Controller {
 
         if (isset($_POST["editbook"])) {
             $book = Book::get_book_by_id($_POST["editbook"]);
+            if (isset($_POST["submitEdit"])) {
+                self::update_book_attributes($book);
+                $success = "Le bouquin a bien été mis à jour.";
+            }
         }
-        if (isset($_POST["idbook"]) && $book !== "") {
-            if (!$book->edit_book($book->id))
-                $errors = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
-        }
-        //repris de msn vue en classe a adapter au projet pour uploader une image
-          if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
             $errors = Book::validate_image($_FILES['image']);
-            if ($errors = []) {
+            if ($errors === []) {
                 $saveTo = $book->generate_image_name($_FILES['image']);
                 $oldFileName = $book->picture;
                 if ($oldFileName && file_exists("upload/" . $oldFileName)) {
@@ -141,8 +140,29 @@ class ControllerBook extends Controller {
                 $book->picture = $saveTo;
                 $book->update();
                 $success = "Le bouquin a bien été mis à jour.";
-            } 
+            }
         }
-        (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile"=>$user, "success" => $success));
+
+//        if (isset($_POST["submitEdit"]) && $book !== "") {
+//            $book = Book::get_book_by_id($_POST["editbook"]);
+//            if (!$book->edit_book())
+//                $errors = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
+//        }
+        (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "success" => $success));
     }
+
+    private static function update_book_attributes($book) {
+        $book->isbn = self::receives($_POST["isbn"]);
+        $book->author = self::receives($_POST["author"]);
+        $book->title = self::receives($_POST["title"]);
+        $book->editor = self::receives($_POST["editor"]);
+        $book->update();
+    }
+
+    private static function receives($value) {
+        $post = $_POST[$value];
+        if (isset($post))
+            return $post;
+    }
+
 }

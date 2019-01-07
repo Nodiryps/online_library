@@ -87,10 +87,12 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
-                        <button id="idbook" class="btn btn-success" name="idbook" type="submit">
-                            <span class="glyphicon glyphicon-ok"> Valider</span>
+                        <button id="idbook" class="btn btn-success" name="submitEdit" type="submit">
+                            <span class="glyphicon glyphicon-ok">
+                                <a href="book/index" alt="book manager" >Valider</a> 
+                            </span>
                         </button>
-
+                        
                         <button id="button2id" name="button2id" class="btn btn-warning" type="submit" name="annuller">
                             <span class="glyphicon glyphicon-remove">
                                 <a href="book/index" alt="book manager" >Annuler</a>
@@ -111,6 +113,6 @@
             </div>
         <?php elseif (strlen($success) != 0): ?>
             <p><span class='success'><?= $success ?></span></p>
-        <?php endif; ?>
+            <?php endif; ?>
     </body>
 </html>

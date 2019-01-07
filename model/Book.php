@@ -108,10 +108,6 @@ class Book extends Model {
         }
     }
 
-    public function book_exists() {
-        
-    }
-
     public static function validate_image($file) {
         $errors = [];
         if (isset($file['name']) && $file['name'] != '') {

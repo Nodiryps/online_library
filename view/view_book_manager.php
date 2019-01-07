@@ -109,7 +109,7 @@
                     </tr>
                 <?php endforeach; ?>
 
-                <td style="color: red;"><?= strtoupper($msg) ?></td>
+                <!--<td style="color: red;"><?= strtoupper($msg) ?></td>-->
 
             </table>
         </div>
