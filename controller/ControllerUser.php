@@ -15,12 +15,11 @@ class ControllerUser extends Controller {
     public function profil() {
         $profile = self::get_user_or_redirect();
         $returndate = [];
-        $datetoreturn=[];
+        $datetoreturn = [];
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
-        foreach ($userRentals as $rent) {
-            $datetoreturn[]= date('Y-m-d',strtotime('+1 month',strtotime($rent->rentaldate)));
-            }
-            
+//        $datetime = "1999-10-20 23:15:30";
+//        $dt = strtotime($datetime); //make timestamp with datetime string
+//        $dates=date("d-m-Y", $dt); //echo the year of the datestamp just created
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate));
     }
 
@@ -137,7 +136,7 @@ class ControllerUser extends Controller {
         $utilisateur = User::get_user_by_username($user->username);
         $id = "";
         if (Tools::issets("idmember"))
-            $id = Tools::post("idmember");
+            $id = $_POST["idmember"];
         $oldpass = User::get_password($id);
         $member = User::get_user_by_id($id);
         $username = $member->username;
@@ -188,24 +187,13 @@ class ControllerUser extends Controller {
                 $member->hash_password = $oldpass;
             }
             if (empty($error)) {
-                try {
-                    $member->update_user();
-                    if ($utilisateur->id === $member->id) {
 
-                        $_SESSION["user"] = $member;
-                    }
-                    Controller::redirect("user", "user_list");
-                } catch (Exception $exc) {
-                    // die("problemes lors de l'acces a la base de donnée");
-                    //                     echo  $exc->getCode(); echo 666;
-                    //                     echo  $exc->getFile();echo 666;
-                    //                     echo  $exc->getLine();echo 666;
-                    //                     echo  $exc->getMessage();echo 666;
-                    //                     echo  $exc->getPrevious();echo 666;
-                    //                     echo  $exc->getTraceAsString();echo 666;
+                $member->update_user();
+                if ($utilisateur->id === $member->id) {
+
+                    $_SESSION["user"] = $member;
                 }
-            } else {
-                
+                Controller::redirect("user", "user_list");
             }
         }
         (new View("edit_profile"))->show(array("username" => $username, "password" => $password, "email" => $email, "role" => $role, "birthdate" => $birthdate, "fullname" => $fullname, "member" => $member, "id" => $id, "error" => $error, "utilisateur" => $utilisateur));
@@ -290,4 +278,5 @@ class ControllerUser extends Controller {
     public function rentals_by_user($user) {
         return Rental::get_rentals_by_user($user);
     }
+
 }

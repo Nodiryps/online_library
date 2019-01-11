@@ -16,7 +16,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Detail de <?= $book->title ?></h1>
+            <h1>Detail de: <?= $book->title ?></h1>
         </div>
         <h1></h1>
         <div class="container ">

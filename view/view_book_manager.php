@@ -99,7 +99,7 @@
                             </td>
                         <?php endif; ?>
                         <td style="border:none;" bgcolor="white">
-                            <form  method="post" action="book/add_rental">
+                            <form  method="post" action="rental/add_rental">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
                                 <button type="submit"  name="idsubmit" class="btn btn-success">
                                     <span class="glyphicon glyphicon-plus"></span>
@@ -162,7 +162,7 @@
                 <?php endif; ?>
             </table>
 
-            <form class="form-horizontal " method="post" action="book/add_rental_for_user">
+            <form class="form-horizontal " method="post" action="rental/add_rental_for_user">
                 <?php if ($profile->is_admin() || $profile->is_manager()): ?>
 
                     <label>le panier est pour: </label>
@@ -183,7 +183,7 @@
                     </div>
                 </form>
             <?php else: ?>
-                <form  class="form-horizontal " method="post" action="book/add_rental_for_user">
+                <form  class="form-horizontal " method="post" action="rental/add_rental_for_user">
                     <div class="text-right">
                         <input type="hidden" name="member_rents" value="<?php $profile->username ?>" >
                         <button class="btn btn-success" class="form-group " type="submit" name="test" ><span class="glyphicon glyphicon-check"> Louer</span></button>

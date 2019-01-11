@@ -31,14 +31,14 @@
         <form class="form-horizontal" action="book/edit_book">
             <fieldset>
 
-                <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
+                <legend class="text-center">EDITION DE <?= strtoupper($title) ?> </legend>
 
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
                     <div class="col-md-5">
                         <input id="ISBN" name="isbn" type="text" 
-                               class="form-control input-md" value="<?= $book->isbn ?>">
+                               class="form-control input-md" value="<?= $isbn ?>">
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
                     <label class="col-md-4 control-label" for="textinput">AUTHOR</label>  
                     <div class="col-md-5">
                         <input id="textinput" name="author" type="text"  
-                               class="form-control input-md" value="<?= $book->author ?>">
+                               class="form-control input-md" value="<?= $author ?>">
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
                     <label class="col-md-4 control-label" for="TITRE">TITRE</label>  
                     <div class="col-md-5">
                         <input id="textinput" name="title" type="text" 
-                               class="form-control input-md" value="<?= $book->title ?>">
+                               class="form-control input-md" value="<?= $title ?>">
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                     <label class="col-md-4 control-label" for="textinput">EDITOR</label>  
                     <div class="col-md-5">
                         <input id="textinput" name="editor" type="text" 
-                               class="form-control input-md" value="<?= $book->editor ?>">
+                               class="form-control input-md" value="<?= $editor ?>">
                     </div>
                 </div>
 
@@ -73,12 +73,12 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
-                        <input id="picture" name="image" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
-                        <?php if ($book->picture): ?>
-                            <img src='upload/<?= $book->picture ?>' width="100" alt="Book image">
+                        <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
+                        <?php if ($picture): ?>
+                            <img src='upload/<?= $image ?>' width="100" alt="Book image">
                             <br><br>
                         <?php endif; ?>
-                        <button  name="button2id" class="btn btn-warning">
+                        <button  name="delimage" class="btn btn-warning">
                             <span class="glyphicon glyphicon-remove"> effacer</span>
                         </button>
                     </div>
@@ -87,10 +87,8 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
-                        <button id="idbook" class="btn btn-success" name="submitEdit" type="submit">
-                            <span class="glyphicon glyphicon-ok">
-                                <a href="book/index" alt="book manager" >Valider</a> 
-                            </span>
+                        <button id="idbook" class="btn btn-success"  type="submit">
+                            <span class="glyphicon glyphicon-ok">Valide</span>
                         </button>
                         
                         <button id="button2id" name="button2id" class="btn btn-warning" type="submit" name="annuller">

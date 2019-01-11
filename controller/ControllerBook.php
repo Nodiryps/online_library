@@ -28,7 +28,7 @@ class ControllerBook extends Controller {
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
-    // on créé un livre sans img => comme ds msn
+// on créé un livre sans img => comme ds msn
     public function add_book() {
         $user = self::get_user_or_redirect();
         $isbn = "";
@@ -119,36 +119,59 @@ class ControllerBook extends Controller {
         $book = "";
         $errors = [];
         $success = "";
+        $isbn = "";
+        $title = "";
+        $author = "";
+        $editor = "";
+        $picture = "";
 
-        if (isset($_POST["editbook"])) {
-            $book = Book::get_book_by_id($_POST["editbook"]);
-            if (isset($_POST["submitEdit"])) {
-                self::update_book_attributes($book);
-                $success = "Le bouquin a bien été mis à jour.";
-            }
+        if (isset($_POST['editbook'])) {
+            $book = Book::get_book_by_id($_POST['editbook']);
+            $isbn = $book->isbn;
+            $title = $book->title;
+            $author = $book->author;
+            $editor = $book->editor;
+            $picture = $book->picture;
         }
+        if (isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author']) && isset($_POST['picture'])) {
 
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
-            $errors = Book::validate_image($_FILES['image']);
-            if ($errors === []) {
-                $saveTo = $book->generate_image_name($_FILES['image']);
-                $oldFileName = $book->picture;
-                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
-                    unlink("upload/" . $oldFileName);
-                }
-                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
-                $book->picture = $saveTo;
-                $book->update();
-                $success = "Le bouquin a bien été mis à jour.";
-            }
+            if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
+                $isbn = Tools::sanitize($_POST["isbn"]);
+            if (isset($_POST['title']) && isset($_POST['title']) !== "")
+                $title = Tools::sanitize($_POST['title']);
+            if (isset($_POST['author']) && isset($_POST['author']) !== "")
+                $author = Tools::sanitize($_POST['author']);
+            if (isset($_POST['editor']) && isset($_POST['editor']) !== "")
+                $editor = Tools::sanitize($_POST["editor"]);
+
+            if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
+                $picture = Tools::sanitize($_POST["picture"]);
+            var_dump($isbn);
+            var_dump($title);
+            var_dump($author);
+            
         }
-
+        //self::update_book_attributes($book);
+//$success = "Le bouquin a bien été mis à jour.";
+//        if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
+//            $errors = Book::validate_image($_FILES['image']);
+//            if ($errors === []) {
+//                $saveTo = $book->generate_image_name($_FILES['image']);
+//                $oldFileName = $book->picture;
+//                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
+//                    unlink("upload/" . $oldFileName);
+//                }
+//                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
+//                $book->picture = $saveTo;
+//                $book->update();
+//                $success = "Le bouquin a bien été mis à jour.";
+//            }
+//        }
 //        if (isset($_POST["submitEdit"]) && $book !== "") {
 //            $book = Book::get_book_by_id($_POST["editbook"]);
 //            if (!$book->edit_book())
 //                $errors = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
-//        }
-        (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "success" => $success));
+        (new View("edit_book"))->show(array("book" => $book, "isbn" => $isbn, "title" => $title, "author" => $author, "editor" => $editor, "picture" => $picture, "errors" => $errors, "profile" => $user, "success" => $success));
     }
 
     private static function update_book_attributes($book) {

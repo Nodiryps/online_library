@@ -28,7 +28,11 @@
         </nav>
 
         <div class="container">
-            <div><h2 style="">Bonjour, <?= $profile->fullname ?> :)</h2></div>
+            <div class="row">
+                <div class="col-lg-5">
+                    <h2 style="">Bonjour, <?= $profile->fullname ?>  :)</h2>
+                </div>
+            </div>
         </div>
 
         <div class="container" style="margin-top:30px;">
@@ -44,14 +48,29 @@
                 <?php foreach ($rentals as $rental): ?>
 
                     <tr>
-                        <td><?= $rental->get_book()->title ?>   (<?=  $rental->get_book()->author ?>)</td>
-                        <td><?= $rental->rentaldate ?></td>
-                        <td><?=date('d/m/Y',strtotime('+1 month',strtotime($rental->rentaldate)));?></td>
+                        <td><?= $rental->get_book()->title ?>   (<?= $rental->get_book()->author ?>)</td>
+                        <td><?= date('d-m-Y ', strtotime($rental->rentaldate)) ?></td>
+                        <?php if (strtotime($rental->rentaldate) < strtotime(date("d-m-Y H:i:s"))): ?>
+                            <td style="color: red"><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>
+                        <?php else : ?>
+                            <td><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>
+                        <?php endif; ?>
                     <?php endforeach; ?>
+                    <?php
+//                    $middle = strtotime($rental->rentaldate); 
+//                    echo date("d-m-Y H:i:s");
+//                   if( $middle < strtotime(date("d-m-Y H:i:s") )){
+//                    echo  "je suis vrai";
+//                   }
+//                    
+                    ?>
+
+
 
                 </tr>
 
             </table>
+
         </div>
     </body>
 </html>
