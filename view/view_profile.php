@@ -48,6 +48,7 @@
                 <?php foreach ($rentals as $rental): ?>
 
                     <tr>
+                        <td><?= ControllerBook::isbn_format_EAN_13($rental->get_book()->isbn) ?></td>
                         <td><?= $rental->get_book()->title ?>   (<?= $rental->get_book()->author ?>)</td>
                         <td><?= date('d-m-Y ', strtotime($rental->rentaldate)) ?></td>
                         <?php if (strtotime($rental->rentaldate) < strtotime(date("d-m-Y H:i:s"))): ?>

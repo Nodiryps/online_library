@@ -24,11 +24,11 @@
                 include('menu.html');
             ?>
             <div class="title" style="position:absolute;top:20px;right:10px;">
-                <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+                <strong> <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong>
             </div>
         </nav>
 
-        <form class="form-horizontal" action="book/edit_book">
+        <form class="form-horizontal" action="book/edit_book" method="post">
             <fieldset>
 
                 <legend class="text-center">EDITION DE <?= strtoupper($title) ?> </legend>
@@ -38,7 +38,7 @@
                     <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
                     <div class="col-md-5">
                         <input id="ISBN" name="isbn" type="text" 
-                               class="form-control input-md" value="<?= $isbn ?>">
+                               class="form-control input-md" value="<?= ControllerBook::isbn_format_EAN_13($isbn) ?>">
                     </div>
                 </div>
 

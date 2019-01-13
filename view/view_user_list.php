@@ -22,7 +22,7 @@
         <nav class="menu">
             <?php include('menu.html'); ?>
             <div class="title" style="position:absolute;top:20px;right:10px;">
-                <?= $utilisateur->fullname ?>'s profile! (<?= $utilisateur->role ?>) 
+                <strong>  <?= $utilisateur->fullname ?>'s profile! (<?= $utilisateur->role ?>) </strong>
             </div>
         </nav>
 

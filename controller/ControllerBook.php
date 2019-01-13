@@ -146,10 +146,7 @@ class ControllerBook extends Controller {
 
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
                 $picture = Tools::sanitize($_POST["picture"]);
-            var_dump($isbn);
-            var_dump($title);
-            var_dump($author);
-            
+           
         }
         //self::update_book_attributes($book);
 //$success = "Le bouquin a bien été mis à jour.";
@@ -172,6 +169,13 @@ class ControllerBook extends Controller {
 //            if (!$book->edit_book())
 //                $errors = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
         (new View("edit_book"))->show(array("book" => $book, "isbn" => $isbn, "title" => $title, "author" => $author, "editor" => $editor, "picture" => $picture, "errors" => $errors, "profile" => $user, "success" => $success));
+    }
+    
+    public static function isbn_format_EAN_13($isbn){
+        return substr($isbn, 0, 3) . "-" . substr($isbn,0, 1)."-". substr($isbn,0, 4)."-". substr($isbn,0,1)."-". substr($isbn,0,4);
+    }
+    public static function isbn_format_string($isbn){
+        return str_replace('-', '', $isbn);
     }
 
     private static function update_book_attributes($book) {
