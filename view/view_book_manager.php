@@ -43,6 +43,7 @@
                             </span>
                         </div>
                     </div>
+                  
                 </div>
             </div>
             <br><br><br>
@@ -109,9 +110,10 @@
                     </tr>
                 <?php endforeach; ?>
 
-                <!--<td style="color: red;"><?= strtoupper($msg) ?></td>-->
+               
 
             </table>
+             <p style="color: red;"><?= strtoupper($msg) ?></p>
         </div>
         <div class="container text-right">
             <form method="get" action="book/create_book">
@@ -150,7 +152,7 @@
                                 </form>
                             </td>
                             <td style="border:none;" bgcolor="white"> 
-                                <form  method="post" action="book/del_one_rent">
+                                <form  method="post" action="rental/del_one_rent">
                                     <input type="hidden" name="delrent" value="<?= $rent->id ?>">
                                     <button type="submit"  name="idsubmit" class="btn btn-danger"><span >supprimer du panier</span></button>
                                 </form>

@@ -82,7 +82,7 @@ class Rental extends Model {
             $books = $query->fetchAll();
             return
 //            count ($books) >=1 && 
-                    count($books) <= 5;
+                    count($books) < 5;
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();

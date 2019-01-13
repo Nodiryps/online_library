@@ -68,14 +68,14 @@
                                class="form-control input-md" value="<?= $editor ?>">
                     </div>
                 </div>
-
+                
                 <!-- File Button --> 
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
                         <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
                         <?php if ($picture): ?>
-                            <img src='upload/<?= $image ?>' width="100" alt="Book image">
+                            <img src='upload/<?= $picture ?>' width="100" alt="Book image">
                             <br><br>
                         <?php endif; ?>
                         <button  name="delimage" class="btn btn-warning">
@@ -87,11 +87,12 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
+                        <input type="hidden" name="idbook" value="<?= $id ?>">
                         <button id="idbook" class="btn btn-success"  type="submit">
                             <span class="glyphicon glyphicon-ok">Valide</span>
                         </button>
                         
-                        <button id="button2id" name="button2id" class="btn btn-warning" type="submit" name="annuller">
+                        <button id="button2id" name="button2id" class="btn btn-warning" type="submit">
                             <span class="glyphicon glyphicon-remove">
                                 <a href="book/index" alt="book manager" >Annuler</a>
                             </span>

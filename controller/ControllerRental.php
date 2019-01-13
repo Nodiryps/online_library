@@ -32,7 +32,7 @@ class ControllerRental extends Controller {
             $value = $_POST["idbook"];
             $rent = Book::get_book_by_id($value);
             if (!Rental::rent_valid($users->id)) {
-                $msg = "Vous ne pouvez pas louer plus de 5 livres";
+                $msg = "Vous ne pouvez pas louer plus de 5 livres a la fois";
             } else {
                 $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
                 $rental->insert_book_without_rent();
@@ -89,7 +89,7 @@ class ControllerRental extends Controller {
 
         if (isset($_POST["delrent"])) {
             $value = $_POST["delrent"];
-            $delrent = Renget_rental_by_id_bookby_id($value);
+            $delrent = Rental::get_rental_by_id_book($value);
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }

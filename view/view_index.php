@@ -35,9 +35,7 @@
                             </button> 
                         </div>
                         <a href="main/signup" style="position:absolute;bottom:-30px;left:120px;">Créer un compte</a>
-                    </form>
-                </div>
-                <?php if ($errors !== []): ?>
+                        <?php if ($errors !== []): ?>
                     <div class='errors'>
                         <p>Erreur(s) à corriger:</p>
                         <ul>
@@ -47,7 +45,12 @@
                         </ul>
                     </div>
                 <?php endif; ?>
+                    </form>
+                </div>
+                
+                
             </div>
+            
         </div>
     </body>
 </html>

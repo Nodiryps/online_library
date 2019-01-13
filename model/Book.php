@@ -76,13 +76,25 @@ class Book extends Model {
     }
 
     public function update() {
-        if (self::get_book_by_id($id)) {
+        if (self::get_book_by_id($this->id)) {
             $query = self::execute("UPDATE book SET isbn = :isbn, title = :title, "
-                            . "author = :author, editor = :editor, picture = :picture", array("isbn" => $this->isbn, "title" => $this->title, "author" => $this->author,
-                        "editor" => $this->editor, "picture" => $this->picture));
-        } else {
-            $this->create();
-        } return $this;
+                            . "author = :author, editor = :editor, picture = :picture WHERE id=:id", array("isbn" => $this->isbn, "title" => $this->title, "author" => $this->author,
+                        "editor" => $this->editor, "picture" => $this->picture, "id" => $this->id));
+        }
+//        else {
+//            $this->create();
+//        } return $this;
+    }
+
+    public  function update_book() {
+            try {
+               self::execute("UPDATE book SET isbn =:isbn, title =:title, author =:author, editor =:editor, picture =:picture WHERE id=:id",
+                       array("isbn" => $this->isbn, "title" => $this->title, "author" => $this->author,"editor" => $this->editor, "picture" => $this->picture, "id" => $this->id));
+              
+            } catch (Exception $ex) {
+              // Tools::abort("Problème lors de l'accès a la base de données");
+                $ex->getMessage();
+            }
     }
 
     public function delete_book() {
@@ -101,10 +113,7 @@ class Book extends Model {
         try {
             self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
         } catch (Exception $ex) {
-            $ex->getCode();
-            echo "//////////////////////////////";
-            echo $ex->getMessage();
-            //Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -136,4 +145,5 @@ class Book extends Model {
         }
         return $saveTo;
     }
+
 }

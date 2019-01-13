@@ -22,9 +22,11 @@ class ControllerBook extends Controller {
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
+            $msg = " ";
         }
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
+
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
@@ -53,7 +55,7 @@ class ControllerBook extends Controller {
     private function rules_add_book($isbn, $title, $author) {
         $errors = [];
         if (strlen($isbn) !== 13)
-            $errors[] = "isbn: incorrect (13)!";
+            $errors[] = "isbn: isbn incorrect (13 chiffres)!";
         if (strlen($title) < 2)
             $errors[] = "titre: trop court (2 min.)!";
         if (strlen($author) < 5)
@@ -119,69 +121,60 @@ class ControllerBook extends Controller {
         $book = "";
         $errors = [];
         $success = "";
+        $id = "";
         $isbn = "";
         $title = "";
         $author = "";
         $editor = "";
         $picture = "";
-        $errors=[];
-
         if (isset($_POST['editbook'])) {
             $book = Book::get_book_by_id($_POST['editbook']);
+            $id = $book->id;
             $isbn = $book->isbn;
             $title = $book->title;
             $author = $book->author;
             $editor = $book->editor;
             $picture = $book->picture;
         }
-        if (isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author']) && isset($_POST['picture'])) {
+        if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author']) && isset($_POST['picture'])) {
+            $id = $_POST['idbook'];
+            $book = Book::get_book_by_id($id);
+            $isbn = $book->isbn;
+            $title = $book->title;
+            $author = $book->author;
+            $editor = $book->editor;
+            $picture = $book->picture;
 
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
-                $isbn = Tools::sanitize($_POST["isbn"]);
+                $book->isbn = $this->isbn_format_string(Tools::sanitize($_POST["isbn"]));
             if (isset($_POST['title']) && isset($_POST['title']) !== "")
-                $title = Tools::sanitize($_POST['title']);
+                $book->title = Tools::sanitize($_POST['title']);
             if (isset($_POST['author']) && isset($_POST['author']) !== "")
-                $author = Tools::sanitize($_POST['author']);
+                $book->author = Tools::sanitize($_POST['author']);
             if (isset($_POST['editor']) && isset($_POST['editor']) !== "")
-                $editor = Tools::sanitize($_POST["editor"]);
-
+                $book->editor = Tools::sanitize($_POST["editor"]);
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
-                $picture = Tools::sanitize($_POST["picture"]);
-            
-                   
-            
+                $book->picture = Tools::sanitize($_POST["picture"]);
+            $errors = $this->rules_add_book($isbn, $title, $author);
+            var_dump($id);
+            if (empty($error)) {
+                $book->update_book();
+                $this->redirect("book", "index");
+            }
         }
-        //self::update_book_attributes($book);
-//$success = "Le bouquin a bien été mis à jour.";
-//        if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
-//            $errors = Book::validate_image($_FILES['image']);
-//            if ($errors === []) {
-//                $saveTo = $book->generate_image_name($_FILES['image']);
-//                $oldFileName = $book->picture;
-//                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
-//                    unlink("upload/" . $oldFileName);
-//                }
-//                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
-//                $book->picture = $saveTo;
-//                $book->update();
-//                $success = "Le bouquin a bien été mis à jour.";
-//            }
-//        }
-//        if (isset($_POST["submitEdit"]) && $book !== "") {
-//            $book = Book::get_book_by_id($_POST["editbook"]);
-//            if (!$book->edit_book())
-//                $errors = "Erreur lors de l'édition du bouquin '$book->title' (ISBN: $book->isbn).";
-        (new View("edit_book"))->show(array("book" => $book, "isbn" => $isbn, "title" => $title, "author" => $author, "editor" => $editor, "picture" => $picture, "errors" => $errors, "profile" => $user, "success" => $success));
+
+        (new View("edit_book"))->show(array("book" => $book, "id" => $id, "isbn" => $isbn, "title" => $title, "author" => $author, "editor" => $editor, "picture" => $picture, "errors" => $errors, "profile" => $user, "success" => $success));
     }
-    
-    public static function isbn_format_EAN_13($isbn){
-        return substr($isbn, 0, 3) . "-" . substr($isbn,0, 1)."-". substr($isbn,0, 4)."-". substr($isbn,0,1)."-". substr($isbn,0,4);
+
+    public static function isbn_format_EAN_13($isbn) {
+        return substr($isbn, 0, 3) . "-" . substr($isbn, 0, 1) . "-" . substr($isbn, 0, 4) . "-" . substr($isbn, 0, 1) . "-" . substr($isbn, 0, 4);
     }
-    public static function isbn_format_string($isbn){
+
+    public static function isbn_format_string($isbn) {
         return str_replace('-', '', $isbn);
     }
 
-    private function validate_book($isbn,$title,$author,$editor){
+    private function validate_book($isbn, $title, $author, $editor) {
         // à completer
     }
 
