@@ -21,7 +21,7 @@
         </nav>
 
 
-        <form class="form-horizontal">
+        <form class=" container form-horizontal">
             <fieldset>
 
                 <legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend>
@@ -29,7 +29,7 @@
                 <!-- Text input-->
                 <div class="form-group">
                     <div class="col-md-5">
-                        <input id="ISBN" name="ISBN" type="text" placeholder="isbn" class="form-control input-md" >
+                        <input id="ISBN" name="ISBN" type="text" placeholder="isbn(en format EAN 13)" class="form-control input-md"  >
                     </div>
                 </div>
 
@@ -68,9 +68,9 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
-                        <form method="post" action="book/index">
-                            <button id="idbook" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
-                        </form>
+
+                        <button id="idbook" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
+
 
                         <button id="button2id" name="button2id" class="btn btn-warning"><span style="color: white" class="glyphicon glyphicon-remove"><a href="book/index" alt="book manager" > Annuler</a></span></button>
                     </div>

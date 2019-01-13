@@ -124,6 +124,7 @@ class ControllerBook extends Controller {
         $author = "";
         $editor = "";
         $picture = "";
+        $errors=[];
 
         if (isset($_POST['editbook'])) {
             $book = Book::get_book_by_id($_POST['editbook']);
@@ -146,7 +147,9 @@ class ControllerBook extends Controller {
 
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
                 $picture = Tools::sanitize($_POST["picture"]);
-           
+            
+                   
+            
         }
         //self::update_book_attributes($book);
 //$success = "Le bouquin a bien été mis à jour.";
@@ -176,6 +179,10 @@ class ControllerBook extends Controller {
     }
     public static function isbn_format_string($isbn){
         return str_replace('-', '', $isbn);
+    }
+
+    private function validate_book($isbn,$title,$author,$editor){
+        // à completer
     }
 
     private static function update_book_attributes($book) {

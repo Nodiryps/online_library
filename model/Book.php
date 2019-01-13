@@ -108,7 +108,7 @@ class Book extends Model {
         }
     }
 
-    public static function validate_image($file) {
+    public static function validate_image($file) {// mettre la fonction dans controller
         $errors = [];
         if (isset($file['name']) && $file['name'] != '') {
             if ($file['error'] == 0) {
