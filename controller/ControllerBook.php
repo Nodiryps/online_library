@@ -144,6 +144,7 @@ class ControllerBook extends Controller {
             $author = $book->author;
             $editor = $book->editor;
             $picture = $book->picture;
+                  var_dump($isbn);
 
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                 $book->isbn = $this->isbn_format_string(Tools::sanitize($_POST["isbn"]));
@@ -156,10 +157,10 @@ class ControllerBook extends Controller {
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
                 $book->picture = Tools::sanitize($_POST["picture"]);
             $errors = $this->rules_add_book($isbn, $title, $author);
-            var_dump($id);
+      
             if (empty($error)) {
                 $book->update_book();
-                $this->redirect("book", "index");
+                //$this->redirect("book", "index");
             }
         }
 
@@ -167,7 +168,8 @@ class ControllerBook extends Controller {
     }
 
     public static function isbn_format_EAN_13($isbn) {
-        return substr($isbn, 0, 3) . "-" . substr($isbn, 0, 1) . "-" . substr($isbn, 0, 4) . "-" . substr($isbn, 0, 1) . "-" . substr($isbn, 0, 4);
+        return substr($isbn, 0, 3) . "-" . substr($isbn,3,1) . "-" 
+                . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn,12, 1);
     }
 
     public static function isbn_format_string($isbn) {
