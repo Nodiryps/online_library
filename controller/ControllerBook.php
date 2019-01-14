@@ -14,11 +14,14 @@ class ControllerBook extends Controller {
     public function index() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
-        $pannier = "";
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
         $members = User::get_all_user();
-
+//        $test=Rental::get_rental_count();
+//        var_dump($test);
+         $test=Rental::rent_valid($user->id);
+          
+   
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
@@ -27,7 +30,7 @@ class ControllerBook extends Controller {
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
 
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members,"test"=>$test));
     }
 
 // on créé un livre sans img => comme ds msn
@@ -160,7 +163,7 @@ class ControllerBook extends Controller {
       
             if (empty($error)) {
                 $book->update_book();
-                //$this->redirect("book", "index");
+                $this->redirect("book", "index");
             }
         }
 

@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `book` (
 
 -- --------------------------------------------------------
 INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`) VALUES 
-(NULL, '1111111111111', 'Harry Potter a l Ecole des Sorciers', 'JK Rowlings', 'Pocket', NULL), 
+(NULL, '1111111111111', 'Harry Potter Ã  l Ecole des Sorciers', 'JK Rowlings', 'Pocket', NULL), 
 (NULL, '2222222222222', 'Mobyz Dick', 'Jules Verge', 'Pocket', NULL), 
 (NULL, '3333333333333', 'Les Fleurs du Male', 'Beau De Lair', 'Pocket', NULL), 
 (NULL, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 

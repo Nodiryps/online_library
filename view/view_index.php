@@ -18,7 +18,7 @@
     <body>
         <div class="container" style="width:350px;margin:5% auto;">	
             <div class="row">
-                <h1 class="text-center"><strong>Connexion</strong></h1>
+                <h1 class="text-center "><strong>Connexion</strong></h1>
                 <br>
                 <div >
                     <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

@@ -24,7 +24,7 @@ class Tools {
         $suffix_salt = "QUaLtRs7";
         return md5($prefix_salt . $password . $suffix_salt);
     }
-
+/////////////faire une classe///////////////// 
     public static function post($text) {
         return $_POST[$text];
     }

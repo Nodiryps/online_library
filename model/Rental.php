@@ -78,11 +78,9 @@ class Rental extends Model {
 
     public static function rent_valid($id) {
         try {
-            $query = self::execute("SELECT * FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
-            $books = $query->fetchAll();
-            return
-//            count ($books) >=1 && 
-                    count($books) < 5;
+            $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
+            return $books = $query->fetchAll();
+            return count($books) < 5;
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();
@@ -131,8 +129,15 @@ class Rental extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-    
+
+    public static function get_rental_count() {
+        try {
+            $query = self::execute("SELECT COUNT(*) FROM rental WHERE rentaldate =null ", array());
+            return $query->fetch();
+        } catch (Exception $ex) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
 
     public function delete_rental() {
         try {
@@ -156,10 +161,8 @@ class Rental extends Model {
         self::execute("UPDATE rental SET rentaldate = :rentaldate WHERE id=:id  ", array("rentaldate" => $rentaldate, "id" => $this->id));
     }
 
-    public function update_rental_rentdate_for_user($user,$rentaldate) {
-        self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id ", array("user"=>$user,"rentaldate" => $rentaldate, "id" => $this->id));
+    public function update_rental_rentdate_for_user($user, $rentaldate) {
+        self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id ", array("user" => $user, "rentaldate" => $rentaldate, "id" => $this->id));
     }
-    
-     
 
 }

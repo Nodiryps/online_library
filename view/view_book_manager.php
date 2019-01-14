@@ -17,8 +17,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
+        
 
-        <nav style="position:fixed;z-index:9000;top:0px;width:100%;"> 
+        <nav style="position:fixed;z-index:9000;top:0px;width:100%; margin-bottom: 1px; "> 
             <?php
             if ($profile->is_member())
                 include('menuMember.html');
@@ -29,7 +30,7 @@
                 <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
             </div>
         </nav>
-
+<?php echo $test; ?>
         <form class="" method="post"  action="book/index">
             <div class="container" style="margin-top:100px;margin-bottom:-30px;">
                 <div class="row">
@@ -49,8 +50,8 @@
             <br><br><br>
         </form>
 
-        <div class="container">
-            <table class="table table-striped table-condensed" >
+        <div class="container table-wrapper-scroll-y">
+            <table class="table table-striped table-condensed " >
                 <legend class="text-center"><h1>Bibliothèque</h1></legend>
                 <thead class="thead-dark">
                     <tr>
@@ -128,7 +129,7 @@
         <div class="container">
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
-                <legend><h1>Votre panier de location</h1></legend>
+                <legend><h1>Votre panier de locations (<?= sizeof($UserRentals)?> livres)</h1></legend>
                 <tr>
                     <th scope="col">ISNB</th>
                     <th scope="col">TITLE</th>

@@ -137,11 +137,11 @@ class Book extends Model {
         //       le meme nom afin d'éviter que le navigateur affiche
         //       une ancienne image présente dans le cache
         if ($_FILES['image']['type'] == "image/gif") {
-            $saveTo = $this->pseudo . time() . ".gif";
+            $saveTo = $this->title . time() . ".gif";
         } else if ($_FILES['image']['type'] == "image/jpeg") {
-            $saveTo = $this->pseudo . time() . ".jpg";
+            $saveTo = $this->title . time() . ".jpg";
         } else if ($_FILES['image']['type'] == "image/png") {
-            $saveTo = $this->pseudo . time() . ".png";
+            $saveTo = $this->title . time() . ".png";
         }
         return $saveTo;
     }

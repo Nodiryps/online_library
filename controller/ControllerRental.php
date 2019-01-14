@@ -10,7 +10,7 @@ require_once 'framework/Tools.php';
 class ControllerRental extends Controller {
 
     public function index() {
-        (new View("basket"))->show();
+        (new View("book_manager"))->show();
     }
     
     public function returns() {
@@ -27,10 +27,11 @@ class ControllerRental extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $msg = " ";
         $members = User::get_all_user();
-
+       
         if (isset($_POST["idbook"])) {
             $value = $_POST["idbook"];
             $rent = Book::get_book_by_id($value);
+            
             if (!Rental::rent_valid($users->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres a la fois";
             } else {
@@ -45,14 +46,13 @@ class ControllerRental extends Controller {
          public function add_rental_for_user() {
          $user = Controller::get_user_or_redirect();
          $books = Book::get_all_books();
-//         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
          $msg = " ";
          $usertoAddRent = "";
-//         $allrentofUser = "";
          $members = User::get_all_user();
          $datetime = date("Y-m-d H:i:s");
          $allrentofUser = Rental::get_this_rental_not_validate($user->id);
-
+        
+         
          if (isset($_POST["member_rent"])) {
              $value = $_POST["member_rent"];
              $usertoAddRent = User::get_user_by_username($value);
@@ -66,11 +66,11 @@ class ControllerRental extends Controller {
                  }
              }
          }
-         if (isset($_POST["member_rents"])) {
-             foreach ($allrentofUser as $rent) {
-                 $rent->update_rental_rentdate($datetime);
-             }
-         }
+//         if (isset($_POST["member_rents"])) {
+//             foreach ($allrentofUser as $rent) {
+//                 $rent->update_rental_rentdate($datetime);
+//             }
+//         }
          if (isset($_POST["annuler"])) {
              foreach ($allrentofUser as $rent) {
                  $rent->delete_rental();
