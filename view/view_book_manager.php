@@ -18,19 +18,21 @@
     </head>
     <body>
         
-
-        <nav style="position:fixed;z-index:9000;top:0px;width:100%; margin-bottom: 1px; "> 
+        <nav style="position:fixed;z-index:9000;top:0px;width:100%; margin-bottom: 1px; " class="text-right"> 
+            
             <?php
+         
             if ($profile->is_member())
                 include('menuMember.html');
             if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
-            <div class="title" style="position:absolute;top:20px;right:10px;">
-                <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+            <div class="text-right" style="position:absolute;top:20px;right:10px;">
+                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
             </div>
+         
         </nav>
-<?php echo $test; ?>
+
         <form class="" method="post"  action="book/index">
             <div class="container" style="margin-top:100px;margin-bottom:-30px;">
                 <div class="row">
@@ -109,11 +111,12 @@
                             </form>
                         </td>
                     </tr>
-                <?php endforeach; ?>
+                 <?php endforeach; ?>
 
                
-
+ 
             </table>
+            <?php if($profile->is_admin()):?>
              <p style="color: red;"><?= strtoupper($msg) ?></p>
         </div>
         <div class="container text-right">
@@ -123,13 +126,14 @@
                 </button>
             </form>
         </div>
+       <?php endif; ?>
         
         <br>
 
         <div class="container">
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
-                <legend><h1>Votre panier de locations (<?= sizeof($UserRentals)?> livres)</h1></legend>
+                <legend><h1>Votre panier de locations (<?= sizeof($UserRentals)?> locations)</h1></legend>
                 <tr>
                     <th scope="col">ISNB</th>
                     <th scope="col">TITLE</th>

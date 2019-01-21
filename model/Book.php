@@ -132,7 +132,7 @@ class Book extends Model {
         return $errors;
     }
 
-    public function generate_image_name($file) {
+    public function validate_image_type($file) {
         //note : time() est utilisé pour que la nouvelle image n'aie pas
         //       le meme nom afin d'éviter que le navigateur affiche
         //       une ancienne image présente dans le cache
@@ -145,5 +145,18 @@ class Book extends Model {
         }
         return $saveTo;
     }
-
+public static function validate_photo($file) {
+        $errors = [];
+        if (isset($file['name']) && $file['name'] != '') {
+            if ($file['error'] == 0) {
+                $valid_types = array("image/gif", "image/jpeg", "image/png");
+                if (!in_array($_FILES['image']['type'], $valid_types)) {
+                    $errors[] = "Unsupported image format : gif, jpg/jpeg or png.";
+                }
+            } else {
+                $errors[] = "Error while uploading file.";
+            }
+        }
+        return $errors;
+    }
 }

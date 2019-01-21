@@ -147,7 +147,7 @@ class ControllerBook extends Controller {
             $author = $book->author;
             $editor = $book->editor;
             $picture = $book->picture;
-                  var_dump($isbn);
+                 // var_dump($isbn);
 
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                 $book->isbn = $this->isbn_format_string(Tools::sanitize($_POST["isbn"]));
@@ -159,15 +159,37 @@ class ControllerBook extends Controller {
                 $book->editor = Tools::sanitize($_POST["editor"]);
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
                 $book->picture = Tools::sanitize($_POST["picture"]);
+           
+               
             $errors = $this->rules_add_book($isbn, $title, $author);
+            $errors= Book::validate_photo($book->picture);
+            self::add_image($book);
       
             if (empty($error)) {
                 $book->update_book();
-                $this->redirect("book", "index");
+                    $this->redirect("book", "index");
             }
         }
 
         (new View("edit_book"))->show(array("book" => $book, "id" => $id, "isbn" => $isbn, "title" => $title, "author" => $author, "editor" => $editor, "picture" => $picture, "errors" => $errors, "profile" => $user, "success" => $success));
+    }
+
+    public static function add_image($book){
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
+            echo " salut";
+            $errors = Book::validate_photo($_FILES['image']);
+            if (empty($errors)) {
+                $saveTo = $book->validate_image($_FILES['image']);
+                $oldFileName = $member->picture_path;
+                if ($oldFileName && file_exists("upload/" . $oldFileName)) {
+                    unlink("upload/" . $oldFileName);
+                }
+                move_uploaded_file($_FILES['image']['tmp_name'], "upload/$saveTo");
+                $member->picture_path = $saveTo;
+                $member->update();
+                $success = "Your profile has been successfully updated.";
+            } 
+        }
     }
 
     public static function isbn_format_EAN_13($isbn) {
