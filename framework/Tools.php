@@ -44,7 +44,7 @@ class Tools {
     }
 
     public static function isset_notEmpty($value) {
-        return isset($value) && !empty(trim($$value));
+        return isset($value) && !empty($value);
     }
 
 }

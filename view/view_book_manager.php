@@ -116,12 +116,12 @@
                
  
             </table>
-            <?php if($profile->is_admin()):?>
              <p style="color: red;"><?= strtoupper($msg) ?></p>
         </div>
+        <?php if($profile->is_admin()):?>
         <div class="container text-right">
-            <form method="get" action="book/create_book">
-                <button type="submit"  name="createBook" class="btn btn-success">
+            <form method="get" action="book/add_book">
+                <button class="btn btn-success">
                     <span>Nouveau livre</span>
                 </button>
             </form>

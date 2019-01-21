@@ -69,7 +69,7 @@ class Book extends Model {
             return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"]);
     }
 
-    private function create() {
+    public function create() {
         self::execute("INSERT INTO book(isbn, title, author, editor, picture)"
                 . "VALUES(:isbn, :title, :author, :editor, :picture)", array("isbn" => $this->isbn, "title" => $this->title,
             "author" => $this->author, "editor" => $this->editor, "picture" => $this->picture));

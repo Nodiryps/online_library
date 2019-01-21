@@ -19,9 +19,9 @@ class ControllerBook extends Controller {
         $members = User::get_all_user();
 //        $test=Rental::get_rental_count();
 //        var_dump($test);
-         $test=Rental::rent_valid($user->id);
-          
-   
+        $test = Rental::rent_valid($user->id);
+
+
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
@@ -30,7 +30,7 @@ class ControllerBook extends Controller {
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
 
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members,"test"=>$test));
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "test" => $test));
     }
 
 // on créé un livre sans img => comme ds msn
@@ -42,16 +42,20 @@ class ControllerBook extends Controller {
         $editor = "";
         $errors = [];
 
-        if ($user->is_admin() || $user->is_manager())
-            if (isset($_POST["createBook"]))
-                if (Tools::isset_notEmpty($_POST["isbn"]) && Tools::isset_notEmpty($_POST["author"]) && Tools::isset_notEmpty($_POST["title"]) && Tools::isset_notEmpty($_POST["editor"])) {
-                    $isbn = Tools::sanitize($_POST["isbn"]);
-                    $title = Tools::sanitize($_POST["title"]);
-                    $author = Tools::sanitize($_POST["author"]);
-                    $editor = Tools::sanitize($_POST["editor"]);
+        if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"]) && isset($_POST["picture"])) {
+            $isbn = Tools::sanitize($_POST["isbn"]);
+            $title = Tools::sanitize($_POST["title"]);
+            $author = Tools::sanitize($_POST["author"]);
+            $editor = Tools::sanitize($_POST["editor"]);
+            $picture = Tools::sanitize($_POST["picture"]);
 
-                    $errors[] = $this->rules_add_book($isbn);
-                }
+            $errors = $this->rules_add_book($isbn, $title, $author);
+
+            if (empty($errors)) {
+                $book = new Book(0, $isbn, $title, $author, $editor, $picture);
+                $book->create();
+            }
+        }
         (new View("add_book"))->show(array("errors" => $errors, "isbn"));
     }
 
@@ -106,19 +110,6 @@ class ControllerBook extends Controller {
         (new View("book_detail"))->show(array("book" => $book, "profile" => $user));
     }
 
-    public function create_book() {
-        $user = Controller::get_user_or_redirect();
-        $editbook = "";
-        $isbn = "";
-        $titre = "";
-        $author = "";
-        $editor = "";
-        $picture = "";
-        $test = "test";
-
-        (new View("add_book"))->show(array("editbook" => $editbook, "test" => $test));
-    }
-
     public function edit_book() {
         $user = $this->get_user_or_redirect();
         $book = "";
@@ -147,7 +138,7 @@ class ControllerBook extends Controller {
             $author = $book->author;
             $editor = $book->editor;
             $picture = $book->picture;
-                 // var_dump($isbn);
+            // var_dump($isbn);
 
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                 $book->isbn = $this->isbn_format_string(Tools::sanitize($_POST["isbn"]));
@@ -159,22 +150,22 @@ class ControllerBook extends Controller {
                 $book->editor = Tools::sanitize($_POST["editor"]);
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
                 $book->picture = Tools::sanitize($_POST["picture"]);
-           
-               
+
+
             $errors = $this->rules_add_book($isbn, $title, $author);
-            $errors= Book::validate_photo($book->picture);
+            $errors = Book::validate_photo($book->picture);
             self::add_image($book);
-      
+
             if (empty($error)) {
                 $book->update_book();
-                    $this->redirect("book", "index");
+                $this->redirect("book", "index");
             }
         }
 
         (new View("edit_book"))->show(array("book" => $book, "id" => $id, "isbn" => $isbn, "title" => $title, "author" => $author, "editor" => $editor, "picture" => $picture, "errors" => $errors, "profile" => $user, "success" => $success));
     }
 
-    public static function add_image($book){
+    public static function add_image($book) {
         if (isset($_FILES['image']) && $_FILES['image']['error'] === self::UPLOAD_ERR_OK) {
             echo " salut";
             $errors = Book::validate_photo($_FILES['image']);
@@ -188,13 +179,13 @@ class ControllerBook extends Controller {
                 $member->picture_path = $saveTo;
                 $member->update();
                 $success = "Your profile has been successfully updated.";
-            } 
+            }
         }
     }
 
     public static function isbn_format_EAN_13($isbn) {
-        return substr($isbn, 0, 3) . "-" . substr($isbn,3,1) . "-" 
-                . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn,12, 1);
+        return substr($isbn, 0, 3) . "-" . substr($isbn, 3, 1) . "-"
+                . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn, 12, 1);
     }
 
     public static function isbn_format_string($isbn) {

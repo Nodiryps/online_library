@@ -21,7 +21,7 @@
         </nav>
 
 
-        <form class=" container form-horizontal">
+        <form class=" container form-horizontal" action="book/add_book" method="post">
             <fieldset>
 
                 <legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend>
@@ -29,28 +29,28 @@
                 <!-- Text input-->
                 <div class="form-group">
                     <div class="col-md-5">
-                        <input id="ISBN" name="ISBN" type="text" placeholder="isbn(en format EAN 13)" class="form-control input-md"  >
+                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(en format EAN 13)" class="form-control input-md"  >
                     </div>
                 </div>
 
                 <!-- Text input-->
                 <div class="form-group">
                     <div class="col-md-5">
-                        <input id="textinput" name="textinput" type="text" placeholder="auteur.e" class="form-control input-md" >
+                        <input id="textinput" name="author" type="text" placeholder="auteur.e" class="form-control input-md" >
                     </div>
                 </div>
 
                 <!-- Text input-->
                 <div class="form-group">
                     <div class="col-md-5">
-                        <input id="textinput" name="textinput" type="text" placeholder="titre" class="form-control input-md">
+                        <input id="textinput" name="title" type="text" placeholder="titre" class="form-control input-md">
                     </div>
                 </div>
 
                 <!-- Text input-->
                 <div class="form-group">
                     <div class="col-md-5">
-                        <input id="textinput" name="textinput" type="text" placeholder="edition" class="form-control input-md">
+                        <input id="textinput" name="editor" type="text" placeholder="edition" class="form-control input-md">
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
 
-                        <button id="idbook" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
+                        <button id="idbook" type="submit" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
 
 
                         <button id="button2id" name="button2id" class="btn btn-warning"><span style="color: white" class="glyphicon glyphicon-remove"><a href="book/index" alt="book manager" > Annuler</a></span></button>
@@ -77,5 +77,15 @@
                 </div>
             </fieldset>
         </form>
+        <div class="container text-uppercase">
+            <?php if(!empty($errors)): ?>
+               <ul>
+        <?php foreach ($errors as $test):?>
+                   <li style="color: red"><p><?= $test ?></p></li>
+        <?php endforeach;?>
+                   <?php endif; ?>
+        </ul>
+        </div>
+     
     </body>
 </html>
