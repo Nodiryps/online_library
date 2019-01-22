@@ -18,7 +18,7 @@
     </head>
     <body>
         
-        <nav style="position:fixed;z-index:9000;top:0px;width:100%; margin-bottom: 1px; " class="text-right"> 
+        <nav   class="text-right"> 
             
             <?php
          

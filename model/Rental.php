@@ -79,8 +79,21 @@ class Rental extends Model {
     public static function rent_valid($id) {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
-            return $books = $query->fetchAll();
-            return count($books) < 5;
+            $books = $query->fetch(); 
+            return $books[0] > 5;
+        } catch (Exception $ex) {
+            die("soucis de db");
+            echo $ex->getLine();
+            echo '/////';
+            echo $ex->getMessage();
+        }
+    }
+    
+    public static function rent_rented($id) {
+        try {
+            $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
+            $books = $query->fetch();
+            return $books[0] > 5;
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();
