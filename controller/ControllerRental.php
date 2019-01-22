@@ -18,7 +18,7 @@ class ControllerRental extends Controller {
         (new View("returns"))->show(array("profile" => $profile));
     }
 
-    public function add_rental() {// on recupere un user mais le champ id est vide
+    public function add_rental_in_basket() {// on recupere un user mais le champ id est vide
         $user = Controller::get_user_or_redirect();
         $users = User::get_user_by_username($user->username);
         $books = Book::get_all_books();
@@ -43,7 +43,7 @@ class ControllerRental extends Controller {
         (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
-    public function add_rental_for_user() {
+    public function add_rental_for_user_in_basket() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
         $msg = " ";
@@ -55,14 +55,20 @@ class ControllerRental extends Controller {
             $value = $_POST["member_rent"];
             $usertoAddRent = User::get_user_by_username($value);
             if ($user->id != $usertoAddRent->id) {
-                foreach ($allrentofUser as $rent) {
-                    $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
+                if (!Rental::rent_rented($usertoAddRent->id)) {
+                    foreach ($allrentofUser as $rent) {
+                        $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
+                    }
+                } else {
+                    $msg = "cet utilisateur a deja 5 location en cours";
                 }
             } else {
-                if (Rental::rent_rented($user->id)) {
+                if (!Rental::rent_rented($user->id)) {
                     foreach ($allrentofUser as $rent) {
                         $rent->update_rental_rentdate($datetime);
                     }
+                } else {
+                    $msg = "vous avez deja 5 livre en location";
                 }
             }
         }
@@ -75,7 +81,7 @@ class ControllerRental extends Controller {
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
-    public function del_one_rent() {
+    public function del_one_rental_in_basket() {
         $user = Controller::get_user_or_redirect();
         $books = Book::get_all_books();
         $getUserRental = $user->get_rental_join_book_join_user_by_user();

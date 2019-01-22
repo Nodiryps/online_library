@@ -138,7 +138,6 @@ class ControllerBook extends Controller {
             $author = $book->author;
             $editor = $book->editor;
             $picture = $book->picture;
-            // var_dump($isbn);
 
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                 $book->isbn = $this->isbn_format_string(Tools::sanitize($_POST["isbn"]));
@@ -150,7 +149,6 @@ class ControllerBook extends Controller {
                 $book->editor = Tools::sanitize($_POST["editor"]);
             if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
                 $book->picture = Tools::sanitize($_POST["picture"]);
-
 
             $errors = $this->rules_add_book($isbn, $title, $author);
             $errors = Book::validate_photo($book->picture);

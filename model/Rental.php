@@ -80,6 +80,7 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
             $books = $query->fetch(); 
+            var_dump($books[0]);
             return $books[0] > 5;
         } catch (Exception $ex) {
             die("soucis de db");
@@ -93,7 +94,8 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
             $books = $query->fetch();
-            return $books[0] > 5;
+            var_dump($books[0]>4);
+            return $books[0] > 4;
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();
