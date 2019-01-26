@@ -279,5 +279,7 @@ class ControllerUser extends Controller {
     public function rentals_by_user($user) {
         return Rental::get_rentals_by_user($user);
     }
+    
+   
 
 }

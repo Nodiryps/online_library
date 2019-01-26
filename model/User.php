@@ -287,4 +287,16 @@ class User extends Model {
     public function is_member() {
         return $this->role === "member";
     }
+    
+     public static function get_username_by_id($id){
+        try{
+            $user= self::execute("SELECT username FROM user WHERE id=:id", array("id"=>$id));
+            $query=$user->fetch();
+            return $query[0];
+        }
+        catch(Exception $ex){
+            die("probleme lors de l'acces a la base de données");
+        }
+        
+    }
 }

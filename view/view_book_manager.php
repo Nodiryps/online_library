@@ -157,7 +157,7 @@
                                 </form>
                             </td>
                             <td style="border:none;" bgcolor="white"> 
-                                <form  method="post" action="rental/del_one_rent">
+                                <form  method="post" action="rental/del_one_rental_in_basket">
                                     <input type="hidden" name="delrent" value="<?= $rent->id ?>">
                                     <button type="submit"  name="idsubmit" class="btn btn-danger"><span >supprimer du panier</span></button>
                                 </form>

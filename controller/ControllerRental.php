@@ -10,20 +10,26 @@ require_once 'framework/Tools.php';
 class ControllerRental extends Controller {
 
     public function index() {
-        (new View("book_manager"))->show();
+        Controller::redirect('Book','index');
     }
 
     public function returns() {
         $profile = Controller::get_user_or_redirect();
-        (new View("returns"))->show(array("profile" => $profile));
+        $books= Rental::get_rental_join_book_join_user_rentdate();
+        
+        (new View("returns"))->show(array("profile" => $profile,"books"=>$books));
+    }
+    public function search_book(){
+        $profile = Controller::get_user_or_redirect();
+        $books= Rental::get_rental_join_book_join_user_rentdate();
+         if(isset($_POST[""]))
+         (new View("returns"))->show(array("profile" => $profile,"books"=>$books));
     }
 
     public function add_rental_in_basket() {// on recupere un user mais le champ id est vide
         $user = Controller::get_user_or_redirect();
         $users = User::get_user_by_username($user->username);
         $books = Book::get_all_books();
-        var_dump(Rental::rent_valid($users->id));
-        var_dump(Rental::rent_rented($users->id));
         $id = 0;
         $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();

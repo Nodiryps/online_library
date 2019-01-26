@@ -67,20 +67,53 @@ class Rental extends Model {
     }
 
     public static function get_rental_join_book_join_user() {
+        $results=[];
         try {
             $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id", array());
-            $books = $query->fetchAll();
-            return $books;
+            $rental = $query->fetchAll();
+            foreach ($rental as $row){
+             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+     public static function get_rental_join_book_join_user_rentdate() {
+        $results=[];
+        try {
+            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row){
+             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+     public static function get_rental_join_book_join_user_returndate() {
+        $results=[];
+        try {
+            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row){
+             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
         } catch (Exception $e) {
             abort("Problème lors de l'accès a la base de données");
         }
     }
 
+
+
     public static function rent_valid($id) {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
             $books = $query->fetch(); 
-            var_dump($books[0]);
+            
             return $books[0] > 5;
         } catch (Exception $ex) {
             die("soucis de db");
@@ -94,7 +127,6 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
             $books = $query->fetch();
-            var_dump($books[0]>4);
             return $books[0] > 4;
         } catch (Exception $ex) {
             die("soucis de db");
@@ -134,7 +166,7 @@ class Rental extends Model {
         }
     }
 
-    // methode pas a la bonne place
+    // methode pas a la bonne place->dans BOOK
     public function get_book() {
         try {
             $query = self::execute("SELECT * FROM book WHERE id = :id", array("id" => $this->book));

@@ -159,4 +159,26 @@ public static function validate_photo($file) {
         }
         return $errors;
     }
+    
+    public static function get_title_by_id($id){
+        try{
+        $query = self::execute("SELECT title FROM book WHERE id=:id", array("id" => $id));
+        $book = $query->fetch();
+        return $book[0];
+        }
+        catch(Exception $ex){
+             $ex->getMessage();
+        }
+    }
+    
+    public static function get_author_by_id($id){
+        try{
+        $query = self::execute("SELECT author FROM book WHERE id=:id", array("id" => $id));
+        $book = $query->fetch();
+        return $book[0];
+        }
+        catch(Exception $ex){
+             $ex->getMessage();
+        }
+    }
 }

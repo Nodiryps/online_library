@@ -19,67 +19,91 @@
                 <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
             </div>
         </nav>
-        <div class="container text-center">
-            <h1>Gestion de retours</h1>
-            <br>
-            <br>
+        <div class="container  ">
+            <form method="post" action="rental/search_book" class="form-control-static">
+            <div class="row align-items-center justify-content-center " >
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <form id="convFilter" class="form-horizontal" action="/admin/conversations/filter">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label" for="Membre">Membre</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="membre" id="Membre" placeholder="le username">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label class="col-sm-4 control-label" for="Livre">Livre</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="Livre" name="title" placeholder="titre">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label" for="date de location">date de location</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" name="rentdate" id="toDate" placeholder=" 02/10/2015">
-                                    </div>
-                                </div>
-                                <div class="col-sm-offset-4 col-sm-8">
-                                    <button type="button" id="find-all" class="btn btn-primary">Find All</button>
-                                    <button type="submit" class="btn btn-primary">Search</button>
-                                </div>
-                            </div>
-                            <div class="funkyradio">
-                                <div class="funkyradio-default">
-                                    <input type="radio" name="radio" id="radio1" />
-                                    <label for="radio1">First Option default</label>
-                                </div>
-                            </div>
-                            	<label class="btn btn-success active">
-				<input type="checkbox" autocomplete="off" checked>
-				<span class="glyphicon glyphicon-ban-circle">en cours</span>
-			</label>
-                            
-                            	<label class="btn btn-warning active">
-				<input type="checkbox" autocomplete="off" checked>
-				<span class="glyphicon glyphicon-ban-circle">retour</span>
-			</label>
-                               	<label class="btn btn-danger active">
-				<input type="checkbox" autocomplete="off" checked>
-				<span class="glyphicon glyphicon-ban-circle">tous</span>
-			</label>
-
-
-                        </form>
+                <div class="col-md-2 pt-3">
+                    <div class="form-group ">
+                        <input type="text" name="title" placeholder="TITRE" class="form-control">
                     </div>
                 </div>
+                <div class="col-md-2 pt-3">
+                    <div class="form-group ">
+                        <input type="text" name="author" placeholder="AUTHEUR" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-2 pt-3">
+                    <div class="form-group">
+                        <div class="form-group ">
+                            <input type="date" name="date"  class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 pt-3">
+                    <div class="form-group">
+                        <select id="inputState" name="choix" class="form-control">
+                            <option selected value="all">Tous</option>
+                            <option value="rent">En location</option>
+                            <option value="back">Retour</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-block">FILTRER</button>
+                </div>
+
+
+            </div>
+            </form>
+
+        </div>
+        <br>
+        <br>
+        <div>
+            <div class="container table-wrapper-scroll-y">
+                <table class="table table-striped table-condensed " >
+
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center" scope="col">RENTAL DATE</th>
+                            <th class="text-center" scope="col">MEMBER</th>
+                            <th class="text-center" scope="col">BOOK</th>
+                            <th class="text-center" scope="col">RETURN-DATE</th>
+                            <th class="text-center" scope="col">ACTION</th>
+                        </tr>
+                    </thead>
+                    <?php foreach ($books as $book): ?>
+                        <tr>
+                            <td class="text-center"><?= $book->rentaldate ?></td>
+                            <td class="text-center"><?= User::get_username_by_id($book->user) ?></td>
+                            <td class="text-center"><?= Book::get_title_by_id($book->book) ?> (<?= strtoupper(Book::get_author_by_id($book->book))?>)</td>
+                            <td class="text-center"><?= $book->returndate ?></td>
+                            <?php if ($profile->role == "admin"): ?>
+                            <td style="border:none;" bgcolor="white">
+                                <form  method="post" action="book/">
+                                    <input type="hidden" name="editbook" value="<?= $book->id ?>">
+                                    <button type="submit" name="idsubmit" class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-trash"></span >
+                                    </button>
+                                </form>
+                            </td>
+                            <?php endif; ?>
+
+                            <td style="border:none;" bgcolor="white">
+                                <form  method="post" action="book/book_detail">
+                                    <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                    <button type="submit" name="idsubmit" class="btn btn-warning">
+                                        <span class="glyphicon glyphicon-barcode"></span>
+                                    </button>
+                                </form>
+                            </td>
+
+                        <?php endforeach; ?>
+                        </tr>
+                </table>
             </div>
         </div>
-
     </body>
 </html>

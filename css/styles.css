@@ -3,9 +3,18 @@
     padding:0
 }*/
 
-html, body {
+/*html, body {
     background-color:purple;
     margin:10px 2000px 10px 2000px;
+}*/
+
+border{
+    border-radius: 24px;
+    background-color: #FFFFFF;
+    box-shadow: 0 6px 30px 0 rgba(0,0,0,0.06);
+    padding: 100px;
+    text-align: center;
+    margin-top: 54px;
 }
 
 /*h1 {
