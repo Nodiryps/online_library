@@ -43,7 +43,7 @@ class ControllerRental extends Controller {
                 $books = Rental::get_rental_join_book_join_user_all();
             }
             else{
-                
+                Rental::get_rental_by_critere($title, $author);
             }
         }
          (new View("returns"))->show(array("profile" => $profile,"books"=>$books,"title"=>$title,"author"=>$author,"date"=>$date,"filter"=>$filter));
