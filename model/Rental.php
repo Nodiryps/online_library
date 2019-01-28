@@ -106,6 +106,35 @@ class Rental extends Model {
             abort("Problème lors de l'accès a la base de données");
         }
     }
+        public static function get_rental_join_book_join_user_all() {
+        $results=[];
+        try {
+            $query = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL  OR returndate IS NOT NULL", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row){
+             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    public static function get_rental_by_critere($title,$author,$date) {
+        $results = [];
+        $title= Book::get_book_by_title($title);
+        try {
+            $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id"
+                    . "WHERE rentaldate IS NOT NULL  OR returndate IS NOT NULL",array(":title" => "%" . $title . "%",":author" => "%" . $author . "%",":date" => "%" . $date . "%"));
+            $query = $books->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            Tools::abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
 
 
 

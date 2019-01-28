@@ -16,7 +16,7 @@
                 include('menu.html');
             ?>
             <div class="title" style="position:absolute;top:20px;right:10px;">
-                <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+                <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong>
             </div>
         </nav>
         <div class="container  ">
@@ -25,25 +25,25 @@
 
                 <div class="col-md-2 pt-3">
                     <div class="form-group ">
-                        <input type="text" name="title" placeholder="TITRE" class="form-control">
+                        <input type="text" name="title" placeholder="TITRE" class="form-control" value="<?= $title?>">
                     </div>
                 </div>
                 <div class="col-md-2 pt-3">
                     <div class="form-group ">
-                        <input type="text" name="author" placeholder="AUTHEUR" class="form-control">
+                        <input type="text" name="author" placeholder="AUTHEUR" class="form-control" value="<?= $author?>">
                     </div>
                 </div>
                 <div class="col-md-2 pt-3">
                     <div class="form-group">
                         <div class="form-group ">
-                            <input type="date" name="date"  class="form-control">
+                            <input type="date" name="date"  class="form-control" value="<?php echo date("d/m/Y"); ?>">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2 pt-3">
                     <div class="form-group">
-                        <select id="inputState" name="choix" class="form-control">
-                            <option selected value="all">Tous</option>
+                        <select id="inputState" name="filtre" class="form-control" >
+                            <option  value="all">Tous</option>
                             <option value="rent">En location</option>
                             <option value="back">Retour</option>
 
