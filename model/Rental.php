@@ -27,13 +27,7 @@ class Rental extends Model {
                 "rentaldate" => $this->rentaldate, "returndate" => $this->returndate));
             return $this;
         } catch (Exception $ex) {
-            //die("fibi");
-//            echo $ex->getTraceAsString(); 
-
-            echo '/////////LIGNE//////////';
-            echo $ex->getLine();
-            echo '///////msg////////////';
-            echo $ex->getMessage();
+            
         }
     }
 
@@ -67,86 +61,103 @@ class Rental extends Model {
     }
 
     public static function get_rental_join_book_join_user() {
-        $results=[];
+        $results = [];
         try {
             $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id", array());
             $rental = $query->fetchAll();
-            foreach ($rental as $row){
-             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
-            }
-            return $results;
-        } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
-        }
-    }
-     public static function get_rental_join_book_join_user_rentdate() {
-        $results=[];
-        try {
-            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL", array());
-            $rental = $query->fetchAll();
-            foreach ($rental as $row){
-             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
-            }
-            return $results;
-        } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
-        }
-    }
-    
-     public static function get_rental_join_book_join_user_returndate() {
-        $results=[];
-        try {
-            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL", array());
-            $rental = $query->fetchAll();
-            foreach ($rental as $row){
-             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
-            }
-            return $results;
-        } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
-        }
-    }
-        public static function get_rental_join_book_join_user_all() {
-        $results=[];
-        try {
-            $query = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL  OR returndate IS NOT NULL", array());
-            $rental = $query->fetchAll();
-            foreach ($rental as $row){
-             $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
-            }
-            return $results;
-        } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
-        }
-    }
-    
-    // methode un peu tendnu a faire.
-    public static function get_rental_by_critere($title,$author) {
-        $results = [];
-        $title= Book::get_book_by_title($title);
-       
-        try {
-             
-            $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id"
-                    . "WHERE rentaldate IS NOT NULL  OR returndate IS NOT NULL AND book.title LIKE :title , book.author LIKE :author",array(":title" => "%" . $title . "%",":author" => "%" . $author . "%"));
-            $query = $books->fetchAll();
-            foreach ($query as $row) {
+            foreach ($rental as $row) {
                 $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
             }
             return $results;
         } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
+    public static function get_rental_join_book_join_user_rentdate() {
+        $results = [];
+        try {
+            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row) {
+                $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
+    public static function get_rental_join_book_join_user_returndate() {
+        $results = [];
+        try {
+            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row) {
+                $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
+    public static function get_rental_join_book_join_user_all() {
+        $results = [];
+        try {
+            $query = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL  OR returndate IS NOT NULL", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row) {
+                $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("Problème lors de l'accès a la base de données");
+        }
+    }
+
+    // methode un peu tendnu a faire.
+    public static function  get_rental_by_critere($title, $author, $filter) {
+        $results = [];
+        try {
+            if ($filter == "all") {
+                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $query = $books->fetchAll();
+                foreach ($query as $row) {
+                    $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+                }
+                return $results;
+            }
+            if ($filter == "back") {
+                $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $rental = $query->fetchAll();
+                foreach ($rental as $row) {
+                    $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+                }
+                return $results;
+            }
+            if ($filter == "rent") {
+                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $query = $books->fetchAll();
+                foreach ($query as $row) {
+                    $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
+                }
+                return $results;
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            echo $e->getFile();
+            echo $e->getLine();
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
-
-
-
     public static function rent_valid($id) {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
-            $books = $query->fetch(); 
-            
+            $books = $query->fetch();
+
             return $books[0] > 5;
         } catch (Exception $ex) {
             die("soucis de db");
@@ -155,7 +166,7 @@ class Rental extends Model {
             echo $ex->getMessage();
         }
     }
-    
+
     public static function rent_rented($id) {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));

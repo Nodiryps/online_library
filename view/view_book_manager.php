@@ -30,7 +30,7 @@
             <div class="text-right" style="position:absolute;top:20px;right:10px;">
                 <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
             </div>
-         
+            
         </nav>
 
         <form class="" method="post"  action="book/index">

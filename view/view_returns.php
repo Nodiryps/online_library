@@ -43,7 +43,7 @@
                 <div class="col-md-2 pt-3">
                     <div class="form-group">
                         <select id="inputState" name="filtre" class="form-control" >
-                            <option  value="all">Tous</option>
+                            <option  value="all" >Tous</option>
                             <option value="rent">En location</option>
                             <option value="back">Retour</option>
 

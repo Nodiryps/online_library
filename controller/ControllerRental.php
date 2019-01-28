@@ -10,43 +10,36 @@ require_once 'framework/Tools.php';
 class ControllerRental extends Controller {
 
     public function index() {
-        Controller::redirect('Book','index');
+        Controller::redirect('Book', 'index');
     }
 
     public function returns() {
         $profile = Controller::get_user_or_redirect();
-        $books= Rental::get_rental_join_book_join_user_rentdate();
-        $title="";
-        $author="";
-        $date="";
-        $filter="";
-        
-         (new View("returns"))->show(array("profile" => $profile,"books"=>$books,"title"=>$title,"author"=>$author,"date"=>$date,"filter"=>$filter));
+        $books = Rental::get_rental_join_book_join_user_rentdate();
+        $title = "";
+        $author = "";
+        $date = "";
+        $filter = "";
+
+        (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
     }
-    public function search_book(){
+
+    public function search_book() {
         $profile = Controller::get_user_or_redirect();
-        $books= Rental::get_rental_join_book_join_user_rentdate();
-        $title="";
-        $author="";
-        $date="";
-        $filter="";
-        if(isset($_POST["title"]) &&isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"])&& isset($_POST["filtre"]) ){
-           $title= Tools::sanitize($_POST["title"]);
-           $author=Tools::sanitize($_POST["author"]);
-           $date=Tools::sanitize($_POST["date"]);
-           $filter= Tools::sanitize($_POST["filtre"]);
-           var_dump($filter);
-           if ($filter === "back") {
-                $books = Rental::get_rental_join_book_join_user_returndate();
-            }
-           elseif ($filter === "all") {
-                $books = Rental::get_rental_join_book_join_user_all();
-            }
-            else{
-                Rental::get_rental_by_critere($title, $author);
-            }
+        $books = Rental::get_rental_join_book_join_user_rentdate();
+        $title = "";
+        $author = "";
+        $date = "";
+        $filter = "";
+        if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
+            $title = Tools::sanitize($_POST["title"]);
+            $author = Tools::sanitize($_POST["author"]);
+            $date = Tools::sanitize($_POST["date"]);
+            $filter = Tools::sanitize($_POST["filtre"]);
+           $books= Rental::get_rental_by_critere($title, $author, $filter);
+           
         }
-         (new View("returns"))->show(array("profile" => $profile,"books"=>$books,"title"=>$title,"author"=>$author,"date"=>$date,"filter"=>$filter));
+        (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
     }
 
     public function add_rental_in_basket() {// on recupere un user mais le champ id est vide

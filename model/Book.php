@@ -48,7 +48,7 @@ class Book extends Model {
         $results = [];
         try {
             $books = self::execute("SELECT * FROM book "
-                            . "WHERE title LIKE :critere OR author LIKE :critere OR "
+                            . "WHERE isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR "
                             . "editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
             foreach ($query as $row) {

@@ -158,7 +158,6 @@ class User extends Model {
 
     public static function add_user($username, $password, $fullname, $email, $birthdate) {
         $role = "member";
-//        $query = "";
         try {
             $query = self::execute("INSERT INTO user(username,password,fullname,email,birthdate,role)
                                         VALUES(:username,:password,:fullname,:email,:birthdate,:role)", array(
