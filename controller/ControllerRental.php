@@ -120,5 +120,44 @@ class ControllerRental extends Controller {
         }
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
+    
+    
+  public function delete_rental(){
+           $profile = Controller::get_user_or_redirect();
+        $books = Rental::get_rental_join_book_join_user_rentdate();
+        $title = "";
+        $author = "";
+        $date = "";
+        $filter = "";
+        if (isset($_POST["delrent"])) {
+            $delrent= Rental::get_rental_by_id_book($_POST["delrent"]);
+            foreach ($delrent as $del) {
+                $del->delete_rental();
+            }
+             $books = Rental::get_rental_join_book_join_user_rentdate();
+        }
+        
+        (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+    }
+    
+    public function update_rental_returndate() {
+          $profile = Controller::get_user_or_redirect();
+        $books = Rental::get_rental_join_book_join_user_rentdate();
+        $title = "";
+        $author = "";
+        $date = "";
+        $filter = "";
+        $datetime = date("Y-m-d H:i:s");
+       
+         if (isset($_POST["idbook"])) {
+            $returnRental= Rental::get_rental_by_id_book($_POST["idbook"]);
+            foreach ($returnRental as $return) {
+                $return->update_rental_returndate($datetime);
+            }
+             $books = Rental::get_rental_join_book_join_user_rentdate();
+        }
+        
+         (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+    }
 
 }

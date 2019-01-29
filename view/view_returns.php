@@ -82,8 +82,8 @@
                             <td class="text-center"><?= $book->returndate ?></td>
                             <?php if ($profile->role == "admin"): ?>
                             <td style="border:none;" bgcolor="white">
-                                <form  method="post" action="book/">
-                                    <input type="hidden" name="editbook" value="<?= $book->id ?>">
+                                <form  method="post" action="rental/delete_rental">
+                                    <input type="hidden" name="delrent" value="<?= $book->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span >
                                     </button>
@@ -92,7 +92,7 @@
                             <?php endif; ?>
 
                             <td style="border:none;" bgcolor="white">
-                                <form  method="post" action="book/book_detail">
+                                <form  method="post" action="rental/update_rental_returndate">
                                     <input type="hidden" name="idbook" value="<?= $book->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-warning">
                                         <span class="glyphicon glyphicon-barcode"></span>
