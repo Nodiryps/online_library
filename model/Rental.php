@@ -74,7 +74,23 @@ class Rental extends Model {
         }
     }
 
-    public static function get_rental_join_book_join_user_rentdate() {
+    public static function get_rental_join_book_join_user_rentdate($id) {
+        $results = [];
+        try {
+            $query = self::execute("SELECT * FROM book WHERE book.id NOT IN (select book.id from rental JOIN book on rental.book=book.id where rentaldate is null and rental.user= :id)", array("id"=>$id));
+            $rental = $query->fetchAll();
+            foreach ($rental as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+           // Tools::abort("Problème lors de l'accès a la base de données");
+            echo $e->getMessage();
+            echo $e->getLine();
+            echo $e->getFile();
+        }
+    }
+     public static function get_rental_join_book_join_user_rentdates() {
         $results = [];
         try {
             $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL", array());
@@ -197,11 +213,44 @@ class Rental extends Model {
     public static function get_rentals_by_user($user) {
         $res = [];
         try {
-            $query = self::execute("SELECT * FROM rental WHERE user = :user AND rentaldate IS NOT NULL", array("user" => $user));
+            $query = self::execute("SELECT * FROM rental WHERE user = :user AND rentaldate IS NOT NULL AND returndate is NULL", array("user" => $user));
             $rentals = $query->fetchAll();
             foreach ($rentals as $rental)
                 $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
             return $res;
+        } catch (Exception $ex) {
+            //Tools::abort("Problème lors de l'accès à la base de données.");
+            $ex->getMessage();
+            $ex->getLine();
+            $ex->getFile();
+        }
+    }
+    
+    public static function get_rentals_b($user) {
+        $res = [];
+        try {
+            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL", array("user" => $user));
+            $rentals = $query->fetchAll();
+            foreach ($rentals as $rental) {
+                $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
+            }
+            return $res;
+        } catch (Exception $ex) {
+            //Tools::abort("Problème lors de l'accès à la base de données.");
+            $ex->getMessage();
+            $ex->getLine();
+            $ex->getFile();
+        }
+    }
+     public static function get_rentals_by_id($id) {
+        $res = [];
+        try {
+            $query = self::execute("SELECT * FROM rental WHERE id = :id ", array("id" => $id));
+            $rentals = $query->fetchAll();
+            foreach ($rentals as $rental)
+                $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
+            return $res;
+          
         } catch (Exception $ex) {
             //Tools::abort("Problème lors de l'accès à la base de données.");
             $ex->getMessage();

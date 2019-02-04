@@ -87,20 +87,6 @@ class ControllerBook extends Controller {
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
-
-//    public function books_manager() {
-//        $user = Controller::get_user_or_redirect();
-//        $books = Book::get_all_books();
-//        var_dump($books);
-//    }
-//    public function panier() {// a effacer peut-etre 
-//        $user = Controller::get_user_or_redirect();
-//        if (isset($_POST["idbook"])) {
-//            $value = $_POST["idbook"];
-//        }
-//        (new View("book_detail"))->show(array("books" => $books));
-//    }
-
     public function book_detail() {
         $user = Controller::get_user_or_redirect();
         if (isset($_POST["idbook"])) {

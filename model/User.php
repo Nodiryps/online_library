@@ -254,7 +254,7 @@ class User extends Model {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
             }
             return $results;
-            return $query;
+           
         } catch (Exception $e) {
            // Tools::abort("Problème lors de l'accès a la base de données");
             echo $e->getMessage();

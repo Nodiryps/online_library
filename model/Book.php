@@ -23,7 +23,21 @@ class Book extends Model {
     public static function get_all_books() {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book", array());
+            $books = self::execute("SELECT * FROM book ", array());
+            $query = $books->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            Tools::abort("Problème lors de l'accès a la base de données");
+        }
+    }
+    
+        public static function get_all_books_join_rental() {
+        $results = [];
+        try {
+            $books = self::execute("SELECT * FROM book join rental where book.id=rental.book ", array());
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
