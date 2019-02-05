@@ -131,6 +131,7 @@ class ControllerRental extends Controller {
         if (isset($_POST["delrent"])) {
             var_dump($_POST["delrent"]);
             $delrent = Rental::get_rentals_by_id($_POST["delrent"]);
+            var_dump($delrent);
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }

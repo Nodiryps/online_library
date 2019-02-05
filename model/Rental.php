@@ -93,7 +93,7 @@ class Rental extends Model {
      public static function get_rental_join_book_join_user_rentdates() {
         $results = [];
         try {
-            $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE rentaldate IS NOT NULL", array());
+            $query = self::execute("SELECT DISTINCT* FROM rental WHERE rentaldate IS NOT NULL", array());
             $rental = $query->fetchAll();
             foreach ($rental as $row) {
                 $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
@@ -258,6 +258,7 @@ class Rental extends Model {
             $ex->getFile();
         }
     }
+    
 
     // methode pas a la bonne place->dans BOOK
     public function get_book() {
