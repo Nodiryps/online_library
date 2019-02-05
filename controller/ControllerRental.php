@@ -112,7 +112,7 @@ class ControllerRental extends Controller {
     
     public function returns() {
         $profile = Controller::get_user_or_redirect();
-        $books = Rental::get_rentals_b($profile->id);
+        $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
         $title = "";
         $author = "";
         $date = "";
@@ -129,9 +129,7 @@ class ControllerRental extends Controller {
         $date = "";
         $filter = "";
         if (isset($_POST["delrent"])) {
-            var_dump($_POST["delrent"]);
             $delrent = Rental::get_rentals_by_id($_POST["delrent"]);
-            var_dump($delrent);
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }
@@ -149,6 +147,7 @@ class ControllerRental extends Controller {
         $filter = "";
         $datetime = date("Y-m-d H:i:s");
         if (isset($_POST["idbook"])) {
+            var_dump($_POST["idbook"]);
             $returnRental = Rental::get_rentals_by_id($_POST["idbook"]);
             foreach ($returnRental as $return) {
                 $return->update_rental_returndate($datetime);

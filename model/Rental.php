@@ -247,8 +247,9 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT * FROM rental WHERE id = :id ", array("id" => $id));
             $rentals = $query->fetchAll();
-            foreach ($rentals as $rental)
+            foreach ($rentals as $rental) {
                 $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
+            }
             return $res;
           
         } catch (Exception $ex) {
