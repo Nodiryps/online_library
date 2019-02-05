@@ -44,21 +44,21 @@ CREATE TABLE IF NOT EXISTS `book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
-INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`) VALUES 
-(NULL, '1111111111111', 'Harry Potter à l Ecole des Sorciers', 'JK Rowlings', 'Pocket', NULL), 
-(NULL, '2222222222222', 'Mobyz Dick', 'Jules Verge', 'Pocket', NULL), 
-(NULL, '3333333333333', 'Les Fleurs du Male', 'Beau De Lair', 'Pocket', NULL), 
-(NULL, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL), 
-(NULL, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', NULL),
-(NULL, '6666666666666', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', NULL), 
-(NULL, '7777777777777', '1984', 'George Orwell', 'Pocket', NULL),
-(NULL, '8888888888888', 'To Kill a Mockingbird', 'Harper Lee', 'Pocket', NULL),
-(NULL, '9999999999999', 'Lord of the Flies', 'William Golding', 'Pocket', NULL),
-(NULL, '1111111111110', 'La Danse de la Colere', 'Lerner', 'Pocket', NULL),
-(NULL, '2222222222220', 'Why Does He Do That', 'Lundy Bancroft', 'Pocket', NULL),
-(NULL, '3333333333330', 'The Stranger', 'Albert Camus', 'Pocket', NULL),
-(NULL, '4444444444440', 'Heart of Darkness', 'Joseph Conrad', 'Pocket', NULL),
-(NULL, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL);
+INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`) VALUES
+(1, '1111111111111', 'Harrys Potter à l Ecole des Sorciers', 'JK Rowlings', 'Pocket', 'Harrys Potter à l Ecole des Sorciers.jpg'),
+(2, '2222222222222', 'Mobyz Dick', 'Jules Verges', 'Pocket', 'Mobyz Dick.jpg'),
+(3, '3333333333333', 'Les Fleurs du Male', 'Beau De Lair', 'Pockets', 'Les Fleurs du Male.jpg'),
+(4, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', 'Madame Bovary.jpg'),
+(5, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', 'Peter Pan.jpg'),
+(6, '6666666666666', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', NULL),
+(7, '7777777777777', '1984', 'George Orwell', 'Pocket', NULL),
+(8, '8888888888888', 'To Kill a Mockingbird', 'Harper Lee', 'Pocket', 'To Kill a Mockingbird.jpg'),
+(9, '9999999999999', 'Lord of the Flies', 'William Goldings', 'Pocket', NULL),
+(10, '1111111111110', 'La Danse de la Colere', 'Lerner', 'Pocket', 'La Danse de la Colere.jpg'),
+(11, '2222222222220', 'Why Does He Do That', 'Lundy Bancroft', 'Pocket', NULL),
+(12, '3333333333330', 'The Stranger', 'Albert Camus', 'Pocket', 'The Stranger.jpg'),
+(13, '4444444444440', 'Heart of Darkness', 'Joseph Conrad', 'Pocket', NULL),
+(14, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL);
 
 --
 -- Table structure for table `rental`

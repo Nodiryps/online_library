@@ -147,7 +147,6 @@ class ControllerRental extends Controller {
         $filter = "";
         $datetime = date("Y-m-d H:i:s");
         if (isset($_POST["idbook"])) {
-            var_dump($_POST["idbook"]);
             $returnRental = Rental::get_rentals_by_id($_POST["idbook"]);
             foreach ($returnRental as $return) {
                 $return->update_rental_returndate($datetime);

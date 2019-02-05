@@ -14,12 +14,12 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
-    <body>
+    <body style="background-image: url('uploads/<?= $book->picture?>'); background-repeat: none">
         <div class="container">
             <h1>Detail de: <?= $book->title ?></h1>
         </div>
         <h1></h1>
-        <div class="container ">
+        <div class="container " >
             <div class="row">
                  <div class="col-lgl-9">
             <table class="table table-dark col-lg-6">

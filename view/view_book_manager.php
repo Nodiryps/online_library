@@ -73,7 +73,7 @@
                         <td class="text-center"><?= $book->editor ?></td>
                         <?php if(!empty($book->picture)): ?>
                         <td class="text-center">  
-                            <img  style="width: 45px; border-radius: 100px; " src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
+                            <img  style="width: 45px;  " src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
                             
                         </td>
                         <?php else:?>
@@ -149,7 +149,7 @@
                     <th scope="col">TITLE</th>
                     <th scope="col">AUTHOR</th>
                     <th scope="col">EDITOR</th>
-                    <th scope="col">PICTURE</th>
+                  
                 </tr>
                 </thead>
                 <?php if (!empty($UserRentals)): ?>
@@ -159,7 +159,6 @@
                             <td><?= $rent->title ?></td>
                             <td><?= strtoupper($rent->author) ?></td>
                             <td><?= $rent->editor ?></td>
-                            <td><?= $rent->picture ?></td>
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $rent->id ?>">

@@ -28,7 +28,7 @@
             </div>
         </nav>
 
-        <form class="form-horizontal" action="book/edit_book" method="post">
+        <form class="form-horizontal" action="book/edit_book" method="post" enctype="multipart/form-data">
             <fieldset>
 
                 <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
@@ -76,7 +76,7 @@
                         <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
                         <br><br>
                           <?php if(!empty($book->picture)): ?>
-                            <img src='uploads/<?= $book->picture ?>' width="100" alt="Book image">
+                            <img src='uploads/<?= $book->picture?>' width="100" alt="Book image">
                             <br><br>
                        <?php else:?>
                             <img src='uploads/images.png' width="100" alt="Book image">
@@ -91,7 +91,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="idbook"></label>
                     <div class="col-md-8">
-                        <input type="hidden" name="idbook" value="<?= $id ?>">
+                        <input type="hidden" name="idbook" value="<?= $book->id ?>">
                         <button id="idbook" class="btn btn-success"  type="submit">
                             <span class="glyphicon glyphicon-ok">Valide</span>
                         </button>
