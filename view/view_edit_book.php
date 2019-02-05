@@ -31,14 +31,14 @@
         <form class="form-horizontal" action="book/edit_book" method="post">
             <fieldset>
 
-                <legend class="text-center">EDITION DE <?= strtoupper($title) ?> </legend>
+                <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
 
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
                     <div class="col-md-5">
                         <input id="ISBN" name="isbn" type="text" 
-                               class="form-control input-md" value="<?= ControllerBook::isbn_format_EAN_13($isbn) ?>">
+                               class="form-control input-md" value="<?= ControllerBook::isbn_format_EAN_13($book->isbn) ?>">
                     </div>
                 </div>
 
@@ -47,7 +47,7 @@
                     <label class="col-md-4 control-label" for="textinput">AUTHOR</label>  
                     <div class="col-md-5">
                         <input id="textinput" name="author" type="text"  
-                               class="form-control input-md" value="<?= $author ?>">
+                               class="form-control input-md" value="<?= $book->author ?>">
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
                     <label class="col-md-4 control-label" for="TITRE">TITRE</label>  
                     <div class="col-md-5">
                         <input id="textinput" name="title" type="text" 
-                               class="form-control input-md" value="<?= $title ?>">
+                               class="form-control input-md" value="<?= $book->title ?>">
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                     <label class="col-md-4 control-label" for="textinput">EDITOR</label>  
                     <div class="col-md-5">
                         <input id="textinput" name="editor" type="text" 
-                               class="form-control input-md" value="<?= $editor ?>">
+                               class="form-control input-md" value="<?= $book->editor ?>">
                     </div>
                 </div>
                 
@@ -74,10 +74,14 @@
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
                         <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
-                        <?php if ($picture): ?>
-                            <img src='upload/<?= $picture ?>' width="100" alt="Book image">
+                        <br><br>
+                          <?php if(!empty($book->picture)): ?>
+                            <img src='uploads/<?= $book->picture ?>' width="100" alt="Book image">
                             <br><br>
-                        <?php endif; ?>
+                       <?php else:?>
+                            <img src='uploads/images.png' width="100" alt="Book image">
+                            <br><br>
+                            <?php endif;?>
                         <button  name="delimage" class="btn btn-warning">
                             <span class="glyphicon glyphicon-remove"> effacer</span>
                         </button>

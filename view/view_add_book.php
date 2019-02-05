@@ -21,7 +21,7 @@
         </nav>
 
 
-        <form class=" container form-horizontal" action="book/add_book" method="post">
+        <form class=" container form-horizontal" action="book/add_book" method="post" enctype="multipart/form-data">
             <fieldset>
 
                 <legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
                     <div class="col-md-4">
-                        <input id="picture" name="picture" class="input-file" type="file">
+                        <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
                         <button  name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-"> effacer</span></button>
                     </div>
                 </div>

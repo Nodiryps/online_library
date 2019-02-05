@@ -41,18 +41,32 @@ class ControllerBook extends Controller {
         $author = "";
         $editor = "";
         $errors = [];
+        $picture_path="";
 
-        if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"]) && isset($_POST["picture"])) {
+        if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"])) {
             $isbn = Tools::sanitize($_POST["isbn"]);
             $title = Tools::sanitize($_POST["title"]);
             $author = Tools::sanitize($_POST["author"]);
             $editor = Tools::sanitize($_POST["editor"]);
-            $picture = Tools::sanitize($_POST["picture"]);
 
             $errors = $this->rules_add_book($isbn, $title, $author);
+            //var_dump($_FILES);
+
+            if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
+                if ($_FILES['picture']['error'] == 0) {
+                    $infosfichier = pathinfo($_FILES['picture']['name']);
+                    $extension_upload = $infosfichier['extension'];
+                    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+                    if (in_array($extension_upload, $extensions_autorisees)) {
+                        $picture_path=$title.".".$extension_upload;
+                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' .$picture_path);
+                    }
+                }
+            }
+
 
             if (empty($errors)) {
-                $book = new Book(0, $isbn, $title, $author, $editor, $picture);
+                $book = new Book(0, $isbn, $title, $author, $editor, $picture_path);
                 $book->create();
             }
         }
@@ -87,6 +101,7 @@ class ControllerBook extends Controller {
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
+
     public function book_detail() {
         $user = Controller::get_user_or_redirect();
         if (isset($_POST["idbook"])) {
@@ -109,21 +124,20 @@ class ControllerBook extends Controller {
         $picture = "";
         if (isset($_POST['editbook'])) {
             $book = Book::get_book_by_id($_POST['editbook']);
-            $id = $book->id;
-            $isbn = $book->isbn;
-            $title = $book->title;
-            $author = $book->author;
-            $editor = $book->editor;
-            $picture = $book->picture;
+//            $id = $book->id;
+//            $isbn = $book->isbn;
+//            $title = $book->title;
+//            $author = $book->author;
+//            $editor = $book->editor;
+//            $picture = $book->picture;
         }
-        if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author']) && isset($_POST['picture'])) {
+        if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
             $id = $_POST['idbook'];
             $book = Book::get_book_by_id($id);
             $isbn = $book->isbn;
             $title = $book->title;
             $author = $book->author;
             $editor = $book->editor;
-            $picture = $book->picture;
 
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                 $book->isbn = $this->isbn_format_string(Tools::sanitize($_POST["isbn"]));
@@ -133,12 +147,23 @@ class ControllerBook extends Controller {
                 $book->author = Tools::sanitize($_POST['author']);
             if (isset($_POST['editor']) && isset($_POST['editor']) !== "")
                 $book->editor = Tools::sanitize($_POST["editor"]);
-            if (isset($_POST['picture']) && isset($_POST['picture']) !== "")
-                $book->picture = Tools::sanitize($_POST["picture"]);
+          
 
             $errors = $this->rules_add_book($isbn, $title, $author);
-            $errors = Book::validate_photo($book->picture);
-            self::add_image($book);
+           // $errors = Book::validate_photo($book->picture);
+            //self::add_image($book);
+            
+             if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
+                if ($_FILES['picture']['error'] == 0) {
+                    $infosfichier = pathinfo($_FILES['picture']['name']);
+                    $extension_upload = $infosfichier['extension'];
+                    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+                    if (in_array($extension_upload, $extensions_autorisees)) {
+                        $picture_path=$title.".".$extension_upload;
+                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' .$picture_path);
+                    }
+                }
+            }
 
             if (empty($error)) {
                 $book->update_book();

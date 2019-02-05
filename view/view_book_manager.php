@@ -71,7 +71,17 @@
                         <td class="text-center"><?= $book->title ?></td>
                         <td class="text-center"><?= strtoupper($book->author) ?></td>
                         <td class="text-center"><?= $book->editor ?></td>
-                        <td class="text-center"><?= $book->picture ?></td>
+                        <?php if(!empty($book->picture)): ?>
+                        <td class="text-center">  
+                            <img  style="width: 45px; border-radius: 100px; " src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
+                            
+                        </td>
+                        <?php else:?>
+                          <td class="text-center">  
+                              <img class="img-circle " style="width: 45px;" src='uploads/images.png' width="100" alt="Couverture">
+                            
+                        </td>
+                        <?php endif;?>
                         <?php if ($profile->role == "admin"): ?>
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/edit_book">
