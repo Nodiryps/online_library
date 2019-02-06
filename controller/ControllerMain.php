@@ -70,7 +70,7 @@ class ControllerMain extends Controller {
                $this->log_user($member);
             }
         }
-        (new View("signu v p"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm,"fullname"=>$fullname,"email"=>$email,"birthdate"=>$birthdate, "errors" => $errors));
+        (new View("signup"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm,"fullname"=>$fullname,"email"=>$email,"birthdate"=>$birthdate, "errors" => $errors));
     }
     
     
