@@ -241,7 +241,8 @@ class User extends Model {
                           "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             //Tools::abort("Problème lors de l'accès a la base de données");
+             echo $ex->getMessage();
         }
     }
 

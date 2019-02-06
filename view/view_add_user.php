@@ -14,83 +14,93 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="container">
-            <div>
-                <h1>Ajouter un utilisateur</h1>
+
+        <nav   class="text-right"> 
+
+            <?php
+            if ($profile->is_member())
+                include('menuMember.html');
+            if ($profile->is_admin() || $profile->is_manager())
+                include('menu.html');
+            ?>
+            <div class="text-right" style="position:absolute;top:20px;right:10px;">
+                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
             </div>
-            <div class="menu">
-                <a href="user/profil">Home</a>
-            </div>
-            <div class="container">
+
+        </nav>
+        <div class="container text-center">
+            
+                <legend>Ajouter un utilisateur</legend>
+           
+        </div>
+            <div class="container row text-center">
                 Please enter your details to sign up :
                 <br><br>
                 <div class="form-horizontal">
-                <form action="user/add_user" method="post">
-                    <table class="table table-dark col-lg-6">
-                         <thead class="thead-dark">
-                        <tr>
-                            <td>username:</td>
-                            <td><input id="username" name="username" type="text" value=""></td>
-                        </tr>
-                        <tr>
-                            <td>Password:</td>
-                            <td><input id="password" name="password" type="password" value=""></td>
-                        </tr>
-                        <tr>
-                            <td>Confirm Password:</td>
-                            <td><input id="password_confirm" name="password_confirm" type="password" value=""></td>
-                        </tr>
-                        <tr>
-                            <td>fullname:</td>
-                            <td><input id="username" name="fullname" type="text" value=""></td>
-                        </tr>
-                        <tr>
-                            <td>email:</td>
-                            <td><input id="username" name="mail" type="text" value=""></td>
-                        </tr>
-                        <tr>
-                            <td>birthdate</td>
-                            <td><input id="username" name="birthdate" type="date" ></td>
-                        </tr>
+                    <form action="user/add_user" method="post" class="form-horizontal">
+                        <table class="table table-dark col-lg-offset-1 col-lg-5 ">
+                            <thead class="thead-dark">
+                                <tr class="form-group">
+                                    <td><input id="username" name="username" type="text" value="" class="form-control my-input" id="username" placeholder="username" value="<?= $username?>"></td>
+                                </tr >
+                                <tr class="form-group">
+                                    <td><input id="password" name="password" type="password" value="" class="form-control my-input" id="username"  placeholder="mot de passe"></td>
+                                </tr>
+                                <tr class="form-group">
+                                    <td><input id="password_confirm" name="password_confirm" type="password" value="" class="form-control my-input" id="username"  placeholder="confirmer le mot de passe"></td>
+                                </tr>
+                                <tr class="form-group">
+                                    <td><input id="username" name="fullname" type="text" value="" class="form-control my-input" id="username"  placeholder="fullname" value="<?= $fullname?>"></td>
+                                </tr>
+                                <tr class="form-group">
+                                    <td><input id="username" name="mail" type="text" value="" class="form-control my-input" id="username"  placeholder="email  " value="<?= $email?>"></td>
+                                </tr>
+                                <tr class="form-group">
+                                    <td><input id="username" name="birthdate" type="date"  class="form-control my-input" id="username"  placeholder="date de naissance"></td>
+                                </tr>
 
-                        <?php if ($utilisateur->role == "admin"): ?>
-                            <tr>
-                                <td>Role</td>
-                                <td><select name="role">
-                                        <option value="admin" >admin</option>
-                                        <option value="manager">manager</option>
-                                        <option value="member" selected="selected">member</option>
+                                <?php if ($profile->role == "admin"): ?>
+                                    <tr class="form-group">
 
-                                    </select></td>
-                            </tr> 
+                                        <td><select name="role" class="form-control my-input" id="username">
+                                                <option value="admin" >admin</option>
+                                                <option value="manager">manager</option>
+                                                <option value="member" selected="selected">member</option>
+                                            </select></td>
+                                    </tr > 
 
-                        <?php endif; ?>   
-                        <?php if ($utilisateur->role == "manager"): ?>
-                            <tr>
-                                <td>Role</td>
-                                <td><select name="role">
-                                        <option value="member">member</option>
-                                    </select></td>
-                            </tr>
-                        <?php endif; ?>
-                    </table>
-                    <input type="submit" value="ajouter">
-                </form>
+                                <?php endif; ?>   
+                                <?php if ($profile->role == "manager"): ?>
+                                    <tr class="form-group">
+                                        <td>Role</td>
+                                        <td><select name="role">
+                                                <option value="member">member</option>
+                                            </select></td>
+                                    </tr>
+                                <?php endif; ?>
+                        </table>
+                        <button type="submit" class=" btn btn-block send-button tx-tfm btn-success" style="margin:auto;width:150px;">
+                            Valider
+                        </button>
                 </div>
-                <?php
-                if (isset($errors)) {
-                    echo "<div class='errors'>
+                </form>
+            </div>
+         <div class="container text-center">
+            <br> <a  class="btn btn-info text-right" href="user/user_list">Retour a la liste des membres</a>
+        </div>
+            <?php
+            if (!empty($errors)) {
+                echo "<div class='errors'>
                           <br><br><p>Veuillez corriger les erreurs suivantes :</p>
                           <ul>";
-                    foreach ($errors as $error) {
-                        echo "<li>" . $error . "</li>";
-                    }
-                    echo '</ul></div>';
+                foreach ($errors as $error) {
+                    echo "<li>" . $error . "</li>";
                 }
-                ?>
-            </div>
-            <br> <a href="user/user_list">Retour a la liste des membres</a>
-
+                echo '</ul></div>';
+            }
+            ?>
+        </div>
+       
     </body>
 
 </html>

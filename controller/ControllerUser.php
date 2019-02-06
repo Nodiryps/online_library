@@ -16,12 +16,15 @@ class ControllerUser extends Controller {
     public function profil() {
         $profile = self::get_user_or_redirect();
         $returndate = [];
-        $datetoreturn = [];
+        $datetoreturn = []; 
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
-//        $datetime = "1999-10-20 23:15:30";
-//        $dt = strtotime($datetime); //make timestamp with datetime string
-//        $dates=date("d-m-Y", $dt); //echo the year of the datestamp just created
+      
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate));
+    }
+    
+    public static function gestion_date($datereturn){
+        return strtotime(date("d/m/Y")) > strtotime($datereturn);
+        
     }
 
     public function user_list() {
@@ -31,60 +34,7 @@ class ControllerUser extends Controller {
         $members = User::get_all_user();
         (new View("user_list"))->show(array("utilisateur" => $utilisateur, "members" => $members, "id" => $id));
     }
-
-//    public function add_user() {
-//        $utilisateur = self::get_user_or_redirect();
-//        $id = "";
-//        $username = '';
-//        $password = '';
-//        $password_confirm = '';
-//        $fullname = "";
-//        $email = "";
-//        $birthdate = "";
-//        $role = "";
-//
-//        if (Tools::isset_notEmpty($_POST['username']) && Tools::isset_notEmpty($_POST['password']) && Tools::isset_notEmpty($_POST['password_confirm']) &&
-//                Tools::isset_notEmpty($_POST["fullname"]) && Tools::isset_notEmpty($_POST["mail"]) && Tools::isset_notEmpty($_POST["birthdate"]) && 
-//                Tools::isset_notEmpty($_POST["role"])) {
-//            $username = Tools::sanitize($_POST['username']);
-//            $password = Tools::sanitize($_POST['password']);
-//            $password_confirm = Tools::sanitize($_POST['password_confirm']);
-//            $fullname = Tools::sanitize($_POST["fullname"]);
-//            $email = Tools::sanitize($_POST["mail"]);
-//            $birthdate = Tools::sanitize($_POST["birthdate"]);
-//            $role = Tools::sanitize($_POST["role"]);
-//
-//            $errors[] = $this->rules_add_user($username, $password, $password_confirm);
-//
-//            $user = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
-//
-//            if (!isset($errors)) {
-//                try {
-////                User::admin_add_user($username, $password, $fullname, $email, $birthdate, $role);
-//                    $user->insert();
-//                } catch (Exception $ex) {
-//                    abort("Problème lors de l'accès a la base de données");
-//                    $ex->getMessage();
-//                    $ex->getLine();
-//                }
-//            }
-//        }
-//        (new View("add_user"))->show(array("utilisateur" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate));
-//    }
-//
-//    private function rules_add_user($username, $password, $password_confirm) {
-//        $errors = [];
-//        if (!User::is_username_not_available($username))
-//            $errors[] = "l'utilisateur existe deja";
-//        if (trim($username) == '')
-//            $errors[] = "Le username est obligatoire";
-//        if (strlen(trim($username)) < 3)
-//            $errors[] = "Le username doit contenir 3 caractères au minimum";
-//        if ($password != $password_confirm)
-//            $errors[] = "Les mots de passe doivent être identiques";
-//        return $errors;
-//    }
-
+    
     public function add_user() {
         $utilisateur = self::get_user_or_redirect();
         $id = "";
@@ -96,6 +46,7 @@ class ControllerUser extends Controller {
         $birthdate = "";
         $query = "";
         $role = "";
+        $errors=[];
 
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) &&
                 isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
@@ -116,18 +67,11 @@ class ControllerUser extends Controller {
             if ($password != $password_confirm)
                 $errors[] = "Les mots de passe doivent être identiques";
             $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
-            if (!isset($errors)) {
-                try {
-                    //User::admin_add_user($username, $password, $fullname, $email, $birthdate, $role);
-                    $member->insert();
-                } catch (Exception $ex) {
-                    abort("Problème lors de l'accès a la base de données");
-                    $ex->getMessage();
-                    $ex->getLine();
-                }
+            if (empty($errors)) {
+                   $member->insert();
             }
         }
-        (new View("add_user"))->show(array("utilisateur" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate));
+        (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate,"errors"=>$errors));
     }
 
     public function edit_profile() {

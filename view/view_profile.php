@@ -41,17 +41,20 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>Livres</th>
-                        <th>Loué le:</th>
-                        <th>À rendre avant le:</th>
+                        <th>titre</th>
+                        <th>Louer le:</th>
+                         <th>À remettre avant le:</th>
                     </tr>
                 </thead>
+                
                 <?php foreach ($rentals as $rental): ?>
 
                     <tr>
                         <td><?= ControllerBook::isbn_format_EAN_13($rental->get_book()->isbn) ?></td>
                         <td><?= $rental->get_book()->title ?>   (<?= $rental->get_book()->author ?>)</td>
                         <td><?= date('d-m-Y ', strtotime($rental->rentaldate)) ?></td>
-                        <?php if (strtotime($rental->rentaldate) < strtotime(date("d-m-Y H:i:s"))): ?>
+                      
+                        <?php if (ControllerUser::gestion_date(date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))))): ?>
                             <td style="color: red"><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>
                         <?php else : ?>
                             <td><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>

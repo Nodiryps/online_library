@@ -136,7 +136,7 @@ class Rental extends Model {
     public static function  get_rental_by_critere($title, $author, $filter) {
         $results = [];
         try {
-            if ($filter == "all") {
+            if ($filter == "Tous") {
                 $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $query = $books->fetchAll();
                 foreach ($query as $row) {
@@ -144,7 +144,7 @@ class Rental extends Model {
                 }
                 return $results;
             }
-            if ($filter == "back") {
+            if ($filter == "retour") {
                 $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $rental = $query->fetchAll();
                 foreach ($rental as $row) {
@@ -152,7 +152,7 @@ class Rental extends Model {
                 }
                 return $results;
             }
-            if ($filter == "rent") {
+            if ($filter == "location") {
                 $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
                                 . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $query = $books->fetchAll();
