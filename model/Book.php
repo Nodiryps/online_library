@@ -130,6 +130,17 @@ class Book extends Model {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
+    
+    public function delete_image(){
+      try {
+               self::execute("UPDATE book SET picture=:picture  WHERE id=:id",
+                       array( "picture" => null, "id" => $this->id));
+              
+            } catch (Exception $ex) {
+              // Tools::abort("Problème lors de l'accès a la base de données");
+                $ex->getMessage();
+            }
+    }
 
     public static function validate_image($file) {// mettre la fonction dans controller
         $errors = [];

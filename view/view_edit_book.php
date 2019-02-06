@@ -28,94 +28,105 @@
             </div>
         </nav>
 
-        <form class="form-horizontal" action="book/edit_book" method="post" enctype="multipart/form-data">
-            <fieldset>
+    <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
+    <div class="container row">
 
-                <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
-
-                <!-- Text input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="ISBN">ISBN</label>  
-                    <div class="col-md-5">
-                        <input id="ISBN" name="isbn" type="text" 
-                               class="form-control input-md" value="<?= ControllerBook::isbn_format_EAN_13($book->isbn) ?>">
+        <div class="col-lg-offset-2 col-lg-5">
+            <form class="text-right" action="book/edit_book" method="post" enctype="multipart/form-data">
+                <fieldset>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label" for="ISBN">ISBN</label>  
+                        <div class="col-lg-7">
+                            <input id="ISBN" name="isbn" type="text" 
+                                   class="form-control input-md" value="<?= ControllerBook::isbn_format_EAN_13($book->isbn) ?>">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="textinput">AUTHOR</label>  
-                    <div class="col-md-5">
-                        <input id="textinput" name="author" type="text"  
-                               class="form-control input-md" value="<?= $book->author ?>">
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label" for="textinput">AUTHOR</label>  
+                        <div class="col-lg-7">
+                            <input id="textinput" name="author" type="text"  
+                                   class="form-control input-md" value="<?= $book->author ?>">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="TITRE">TITRE</label>  
-                    <div class="col-md-5">
-                        <input id="textinput" name="title" type="text" 
-                               class="form-control input-md" value="<?= $book->title ?>">
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label" for="TITRE">TITRE</label>  
+                        <div class="col-lg-7">
+                            <input id="textinput" name="title" type="text" 
+                                   class="form-control input-md" value="<?= $book->title ?>">
+                        </div>
                     </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="textinput">EDITOR</label>  
-                    <div class="col-md-5">
-                        <input id="textinput" name="editor" type="text" 
-                               class="form-control input-md" value="<?= $book->editor ?>">
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label" for="textinput">EDITOR</label>  
+                        <div class="col-lg-7">
+                            <input id="textinput" name="editor" type="text" 
+                                   class="form-control input-md" value="<?= $book->editor ?>">
+                        </div>
                     </div>
-                </div>
-                
-                <!-- File Button --> 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
-                    <div class="col-md-4">
-                        <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
-                        <br><br>
-                          <?php if(!empty($book->picture)): ?>
-                            <img src='uploads/<?= $book->picture?>' width="100" alt="Book image">
+
+                    <!-- File Button --> 
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label" for="picture">CHOISIR UN FICHIER</label>
+                        <div class="col-lg-7">
+                            <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
                             <br><br>
-                       <?php else:?>
-                            <img src='uploads/images.png' width="100" alt="Book image">
-                            <br><br>
-                            <?php endif;?>
-                        <button  name="delimage" class="btn btn-warning">
-                            <span class="glyphicon glyphicon-remove"> effacer</span>
-                        </button>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="idbook"></label>
-                    <div class="col-md-8">
-                        <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                        <button id="idbook" class="btn btn-success"  type="submit">
-                            <span class="glyphicon glyphicon-ok">Valide</span>
-                        </button>
-                        
-                        <button id="button2id" name="button2id" class="btn btn-warning" type="submit">
-                            <span class="glyphicon glyphicon-remove">
-                                <a href="book/index" alt="book manager" >Annuler</a>
-                            </span>
-                        </button>
+
+                        </div>
                     </div>
-                </div>
-            </fieldset>
-        </form>
-        <?php if ($errors !== []): ?>
-            <div class='errors'>
-                <p>Erreur(s) à corriger:</p>
-                <ul>
-                    <?php foreach ($errors as $error): ?>
-                        <li><?= $error ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php elseif (strlen($success) != 0): ?>
-            <p><span class='success'><?= $success ?></span></p>
+
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label" for="idbook"></label>
+                        <div class="col-md-8">
+                            <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                            <button id="idbook" class="btn btn-success"  type="submit">
+                                <span>Valide</span>
+                            </button>
+
+                            <a href="book/index" alt="book manager" class="btn btn-warning">Annuler</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <?php if (!empty($book->picture)): ?>
+                <img src='uploads/<?= $book->picture ?>' width="250" alt="Book image">
+                <br><br>
+            <?php else: ?>
+                <img src='uploads/images.png' width="250" alt="Book image">
+                <br><br>
             <?php endif; ?>
-    </body>
+            <form action="book/edit_book" method="post">
+                <input type="hidden" name="delimageH" value="<?= $book->id?>">
+                <button  name="delimage" class="btn btn-sm btn-warning" type="submit">
+                    <span>effacer l'image</span>
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+
+
+    <div class='errors'>
+        <?php if ($errors !== []): ?>
+            <p>Erreur(s) à corriger:</p>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= $error ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php elseif (strlen($success) != 0): ?>
+        <p><span class='success'><?= $success ?></span></p>
+        <?php endif; ?>
+</body>
 </html>

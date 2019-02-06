@@ -14,36 +14,57 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </head>
-    <body style="background-image: url('uploads/<?= $book->picture?>'); background-repeat: none">
-        <div class="container">
-            <h1>Detail de: <?= $book->title ?></h1>
+    <body>
+
+        <nav   class="text-right"> 
+
+            <?php
+            if ($profile->is_member())
+                include('menuMember.html');
+            if ($profile->is_admin() || $profile->is_manager())
+                include('menu.html');
+            ?>
+            <div class="text-right" style="position:absolute;top:20px;right:10px;">
+                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
+            </div>
+
+        </nav>
+
+        <div class="container text-capitalize">
+            <h1 class="text-center "> <?= $book->title ?></h1>
         </div>
-        <h1></h1>
-        <div class="container " >
+        <br><br>
+        <div class="container" >
             <div class="row">
-                 <div class="col-lgl-9">
-            <table class="table table-dark col-lg-6">
-                <thead class="thead-dark">
-                <tr>
-                    <th>ISBN</th>
-                    <th>AUTHOR</th>
-                    <th>TITLE</th>
-                    <th>EDITOR</th>
-                </tr>
-                <tr>
-                    <td><?= $book->isbn  ?></td>
-                    <td><?= $book->author  ?></td>
-                    <td><?= $book->title  ?></td>
-                    <td><?= $book->editor  ?></td>
-                </tr>
-                    
-            </table>
-            <form method="get" action="book/index">
-                <button  class="btn btn-info"><span   class="glyphicon glyphicon-arrow-left"></span></button>
-            </form>
+                <div class="col-lg-4">
+                    <img style="width:450px;" src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
+                </div>
+                <br><br><br><br>
+                <div class="col-lg-offset-2 col-lg-5 list-group">
+                    <table style="border-collapse:separate;border-spacing:15px;">
+                        <tr>
+                            <th>ISBN:</th> 
+                            <td><?= ControllerBook::isbn_format_EAN_13($book->isbn) ?></td>
+                        </tr>
+                        <tr>
+                            <th>AUTHOR:</th> 
+                            <td><?= $book->author ?></td>
+                        </tr>
+                        <tr>
+                            <th>TITLE:</th>
+                            <td><?= $book->title ?></td>
+                        </tr>
+                        <tr>
+                            <th>EDITOR:</th>
+                            <td><?= $book->editor ?></td>
+                        </tr>
+                    </table>
+                    <form method="get" action="book/index">
+                        <button  class="text-center btn btn-info btn-block btn-huge"><span   class="glyphicon glyphicon-arrow-left">                 </span></button>
+                    </form>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-    
+
     </body>
 </html>

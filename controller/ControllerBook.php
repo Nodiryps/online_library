@@ -17,9 +17,6 @@ class ControllerBook extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
         $members = User::get_all_user();
-//        $test=Rental::get_rental_count();
-//        var_dump($test);
-        $test = Rental::rent_valid($user->id);
 
 
         if (isset($_POST["search"])) {
@@ -30,7 +27,7 @@ class ControllerBook extends Controller {
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
 
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "test" => $test));
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
 
 // on créé un livre sans img => comme ds msn
@@ -41,7 +38,7 @@ class ControllerBook extends Controller {
         $author = "";
         $editor = "";
         $errors = [];
-        $picture_path="";
+        $picture_path = "";
 
         if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"])) {
             $isbn = Tools::sanitize($_POST["isbn"]);
@@ -58,8 +55,8 @@ class ControllerBook extends Controller {
                     $extension_upload = $infosfichier['extension'];
                     $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
                     if (in_array($extension_upload, $extensions_autorisees)) {
-                        $picture_path=$title.".".$extension_upload;
-                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' .$picture_path);
+                        $picture_path = $title . "." . $extension_upload;
+                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
                     }
                 }
             }
@@ -117,8 +114,17 @@ class ControllerBook extends Controller {
         $errors = [];
         $success = "";
         $picture_path = "";
+        $ok = false;
         if (isset($_POST['editbook'])) {
             $book = Book::get_book_by_id($_POST['editbook']);
+        }
+        
+        if (isset($_POST["delimageH"])) {
+            $edit = $_POST['delimageH'];
+            $this_book = Book::get_book_by_id($edit);
+            $this_book->delete_image();
+            $book = Book::get_book_by_id($edit);
+            (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "success" => $success, "picturepath" => $picture_path));
         }
         if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
             $book = Book::get_book_by_id($_POST["idbook"]);
@@ -130,17 +136,18 @@ class ControllerBook extends Controller {
             if (isset($_POST['author']) && isset($_POST['author']) !== "")
                 $book->author = $_POST['author'];
             if (isset($_POST['editor']) && isset($_POST['editor']) !== "")
-                $book->editor =$_POST["editor"];
+                $book->editor = $_POST["editor"];
             $errors = $this->rules_add_book($book->isbn, $book->title, $book->author);
-             if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
+            if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                 if ($_FILES['picture']['error'] == 0) {
                     $infosfichier = pathinfo($_FILES['picture']['name']);
                     $extension_upload = $infosfichier['extension'];
                     $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
                     if (in_array($extension_upload, $extensions_autorisees)) {
-                        $picture_path=$book->title.".".$extension_upload;
-                        $book->picture=$picture_path;
-                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' .$picture_path);
+                        $ok = true;
+                        $picture_path = $book->title . "." . $extension_upload;
+                        $book->picture = $picture_path;
+                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
                     }
                 }
             }
@@ -149,7 +156,12 @@ class ControllerBook extends Controller {
                 $this->redirect("book", "index");
             }
         }
-        (new View("edit_book"))->show(array("book" => $book,"errors" => $errors, "profile" => $user, "success" => $success,"picturepath"=>$picture_path));
+        if($ok) 
+            (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "success" => $success, "picturepath" => $picture_path));
+        
+        if (!isset($_POST["delimageH"]) && !$ok) {
+            (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "success" => $success, "picturepath" => $picture_path));
+        }
     }
 
     public static function add_image($book) {
