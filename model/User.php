@@ -227,9 +227,9 @@ class User extends Model {
         if (!self::is_username_not_available($this->username))
             self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
                         . "email = :email , birthdate = :birthdate, role = :role "
-                        . "WHERE username = :username", 
+                        . "WHERE id = :id", 
                     array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
-                        "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role));
+                        "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
     }
 
     public function insert() {

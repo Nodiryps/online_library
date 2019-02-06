@@ -34,30 +34,41 @@
 
                     <tr>
                         <td>username:</td>
-                        <td><input  name="username" type="text" value="<?= $username ?>"></td>
+                        <td><input  name="username" type="text" value="<?= $member->username ?>"></td>
 
                     <tr>
                         <td>fullname:</td>
-                        <td><input  name="fullname" type="text" value="<?= $fullname ?>"></td>
+                        <td><input  name="fullname" type="text" value="<?= $member->fullname ?>"></td>
                     </tr>
                     <tr>
                         <td>email:</td>
-                        <td><input  name="email" type="text" value="<?= $email ?>"></td>
+                        <td><input  name="email" type="text" value="<?= $member->email ?>"></td>
                     </tr>
                     <tr>
                         <td>birthdate</td>
-                        <td><input  name="birthdate" type="date" value="<?= $birthdate ?>"></td>
+                        <td><input  name="birthdate" type="date" value="<?= $member->birthdate ?>"></td>
                     </tr> 
                     <?php if (!$utilisateur->is_manager()): ?>
                         <tr>
                             <td>Role</td>
-                            <td><select name="role" value="<?= $role ?>">
+                            <td>
+<!--                                <select name="role" value="<?= $role ?>">
                                     <option value="<?= $role ?>"><?= $role?></option>
                                     <option value="admin">admin</option>
                                     <option value="manager">manager</option>
                                     <option value="member">member</option>
 
-                                </select></td>
+                                </select>-->
+                                <select id="selectbasic" name="member_rent" class="form-control">
+                                    <option><?= $utilisateur->role ?></option>
+                                    <?php foreach ($members as $member): ?>
+                                        <?php if ($member->role !== $utilisateur->role): ?>
+                                            <option><?= $member->role ?></option>
+
+                                        <?php endif;
+                                    endforeach; ?>
+                                </select>
+                            </td>
                         </tr>
 
                     <?php endif; ?> 
