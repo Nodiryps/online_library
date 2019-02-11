@@ -27,7 +27,7 @@
                 <legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend>
 
                 <!-- Text input-->
-                <div class="form-group">
+                <div class=" form-group">
                     <div class="col-md-5">
                         <input id="ISBN" name="isbn" type="text" placeholder="isbn(en format EAN 13)" class="form-control input-md"  >
                     </div>

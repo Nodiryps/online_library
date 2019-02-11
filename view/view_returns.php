@@ -43,12 +43,27 @@
                     <div class="col-md-2 pt-3">
                         <div class="form-group">
                             <select id="inputState" name="filtre" class="form-control"  >
-                                <?php if (!empty($filter)): ?>
-                                    <option  selected="<?= $filter ?>"> <?= $filter ?></option>
-                                <?php endif; ?>
-                                <option  value="Tous" >Tous</option>
-                                <option value="location">location</option>
-                                <option value="retour">Retour</option>
+                                
+                                <option <?php 
+                                  if (!empty($filter) && $filter=="Tous"){?>
+                                      selected
+                                      
+                                  <?php }
+                                ?> value="Tous" >Tous</option>
+                                <option 
+                                    <?php 
+                                  if (!empty($filter) && $filter=="location"){?>
+                                      selected
+                                      
+                                 <?php }
+                                ?>value="location">location</option>
+                                <option 
+                                    <?php 
+                                  if (!empty($filter) && $filter=="retour"){?>
+                                      selected
+                                      
+                                  <?php }
+                                ?>value="retour">Retour</option>
 
                             </select>
                         </div>

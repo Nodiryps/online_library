@@ -76,6 +76,7 @@ class ControllerUser extends Controller {
     }
 
     public function edit_profile() {
+        
         $error = [];
         $confirm_password = "";
         $utilisateur = Controller::get_user_or_redirect();
