@@ -17,7 +17,7 @@ class ControllerBook extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $msg = " ";
         $members = User::get_all_user();
-
+        $usertoAddRent=$user;
 
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
@@ -27,7 +27,7 @@ class ControllerBook extends Controller {
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
 
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members,"actualpanier" => $usertoAddRent));
     }
 
 // on créé un livre sans img => comme ds msn

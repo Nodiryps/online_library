@@ -73,6 +73,7 @@
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/edit_book">
                                     <input type="hidden" name="editbook" value="<?= $book->id ?>">
+                                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-info">
                                         <span class="glyphicon glyphicon-pencil"></span >
                                     </button>
@@ -83,6 +84,7 @@
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-default">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     </button>
@@ -93,6 +95,7 @@
                             <td style="border:none;margin-left:10px;" bgcolor="white">
                                 <form  method="post" action="book/delete_book">
                                     <input type="hidden" name="delbook" value="<?= $book->id ?>">
+                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span >
                                     </button>
@@ -102,6 +105,7 @@
                         <td style="border:none;" bgcolor="white">
                             <form  method="post" action="rental/add_rental_in_basket">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                 <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                 <button type="submit"  name="idsubmit" class="btn btn-success">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
@@ -149,12 +153,14 @@
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $rent->id ?>">
+                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
                                 </form>
                             </td>
                             <td style="border:none;" bgcolor="white"> 
                                 <form  method="post" action="rental/del_one_rental_in_basket">
                                     <input type="hidden" name="delrent" value="<?= $rent->id ?>">
+                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit"  name="idsubmit" class="btn btn-danger"><span >supprimer du panier</span></button>
                                 </form>
                             </td>
@@ -165,27 +171,36 @@
                 <?php endif; ?>
             </table>
 
-            <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
+            <form class="form-horizontal " method="post" action="rental/get_basket">
                 <?php if ($profile->is_admin() || $profile->is_manager()): ?>
 
-                    <label>le panier est pour: </label>
+                <label>le panier est pour: <?= $actualpanier->username?> </label>
+                    <div class="container row">
+                        <select id="selectbasic" name="member_rents" class="form-control col-lg-5">
+                            <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
+                            <?php foreach ($members as $member): ?>
 
-                    <select id="selectbasic" name="member_rents" class="form-control">
-                        <option><?= $profile->username ?></option>
-                        <?php foreach ($members as $member): ?>
+                                <option value="<?= $member->id ?>"><?= $member->username ?></option>
 
-                            <option value="<?= $member->username ?>"><?= $member->username ?></option>
-
-                        <?php endforeach; ?>
-                    </select>
-                    <br>
-                    <br>
+                            <?php endforeach; ?>
+                        </select>
+                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                        <button class="btn btn-info" type="submit" name="member_selected">
+                            <span class=" glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </form>
+                <br>
+                <br>
+                <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
                     <div class="text-right">
+                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                         <button class="btn btn-success" class="form-group " type="submit" name="test" value="<?php $profile->username ?>"><span class="glyphicon glyphicon-check"> Louer</span></button>
                         <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                     </div>
-
-                <?php else: ?>
+                </form>
+            <?php else: ?>
+                <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
                     <div class="text-right">
                         <input type="hidden" name="solo" value="<?php $profile->id ?>" >
                         <button class="btn btn-success" class="form-group " type="submit"  ><span class="glyphicon glyphicon-check"> Louer</span></button>
