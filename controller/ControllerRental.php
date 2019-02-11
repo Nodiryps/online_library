@@ -25,8 +25,7 @@ class ControllerRental extends Controller {
             $author = Tools::sanitize($_POST["author"]);
             $date = Tools::sanitize($_POST["date"]);
             $filter = Tools::sanitize($_POST["filtre"]);
-            $books = Rental::get_rental_by_critere($title, $author, $filter);
-            var_dump($filter);
+            $books = Rental::get_rental_by_critere($title, $author, $filter,$date);
         }
         (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
     }

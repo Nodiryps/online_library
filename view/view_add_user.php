@@ -29,79 +29,83 @@
 
         </nav>
         <div class="container text-center">
-            
-                <legend>Ajouter un utilisateur</legend>
-           
+
+            <legend>Ajouter un utilisateur</legend>
+
         </div>
-            <div class="container row text-center">
-                Please enter your details to sign up :
-                <br><br>
-                <div class="form-horizontal">
-                    <form action="user/add_user" method="post" class="form-horizontal">
-                        <table class="table table-dark col-lg-offset-1 col-lg-5 ">
-                            <thead class="thead-dark">
-                                <tr class="form-group">
-                                    <td><input id="username" name="username" type="text" value="" class="form-control my-input" id="username" placeholder="username" value="<?= $username?>"></td>
-                                </tr >
-                                <tr class="form-group">
-                                    <td><input id="password" name="password" type="password" value="" class="form-control my-input" id="username"  placeholder="mot de passe"></td>
-                                </tr>
-                                <tr class="form-group">
-                                    <td><input id="password_confirm" name="password_confirm" type="password" value="" class="form-control my-input" id="username"  placeholder="confirmer le mot de passe"></td>
-                                </tr>
-                                <tr class="form-group">
-                                    <td><input id="username" name="fullname" type="text" value="" class="form-control my-input" id="username"  placeholder="fullname" value="<?= $fullname?>"></td>
-                                </tr>
-                                <tr class="form-group">
-                                    <td><input id="username" name="mail" type="text" value="" class="form-control my-input" id="username"  placeholder="email  " value="<?= $email?>"></td>
-                                </tr>
-                                <tr class="form-group">
-                                    <td><input id="username" name="birthdate" type="date"  class="form-control my-input" id="username"  placeholder="date de naissance"></td>
-                                </tr>
+        <div class="container row text-center">
+            Please enter your details to sign up :
+            <br><br>
+            <div class="form-horizontal">
+                <form action="user/add_user" method="post" class="form-horizontal">
+                    <table class="table table-dark col-lg-offset-1 col-lg-5 ">
+                        <thead class="thead-dark">
+                            <tr class="form-group">
+                                <td><input id="username" name="username" type="text" value="" class="form-control my-input" id="username" placeholder="username" value="<?= $username ?>"></td>
+                            </tr >
+                            <tr class="form-group">
+                                <td><input id="password" name="password" type="password" value="" class="form-control my-input" id="username"  placeholder="mot de passe"></td>
+                            </tr>
+                            <tr class="form-group">
+                                <td><input id="password_confirm" name="password_confirm" type="password" value="" class="form-control my-input" id="username"  placeholder="confirmer le mot de passe"></td>
+                            </tr>
+                            <tr class="form-group">
+                                <td><input id="username" name="fullname" type="text" value="" class="form-control my-input" id="username"  placeholder="fullname" value="<?= $fullname ?>"></td>
+                            </tr>
+                            <tr class="form-group">
+                                <td><input id="username" name="mail" type="text" value="" class="form-control my-input" id="username"  placeholder="email  " value="<?= $email ?>"></td>
+                            </tr>
+                            <tr class="form-group">
+                                <td><input id="username" name="birthdate" type="date"  class="form-control my-input" id="username"  placeholder="date de naissance"></td>
+                            </tr>
 
-                                <?php if ($profile->role == "admin"): ?>
-                                    <tr class="form-group">
+                            <?php if ($profile->role == "admin"): ?>
+                                <tr class="form-group ">
 
-                                        <td><select name="role" class="form-control my-input" id="username">
-                                                <option value="admin" >admin</option>
-                                                <option value="manager">manager</option>
-                                                <option value="member" selected="selected">member</option>
-                                            </select></td>
-                                    </tr > 
+                                    <td><select name="role" class="form-control my-input" id="username">
+                                            <option value="admin" >admin</option>
+                                            <option value="manager">manager</option>
+                                            <option value="member" selected="selected">member</option>
+                                        </select></td>
+                                </tr > 
 
-                                <?php endif; ?>   
+                            <?php endif; ?>   
                                 <?php if ($profile->role == "manager"): ?>
-                                    <tr class="form-group">
-                                        <td>Role</td>
-                                        <td><select name="role">
-                                                <option value="member">member</option>
-                                            </select></td>
-                                    </tr>
-                                <?php endif; ?>
-                        </table>
-                        <button type="submit" class=" btn btn-block send-button tx-tfm btn-success" style="margin:auto;width:150px;">
-                            Valider
-                        </button>
+                                <tr class="form-group ">
+
+                                    <td><select name="role" class="form-control my-input" id="username">
+                                            
+                                            <option value="member" selected="selected">member</option>
+                                        </select></td>
+                                </tr > 
+
+                            <?php endif; ?>   
+                           
+                    </table>
+                    <button type="submit" class=" btn btn-block send-button tx-tfm btn-success" style="margin:auto;width:150px;">
+                        Valider
+                    </button>
+            
+        </form>
                 </div>
-                </form>
-            </div>
-         <div class="container text-center">
-            <br> <a  class="btn btn-info text-right" href="user/user_list">Retour a la liste des membres</a>
-        </div>
-            <?php
-            if (!empty($errors)) {
-                echo "<div class='errors'>
+    </div>
+    <div class="container text-center">
+        <br> <a  class="btn btn-info text-right" href="user/user_list">Retour a la liste des membres</a>
+    </div>
+    <?php
+    if (!empty($errors)) {
+        echo "<div class='errors'>
                           <br><br><p>Veuillez corriger les erreurs suivantes :</p>
                           <ul>";
-                foreach ($errors as $error) {
-                    echo "<li>" . $error . "</li>";
-                }
-                echo '</ul></div>';
-            }
-            ?>
-        </div>
-       
-    </body>
+        foreach ($errors as $error) {
+            echo "<li>" . $error . "</li>";
+        }
+        echo '</ul></div>';
+    }
+    ?>
+</div>
+
+</body>
 
 </html>
 

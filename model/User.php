@@ -246,6 +246,9 @@ class User extends Model {
     }
 
     public function insert() {
+        if(empty($this->birthdate)){
+            $this->birthdate =null;
+        }
         try {
             self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) "
                         . "VALUES(:username, :password, :fullname, :email, :birthdate, :role)", 
@@ -254,8 +257,7 @@ class User extends Model {
                           "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
-             //Tools::abort("Problème lors de l'accès a la base de données");
-             echo $ex->getMessage();
+           Tools::abort("Problème lors de l'accès a la base de données :".$ex->getMessage());   
         }
     }
 
@@ -285,7 +287,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
     

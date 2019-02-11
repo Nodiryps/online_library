@@ -133,11 +133,11 @@ class Rental extends Model {
     }
 
     // methode un peu tendnu a faire.
-    public static function  get_rental_by_critere($title, $author, $filter) {
+    public static function  get_rental_by_critere($title, $author, $filter,$date) {
         $results = [];
         try {
             if ($filter == "Tous") {
-                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) AND book.title LIKE :title AND book.author LIKE :author AND rentaldate LIKE :date", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%", ":date" => "%" . $date . "%"));
                 $query = $books->fetchAll();
                 foreach ($query as $row) {
                     $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);

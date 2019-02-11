@@ -34,7 +34,7 @@ class ControllerUser extends Controller {
         (new View("user_list"))->show(array("utilisateur" => $utilisateur, "members" => $members, "id" => $id));
     }
 
-    public function add_user() {
+     public function add_user() {
         $utilisateur = self::get_user_or_redirect();
         $id = "";
         $username = '';
@@ -66,12 +66,14 @@ class ControllerUser extends Controller {
             if ($password != $password_confirm)
                 $errors[] = "Les mots de passe doivent être identiques";
             $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
+            var_dump($member);
             if (empty($errors)) {
                 $member->insert();
+                //Controller::redirect("user","user_list");
             }
         }
         (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors));
-    }
+    }   
 
     public function edit_profile() {
         $error = [];
@@ -114,10 +116,10 @@ class ControllerUser extends Controller {
                 $error[] = "Il faut indiquer un role!";
             if (strlen($member->username) < 3)
                 $error[] = "Le username doit faire plus de 3 caractères";
-            if (($_POST["password"])!== ($confirm_password)) {
+            if (($_POST["password"]) !== ($confirm_password)) {
                 $error[] = "Les mots de passe ne correspondent pas!";
             }
-            if (!User::check_password($member->hash_password, $oldpass) && !empty($member->hash_password)) {
+            if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {
                 $oldpass = $member->hash_password;
                 echo"first";
                 var_dump($member->hash_password);
@@ -145,7 +147,7 @@ class ControllerUser extends Controller {
         $errors = [];
         if (trim($fullname) === "")
             $errors[] = "Le champ \"fullname\" est obligatoire!";
-        if (trim($_POST[$username]) === "" && trim($_POST[$username]) < 3 )
+        if (trim($_POST[$username]) === "" && trim($_POST[$username]) < 3)
             $errors[] = "Le pseudo est obligatoire (3 min.)";
         if (trim($_POST[$password]) !== trim($_POST[$confirm_password]))
             $errors[] = "Les mots de passe ne correspondent pas!";
