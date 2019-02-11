@@ -231,6 +231,19 @@ class User extends Model {
                     array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
                         "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
     }
+    
+     public function update2() {
+         try{
+             self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
+                        . "email = :email , birthdate = :birthdate, role = :role "
+                        . "WHERE id = :id", 
+                    array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
+                        "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
+         }catch(Exception $e){
+            
+         }
+            
+    }
 
     public function insert() {
         try {

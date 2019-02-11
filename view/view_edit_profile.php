@@ -52,18 +52,11 @@
                         <tr>
                             <td>Role</td>
                             <td>
-<!--                                <select name="role" value="<?= $role ?>">
-                                    <option value="<?= $role ?>"><?= $role?></option>
-                                    <option value="admin">admin</option>
-                                    <option value="manager">manager</option>
-                                    <option value="member">member</option>
-
-                                </select>-->
-                                <select id="selectbasic" name="member_rent" class="form-control">
-                                    <option><?= $utilisateur->role ?></option>
+                                <select id="selectbasic" name="role" class="form-control"   >
+                                    <option value="<?= $utilisateur->role ?>"><?= $utilisateur->role ?></option>
                                     <?php foreach ($members as $member): ?>
                                         <?php if ($member->role !== $utilisateur->role): ?>
-                                            <option><?= $member->role ?></option>
+                                    <option value="<?= $member->role ?>"><?= $member->role ?></option>
 
                                         <?php endif;
                                     endforeach; ?>
@@ -72,7 +65,6 @@
                         </tr>
 
                     <?php endif; ?> 
-                    <?php // if (($utilisateur->is_admin() || $utilisateur->is_manager()) && $utilisateur->username === $member->username): ?>
                     <tr>
                         <td>Password</td>
                         <td><input  name="password" type="password" ></td>
@@ -96,9 +88,12 @@
 
             <br> <a href="user/user_list">Retour a la liste des membres</a>
         </div>
-        <?php foreach ($error as $e): ?>
-            <div class='errors'><?= $e ?></div>
-        <?php endforeach; ?>
+        <div class="container">
+                <?php foreach ($error as $e): ?>
+               <div class='errors'><?= $e ?></div>
+           <?php endforeach; ?>
+        </div>
+       
 
     </body>
 </html>

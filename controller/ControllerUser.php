@@ -87,13 +87,10 @@ class ControllerUser extends Controller {
         if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) ||
                 isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) ||
                 isset($_POST["confirm_password"])) {
-//            $member->username = $_POST["username"];
-//            $member->fullname = $_POST["fullname"];
-//            $member->email = $_POST["email"];
-//            $member->birthdate = $_POST["birthdate"];
-//            $member->role = $_POST["role"];
-//            $confirm_password = $_POST["confirm_password"];
-            var_dump($_POST["username"]);
+            $oldpass = User::get_password($id);
+            var_dump($oldpass);
+            $member = User::get_user_by_id($_POST["idmember"]);
+
             if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
                 $member->birthdate = $_POST["birthdate"];
             if (isset($_POST["role"]) && $_POST["role"] !== "")
@@ -106,8 +103,8 @@ class ControllerUser extends Controller {
                 $member->email = $_POST["email"];
             else
                 $error[] = "Il faut indiquer un email!";
-            if (isset($_POST["password"]) && empty(trim($_POST["password"])))
-                $member->hash_password = $_POST["password"];
+            if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
+                $member->hash_password = Tools::my_hash ($_POST["password"]);
             if (isset($_POST["confirm_password"]) && $_POST["confirm_password"] !== "")
                 $confirm_password = $_POST["confirm_password"];
             if (isset($_POST["fullname"]) && $_POST["fullname"] !== "")
@@ -118,24 +115,32 @@ class ControllerUser extends Controller {
                 $error[] = "Il faut indiquer un role!";
             if (strlen($member->username) < 3)
                 $error[] = "Le username doit faire plus de 3 caractères";
-            if ($member->hash_password !== $confirm_password) {
+            if ($member->hash_password !== Tools::my_hash($confirm_password)) {
                 $error[] = "Les mots de passe ne correspondent pas!";
             }
-            if (!User::check_password($member->hash_password, $oldpass) && !empty($password)) {
+          
+
+var_dump($member);
+
+            if (!User::check_password($member->hash_password, $oldpass) && !empty($member->hash_password)) {
                 $oldpass = $member->hash_password;
+                echo"first";
+                    var_dump($member->hash_password);
             } else {
                 $member->hash_password = $oldpass;
+                 echo"second";
+                  var_dump($member->hash_password);
             }
             if (empty($error)) {
 
-                $member->update();
+                $member->update2();
                 if ($utilisateur->id === $member->id) {
 
                     $_SESSION["user"] = $member;
                 }
-                Controller::redirect("user", "user_list");
-            }else{
-                echo "qjdfhsdjf";
+                 Controller::redirect("user", "user_list");
+            } else {
+                //echo "qjdfhsdjf";
             }
         }
         (new View("edit_profile"))->show(array("members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));
