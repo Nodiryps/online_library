@@ -54,9 +54,9 @@
                             <td>
                                 <select id="selectbasic" name="role" class="form-control"   >
                                     <option value="<?= $utilisateur->role ?>"><?= $utilisateur->role ?></option>
-                                    <?php foreach ($members as $member): ?>
-                                        <?php if ($member->role !== $utilisateur->role): ?>
-                                    <option value="<?= $member->role ?>"><?= $member->role ?></option>
+                                    <?php foreach ($members as $m): ?>
+                                        <?php if ($m->role !== $utilisateur->role): ?>
+                                    <option value="<?= $m->role ?>"><?= $m->role ?></option>
 
                                         <?php endif;
                                     endforeach; ?>
@@ -88,7 +88,7 @@
 
             <br> <a href="user/user_list">Retour a la liste des membres</a>
         </div>
-        <div class="container">
+        <div class="container text text-danger"  >
                 <?php foreach ($error as $e): ?>
                <div class='errors'><?= $e ?></div>
            <?php endforeach; ?>

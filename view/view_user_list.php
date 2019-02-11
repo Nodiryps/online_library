@@ -57,7 +57,7 @@
                         <?php if ($utilisateur->role == "admin" || $utilisateur->role == "manager"): ?>
                             <td style="border:none;" bgcolor="white">
                                 <form action="user/edit_profile" method="POST">
-                                    <input type="hidden" name="idmember" value="<?= $member->id ?>" >
+                                    <input type="hidden" name="idmembers" value="<?= $member->id ?>" >
                                     <button class="btn btn-info" name="modifier" type="submit" value="modifier"  >
                                         <span class="glyphicon glyphicon-pencil"></span>
                                     </button>

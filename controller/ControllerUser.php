@@ -78,19 +78,18 @@ class ControllerUser extends Controller {
         $confirm_password = "";
         $utilisateur = Controller::get_user_or_redirect();
         $id = "";
-        if (isset($_POST["idmember"]))
-            $id = $_POST["idmember"];
+        if (isset($_POST["idmembers"]))
+            $id = $_POST["idmembers"];
         $oldpass = User::get_password($id);
         $member = User::get_user_by_id($id);
         $members = User::get_all_user();
-
+        var_dump($_POST["idmembers"]);
         if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) ||
                 isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) ||
                 isset($_POST["confirm_password"])) {
-            $oldpass = User::get_password($id);
-            var_dump($oldpass);
+            $oldpass = User::get_password($_POST["idmember"]);
             $member = User::get_user_by_id($_POST["idmember"]);
-
+            var_dump($member);
             if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
                 $member->birthdate = $_POST["birthdate"];
             if (isset($_POST["role"]) && $_POST["role"] !== "")
@@ -104,8 +103,8 @@ class ControllerUser extends Controller {
             else
                 $error[] = "Il faut indiquer un email!";
             if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
-                $member->hash_password = Tools::my_hash ($_POST["password"]);
-            if (isset($_POST["confirm_password"]) && $_POST["confirm_password"] !== "")
+                $member->hash_password = Tools::my_hash($_POST["password"]);
+            if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
                 $confirm_password = $_POST["confirm_password"];
             if (isset($_POST["fullname"]) && $_POST["fullname"] !== "")
                 $member->fullname = $_POST["fullname"];
@@ -115,21 +114,17 @@ class ControllerUser extends Controller {
                 $error[] = "Il faut indiquer un role!";
             if (strlen($member->username) < 3)
                 $error[] = "Le username doit faire plus de 3 caractères";
-            if ($member->hash_password !== Tools::my_hash($confirm_password)) {
+            if (($_POST["password"])!== ($confirm_password)) {
                 $error[] = "Les mots de passe ne correspondent pas!";
             }
-          
-
-var_dump($member);
-
             if (!User::check_password($member->hash_password, $oldpass) && !empty($member->hash_password)) {
                 $oldpass = $member->hash_password;
                 echo"first";
-                    var_dump($member->hash_password);
+                var_dump($member->hash_password);
             } else {
                 $member->hash_password = $oldpass;
-                 echo"second";
-                  var_dump($member->hash_password);
+                echo"second";
+                var_dump($member->hash_password);
             }
             if (empty($error)) {
 
@@ -138,7 +133,7 @@ var_dump($member);
 
                     $_SESSION["user"] = $member;
                 }
-                 Controller::redirect("user", "user_list");
+                Controller::redirect("user", "user_list");
             } else {
                 //echo "qjdfhsdjf";
             }
@@ -150,7 +145,7 @@ var_dump($member);
         $errors = [];
         if (trim($fullname) === "")
             $errors[] = "Le champ \"fullname\" est obligatoire!";
-        if (trim($_POST[$username]) === "" && trim($_POST[$username]) < 3)
+        if (trim($_POST[$username]) === "" && trim($_POST[$username]) < 3 )
             $errors[] = "Le pseudo est obligatoire (3 min.)";
         if (trim($_POST[$password]) !== trim($_POST[$confirm_password]))
             $errors[] = "Les mots de passe ne correspondent pas!";
