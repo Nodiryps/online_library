@@ -22,14 +22,14 @@
             if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
-            <div class="title" style="position:absolute;top:20px;right:10px;">
-                <?php echo $profile->fullname; ?>'s profile! (<?= $profile->role ?>) 
+            <div class="title " style="position:absolute;top:20px;right:10px;">
+                <strong><?php echo $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong>
             </div>
         </nav>
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-5">
+                <div class=" text-left text-uppercase col-lg-5">
                     <h2 style="">Bonjour, <?= $profile->fullname ?>  :)</h2>
                 </div>
             </div>

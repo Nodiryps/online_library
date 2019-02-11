@@ -34,7 +34,7 @@ class ControllerUser extends Controller {
         (new View("user_list"))->show(array("utilisateur" => $utilisateur, "members" => $members, "id" => $id));
     }
 
-     public function add_user() {
+    public function add_user() {
         $utilisateur = self::get_user_or_redirect();
         $id = "";
         $username = '';
@@ -73,7 +73,7 @@ class ControllerUser extends Controller {
             }
         }
         (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors));
-    }   
+    }
 
     public function edit_profile() {
         $error = [];
@@ -85,13 +85,11 @@ class ControllerUser extends Controller {
         $oldpass = User::get_password($id);
         $member = User::get_user_by_id($id);
         $members = User::get_all_user();
-        var_dump($_POST["idmembers"]);
         if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) ||
                 isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) ||
                 isset($_POST["confirm_password"])) {
             $oldpass = User::get_password($_POST["idmember"]);
             $member = User::get_user_by_id($_POST["idmember"]);
-            var_dump($member);
             if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
                 $member->birthdate = $_POST["birthdate"];
             if (isset($_POST["role"]) && $_POST["role"] !== "")
@@ -121,12 +119,8 @@ class ControllerUser extends Controller {
             }
             if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {
                 $oldpass = $member->hash_password;
-                echo"first";
-                var_dump($member->hash_password);
             } else {
                 $member->hash_password = $oldpass;
-                echo"second";
-                var_dump($member->hash_password);
             }
             if (empty($error)) {
 
@@ -136,8 +130,6 @@ class ControllerUser extends Controller {
                     $_SESSION["user"] = $member;
                 }
                 Controller::redirect("user", "user_list");
-            } else {
-                //echo "qjdfhsdjf";
             }
         }
         (new View("edit_profile"))->show(array("members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));

@@ -6,9 +6,11 @@ require_once 'ControllerBook.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 require_once 'framework/Tools.php';
+require_once 'framework/Configuration.php';
 
 class ControllerRental extends Controller {
 
+    
     public function index() {
         Controller::redirect('Book', 'index');
     }
@@ -62,8 +64,9 @@ class ControllerRental extends Controller {
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
         $allrentofUser = Rental::get_this_rental_not_validate($user->id);
-        if (isset($_POST["member_rent"])) {
-            $value = $_POST["member_rent"];
+       
+        if (isset($_POST["member_rents"])) {
+            $value = $_POST["member_rents"];
             $usertoAddRent = User::get_user_by_username($value);
             if ($user->id != $usertoAddRent->id) {
                 if (!Rental::rent_rented($usertoAddRent->id)) {
@@ -87,6 +90,15 @@ class ControllerRental extends Controller {
             foreach ($allrentofUser as $rent) {
                 $rent->delete_rental();
             }
+        }
+         if (isset($_POST["solo"])) {
+         if (!Rental::rent_rented($user->id)) {
+                    foreach ($allrentofUser as $rent) {
+                        $rent->update_rental_rentdate($datetime);
+                    }
+                } else {
+                    $msg = "vous avez deja 5 livre en location";
+                }
         }
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));

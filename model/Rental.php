@@ -3,6 +3,7 @@
 require_once 'framework/Model.php';
 require_once 'model/User.php';
 require_once 'model/Book.php';
+require_once 'framework/Configuration.php';
 
 class Rental extends Model {
 
@@ -174,7 +175,7 @@ class Rental extends Model {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
             $books = $query->fetch();
 
-            return $books[0] > 5;
+            return $books[0] > Configuration::get("number");
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();
@@ -187,8 +188,8 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
             $books = $query->fetch();
-            var_dump($books);
-            return $books[0] > 4;
+            
+            return $books[0] >  Configuration::get("number");
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();

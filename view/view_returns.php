@@ -74,7 +74,7 @@
                             <th class="text-center" scope="col">MEMBER</th>
                             <th class="text-center" scope="col">BOOK</th>
                             <th class="text-center" scope="col">RETURN-DATE</th>
-                            <th class="text-center" scope="col">ACTION</th>
+                          
                         </tr>
                     </thead>
                     <?php foreach ($books as $book): ?>
@@ -88,8 +88,8 @@
                                 <td style="border:none;" bgcolor="white">
                                     <form  method="post" action="rental/delete_rental">
                                         <input type="hidden" name="delrent" value="<?= $book->id ?>">
-                                        <button type="submit" name="idsubmit" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-trash"></span >
+                                        <button type="submit" name="idsubmit" class="btn btn-danger ">
+                                            <span class="glyphicon glyphicon-trash text-right"></span >
                                         </button>
                                     </form>
                                 </td>

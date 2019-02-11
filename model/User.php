@@ -113,6 +113,7 @@ class User extends Model {
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
+            echo $e->getMessage();
             Tools:: abort("Problème lors de l'accès a la base de données");
             return false;
         }
