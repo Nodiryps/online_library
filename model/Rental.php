@@ -306,6 +306,9 @@ class Rental extends Model {
     public function update_rental_returndate($returndate) {
         self::execute("UPDATE rental SET returndate = :returndate WHERE id=:id  ", array("returndate" => $returndate, "id" => $this->id));
     }
+     public function cancel_rental_returndate() {
+        self::execute("UPDATE rental SET returndate = :returndate WHERE id=:id  ", array("returndate" => null, "id" => $this->id));
+    }
 
     public function update_rental_rentdate_for_user($user, $rentaldate) {
         self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id ", array("user" => $user, "rentaldate" => $rentaldate, "id" => $this->id));

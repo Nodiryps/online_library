@@ -13,8 +13,6 @@ class ControllerRental extends Controller {
         Controller::redirect('Book', 'index');
     }
 
-    
-
     public function search_book() {
         $profile = Controller::get_user_or_redirect();
         $books = Rental::get_rental_join_book_join_user_rentdate($profile->id);
@@ -51,7 +49,7 @@ class ControllerRental extends Controller {
                 $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
                 $rental->insert_book_without_rent();
             }
-             $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
+            $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
             $getUserRental = $users->get_rental_join_book_join_user_by_user();
         }
         (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
@@ -110,7 +108,7 @@ class ControllerRental extends Controller {
         }
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members));
     }
-    
+
     public function returns() {
         $profile = Controller::get_user_or_redirect();
         $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
@@ -151,6 +149,25 @@ class ControllerRental extends Controller {
             $returnRental = Rental::get_rentals_by_id($_POST["idbook"]);
             foreach ($returnRental as $return) {
                 $return->update_rental_returndate($datetime);
+            }
+            $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
+        }
+
+        (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+    }
+
+    public function cancel_rental_returndate() {
+        $profile = Controller::get_user_or_redirect();
+        $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
+        $title = "";
+        $author = "";
+        $date = "";
+        $filter = "";
+
+        if (isset($_POST["idcancel"])) {
+            $returnRental = Rental::get_rentals_by_id($_POST["idcancel"]);
+            foreach ($returnRental as $return) {
+                $return->cancel_rental_returndate();
             }
             $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
         }

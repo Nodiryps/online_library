@@ -62,7 +62,7 @@ class User extends Model {
         $errors = [];
         $member = self::get_user_by_username($pseudo);
         if ($member) {
-            if (!self::check_password($password, $member->hash_password)) {
+            if (!self::same_hash($password, $member->hash_password)) {
                 $errors[] = "Mauvais MdP. Veuillez réessayer.";
             }
         } else {
@@ -79,7 +79,7 @@ class User extends Model {
         return $errors;
     }
 
-    public static function check_password($clear_password, $hash) {
+    public static function same_hash($clear_password, $hash) {
         return $hash === Tools::my_hash($clear_password);
     }
 

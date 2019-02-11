@@ -46,10 +46,10 @@
                                 <?php if (!empty($filter)): ?>
                                     <option  selected="<?= $filter ?>"> <?= $filter ?></option>
                                 <?php endif; ?>
-                                    <option  value="Tous" >Tous</option>
-                                    <option value="location">location</option>
-                                    <option value="retour">Retour</option>
-                                
+                                <option  value="Tous" >Tous</option>
+                                <option value="location">location</option>
+                                <option value="retour">Retour</option>
+
                             </select>
                         </div>
                     </div>
@@ -84,6 +84,7 @@
                             <td class="text-center"><?= Book::get_title_by_id($book->book) ?> (<?= strtoupper(Book::get_author_by_id($book->book)) ?>)</td>
                             <td class="text-center"><?= $book->returndate ?></td>
                             <?php if ($profile->role == "admin"): ?>
+
                                 <td style="border:none;" bgcolor="white">
                                     <form  method="post" action="rental/delete_rental">
                                         <input type="hidden" name="delrent" value="<?= $book->id ?>">
@@ -92,19 +93,52 @@
                                         </button>
                                     </form>
                                 </td>
+
+                                <?php if ($book->returndate == null): ?>
+                                    <td style="border:none;" bgcolor="white">
+                                        <form  method="post" action="rental/update_rental_returndate">
+                                            <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                            <button type="submit" name="idsubmit" class="btn btn-warning">
+                                                <span class="glyphicon glyphicon-barcode"></span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                <?php else: ?>
+                                    <td style="border:none;" bgcolor="white">
+                                        <form  method="post" action="rental/cancel_rental_returndate">
+                                            <input type="hidden" name="idcancel" value="<?= $book->id ?>">
+                                            <button type="submit" name="idsubmit" class="btn btn-success">
+                                                <span class="glyphicon glyphicon-barcode"></span>
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                <?php endif; ?>
                             <?php endif; ?>
+                                     <?php if ($profile->role == "manager"): ?>
+                            <?php if ($book->returndate == null): ?>
+                                <td style="border:none;" bgcolor="white">
+                                    <form  method="post" action="rental/update_rental_returndate">
+                                        <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                        <button type="submit" name="idsubmit" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-barcode"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            <?php else: ?>
+                                <td style="border:none;" bgcolor="white">
+                                    <form  method="post" action="rental/cancel_rental_returndate">
+                                        <input type="hidden" name="idcancel" value="<?= $book->id ?>">
+                                        <button type="submit" name="idsubmit" class="btn btn-success">
+                                            <span class="glyphicon glyphicon-barcode"></span>
+                                        </button>
+                                    </form>
+                                </td>
 
-                            <td style="border:none;" bgcolor="white">
-                                <form  method="post" action="rental/update_rental_returndate">
-                                    <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                    <button type="submit" name="idsubmit" class="btn btn-warning">
-                                        <span class="glyphicon glyphicon-barcode"></span>
-                                    </button>
-                                </form>
-                            </td>
-
-                        <?php endforeach; ?>
-                    </tr>
+                            <?php endif; ?>
+                                   <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
                 </table>
             </div>
         </div>
