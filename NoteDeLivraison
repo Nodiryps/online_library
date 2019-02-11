@@ -5,3 +5,8 @@ MENU:
    
 index == page de login (lien vers signup si pas encrore membre)
 edit_profile => on ne peut modifier que son propre mdp (pour éviter les mauvaises blagues) 
+
+
+Fonctionnalité non demander:
+
+1) On peut ajouter et supprimer une returndate dans view_return en re-appuyant sur le bouton.
