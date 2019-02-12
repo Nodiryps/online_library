@@ -65,7 +65,7 @@
                             </td>
                         <?php else: ?>
                             <td class="text-center">  
-                                <img id="zoomimg" class="img-circle " style="width: 45px;" src='uploads/images.png' width="100" alt="Couverture">
+                                <img id="zoomimg" style="width: 45px;" src='uploads/images.png' width="100" alt="Couverture">
 
                             </td>
                         <?php endif; ?>
@@ -84,7 +84,7 @@
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-default">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     </button>
@@ -95,7 +95,7 @@
                             <td style="border:none;margin-left:10px;" bgcolor="white">
                                 <form  method="post" action="book/delete_book">
                                     <input type="hidden" name="delbook" value="<?= $book->id ?>">
-                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span >
                                     </button>
@@ -105,7 +105,7 @@
                         <td style="border:none;" bgcolor="white">
                             <form  method="post" action="rental/add_rental_in_basket">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                 <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                                <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                 <button type="submit"  name="idsubmit" class="btn btn-success">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
@@ -153,14 +153,14 @@
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $rent->id ?>">
-                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
                                 </form>
                             </td>
                             <td style="border:none;" bgcolor="white"> 
                                 <form  method="post" action="rental/del_one_rental_in_basket">
                                     <input type="hidden" name="delrent" value="<?= $rent->id ?>">
-                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit"  name="idsubmit" class="btn btn-danger"><span >supprimer du panier</span></button>
                                 </form>
                             </td>
@@ -171,10 +171,10 @@
                 <?php endif; ?>
             </table>
 
-           
-                <?php if ($profile->is_admin() || $profile->is_manager()): ?>
- <form class="form-horizontal " method="post" action="rental/get_basket">
-                <label>le panier est pour: <?= $actualpanier->username?> </label>
+
+            <?php if ($profile->is_admin() || $profile->is_manager()): ?>
+                <form class="form-horizontal" method="post" action="rental/get_basket">
+                    <label>le panier est pour: <?= $actualpanier->username ?> </label>
                     <div class="container row">
                         <select id="selectbasic" name="member_rents" class="form-control col-lg-5">
                             <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
@@ -194,7 +194,7 @@
                 <br>
                 <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
                     <div class="text-right">
-                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                         <button class="btn btn-success" class="form-group " type="submit" name="test" value="<?php $profile->username ?>"><span class="glyphicon glyphicon-check"> Louer</span></button>
                         <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                     </div>
@@ -203,7 +203,7 @@
                 <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
                     <div class="text-right">
                         <input type="hidden" name="solo" value="<?php $profile->id ?>" >
-                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                         <button class="btn btn-success" class="form-group " type="submit"  ><span class="glyphicon glyphicon-check"> Louer</span></button>
                         <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                     </div>

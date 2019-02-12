@@ -175,7 +175,7 @@ class Rental extends Model {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
             $books = $query->fetch();
 
-            return $books[0] > Configuration::get("number");
+            return $books[0] > Configuration::get("max_rents");
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();
@@ -189,7 +189,7 @@ class Rental extends Model {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
             $books = $query->fetch();
             
-            return $books[0] >  Configuration::get("number");
+            return $books[0] >  Configuration::get("max_rents");
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();

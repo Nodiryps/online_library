@@ -75,7 +75,7 @@ class ControllerUser extends Controller {
     }
 
     public function edit_profile() {
-        
+
         $error = [];
         $confirm_password = "";
         $utilisateur = Controller::get_user_or_redirect();
@@ -168,21 +168,26 @@ class ControllerUser extends Controller {
 
     public function delete_user() {
         $utilisateur = self::get_user_or_redirect();
+        if ($utilisateur->is_admin()) {
+            $id = "";
+            $memberToDelete = "";
 
-        $id = "";
-        $memberToDelete = "";
+            if (isset($_POST["iddelete"])) {
+                $id = $_POST["iddelete"];
+                $memberToDelete = User::get_user_by_id($id);
+                $tabAllAdmins = User::get_user_by_role("admin");
+            }
 
-        if (isset($_POST["iddelete"])) {
-            $id = $_POST["iddelete"];
-            $memberToDelete = User::get_user_by_id($id);
+            if (isset($_POST["conf"]) && !empty($_POST["conf"])) {
+                $id = $_POST["conf"];
+                $memberToDelete = User::get_user_by_id($id);
+                $memberToDelete->delete_user();
+                Controller::redirect("user", "user_list");
+            }
+            (new View("delete_confirm"))->show(array("utilisateur" => $utilisateur, "member" => $memberToDelete, "tabAllAdmins" => $tabAllAdmins));
+        } else {
+            self::redirect();
         }
-        if (isset($_POST["conf"]) && !empty($_POST["conf"])) {
-            $id = $_POST["conf"];
-            $memberToDelete = User::get_user_by_id($id);
-            $memberToDelete->delete_user();
-            Controller::redirect("user", "user_list");
-        }
-        (new View("delete_confirm"))->show(array("utilisateur" => $utilisateur, "member" => $memberToDelete));
     }
 
     public function rentals_by_user($user) {

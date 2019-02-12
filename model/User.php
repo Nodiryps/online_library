@@ -96,6 +96,20 @@ class User extends Model {
              Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
+    
+    public static function get_user_by_role($role) {
+        $results = [];
+        try {
+            $members = self::execute("SELECT * FROM user WHERE role = :role", array("role" => $role));
+            $query = $members->fetchAll();
+            foreach ($query as $row) {
+                $results[] = new User($row["id"], $row["username"], $row["password"], $row["fullname"], $row["email"], $row["birthdate"], $row["role"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+             Tools::abort("Problème lors de l'accès a la base de données");
+        }
+    }
 
     public static function get_user_by_id($id) {
         try {

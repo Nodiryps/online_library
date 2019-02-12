@@ -20,7 +20,7 @@
             <div class="row">
                 <h1 class="text-center "><strong>Connexion</strong></h1>
                 <br>
-                <div >
+                <div>
                     <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo">
