@@ -2,12 +2,10 @@
 
 <html>
     <head>
-        <title>bibliothèque</title>
+        <title>Bibliothèque</title>
     </head>
     <body>
-
-        <nav   class="text-right"> 
-
+        <nav class="text-right"> 
             <?php
             if ($profile->is_member())
                 include('menuMember.html');
@@ -15,9 +13,8 @@
                 include('menu.html');
             ?>
             <div class="text-right" style="position:absolute;top:20px;right:10px;">
-                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
+                <p> <strong><?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>)</strong></p>
             </div>
-
         </nav>
 
         <form class="" method="post"  action="book/index">
@@ -137,9 +134,9 @@
                 <legend><h1>Votre panier de locations (<?= sizeof($UserRentals) ?> locations)</h1></legend>
                 <tr>
                     <th scope="col">ISNB</th>
-                    <th scope="col">TITLE</th>
-                    <th scope="col">AUTHOR</th>
-                    <th scope="col">EDITOR</th>
+                    <th scope="col">TITRE</th>
+                    <th scope="col">AUTEUR.E</th>
+                    <th scope="col">EDITION</th>
 
                 </tr>
                 </thead>

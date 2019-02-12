@@ -30,7 +30,7 @@
                         <input style="float:left;" class="col-lg-offset-2 btn btn-danger" name="confirmer" type="submit" value="Supprimer">
                     </form>
                     <form method="POST" action="user/user_list ">
-                        <input class=" btn btn-info" name="retour" type="submit" value="Retour">
+                        <input class="btn btn-info" name="retour" type="submit" value="Retour">
                     </form>
 
             <?php else: ?>
