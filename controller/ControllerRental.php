@@ -22,10 +22,10 @@ class ControllerRental extends Controller {
         $date = "";
         $filter = "";
         if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
-            $title = Tools::sanitize($_POST["title"]);
-            $author = Tools::sanitize($_POST["author"]);
-            $date = Tools::sanitize($_POST["date"]);
-            $filter = Tools::sanitize($_POST["filtre"]);
+            $title = $_POST["title"];
+            $author = $_POST["author"];
+            $date = $_POST["date"];
+            $filter = $_POST["filtre"];
             $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
         }
         (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));

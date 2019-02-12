@@ -46,18 +46,13 @@ class ControllerMain extends Controller {
         $id="";
         $errors = [];
         
-//        $test=User::get_user_by_id(1);
-//        var_dump($test);
-//        $test->setUsername("jean");
-//        $test->update_user();
-      
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
-            $username = Tools::sanitize(trim($_POST['username']));
-            $password = Tools::sanitize($_POST['password']) ;
-            $password_confirm = Tools::sanitize($_POST['password_confirm']);
-            $fullname= Tools::sanitize($_POST["fullname"]);
-            $email= Tools::sanitize($_POST["email"]);
-            $birthdate= Tools::sanitize($_POST["birthdate"]);
+            $username = trim($_POST['username']);
+            $password = $_POST['password'] ;
+            $password_confirm = $_POST['password_confirm'];
+            $fullname= $_POST["fullname"];
+            $email= $_POST["email"];
+            $birthdate= $_POST["birthdate"];
             $role="member";
 
             $member = new User($id,$username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);

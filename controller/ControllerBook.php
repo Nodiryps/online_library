@@ -41,13 +41,12 @@ class ControllerBook extends Controller {
         $picture_path = "";
 
         if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"])) {
-            $isbn = Tools::sanitize($_POST["isbn"]);
-            $title = Tools::sanitize($_POST["title"]);
-            $author = Tools::sanitize($_POST["author"]);
-            $editor = Tools::sanitize($_POST["editor"]);
+            $isbn = $_POST["isbn"];
+            $title = $_POST["title"];
+            $author = $_POST["author"];
+            $editor = $_POST["editor"];
 
             $errors = $this->rules_add_book($isbn, $title, $author);
-            //var_dump($_FILES);
 
             if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                 if ($_FILES['picture']['error'] == 0) {
@@ -128,7 +127,6 @@ class ControllerBook extends Controller {
         }
         if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
             $book = Book::get_book_by_id($_POST["idbook"]);
-            var_dump($book);
             if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                 $book->isbn = $this->isbn_format_string($_POST["isbn"]);
             if (isset($_POST['title']) && isset($_POST['title']) !== "")

@@ -66,7 +66,6 @@ class ControllerUser extends Controller {
             if ($password != $password_confirm)
                 $errors[] = "Les mots de passe doivent être identiques";
             $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
-            var_dump($member);
             if (empty($errors)) {
                 $member->insert();
                 //Controller::redirect("user","user_list");
