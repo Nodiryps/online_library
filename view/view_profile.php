@@ -55,7 +55,7 @@
                         <td><?= date('d-m-Y ', strtotime($rental->rentaldate)) ?></td>
                       
                         <?php if (ControllerUser::gestion_date(date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))))): ?>
-                            <td style="color: red"><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>
+                            <td style="color: red; font-weight: bold ;  "><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?> (RETARD)</td>
                         <?php else : ?>
                             <td><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>
                         <?php endif; ?>

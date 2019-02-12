@@ -113,8 +113,8 @@
                                     <td style="border:none;" bgcolor="white">
                                         <form  method="post" action="rental/update_rental_returndate">
                                             <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                            <button type="submit" name="idsubmit" class="btn btn-warning">
-                                                <span class="glyphicon glyphicon-barcode"></span>
+                                            <button type="submit" name="idsubmit" class="btn btn-success">
+                                                <span class="glyphicon glyphicon-calendar"></span>
                                             </button>
                                         </form>
                                     </td>
@@ -122,8 +122,8 @@
                                     <td style="border:none;" bgcolor="white">
                                         <form  method="post" action="rental/cancel_rental_returndate">
                                             <input type="hidden" name="idcancel" value="<?= $book->id ?>">
-                                            <button type="submit" name="idsubmit" class="btn btn-success">
-                                                <span class="glyphicon glyphicon-barcode"></span>
+                                            <button type="submit" name="idsubmit" class="btn btn-warning">
+                                                <span class="glyphicon glyphicon-repeat"></span>
                                             </button>
                                         </form>
                                     </td>
@@ -135,8 +135,8 @@
                                 <td style="border:none;" bgcolor="white">
                                     <form  method="post" action="rental/update_rental_returndate">
                                         <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                        <button type="submit" name="idsubmit" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-barcode"></span>
+                                        <button type="submit" name="idsubmit" class="btn btn-success">
+                                            <span class="glyphicon glyphicon-calendar"></span>
                                         </button>
                                     </form>
                                 </td>
@@ -144,8 +144,8 @@
                                 <td style="border:none;" bgcolor="white">
                                     <form  method="post" action="rental/cancel_rental_returndate">
                                         <input type="hidden" name="idcancel" value="<?= $book->id ?>">
-                                        <button type="submit" name="idsubmit" class="btn btn-success">
-                                            <span class="glyphicon glyphicon-barcode"></span>
+                                        <button type="submit" name="idsubmit" class="btn btn-warning">
+                                            <span class="glyphicon glyphicon-remove-sign"></span>
                                         </button>
                                     </form>
                                 </td>

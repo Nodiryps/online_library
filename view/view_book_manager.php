@@ -171,9 +171,9 @@
                 <?php endif; ?>
             </table>
 
-            <form class="form-horizontal " method="post" action="rental/get_basket">
+           
                 <?php if ($profile->is_admin() || $profile->is_manager()): ?>
-
+ <form class="form-horizontal " method="post" action="rental/get_basket">
                 <label>le panier est pour: <?= $actualpanier->username?> </label>
                     <div class="container row">
                         <select id="selectbasic" name="member_rents" class="form-control col-lg-5">
@@ -203,6 +203,7 @@
                 <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
                     <div class="text-right">
                         <input type="hidden" name="solo" value="<?php $profile->id ?>" >
+                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                         <button class="btn btn-success" class="form-group " type="submit"  ><span class="glyphicon glyphicon-check"> Louer</span></button>
                         <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
                     </div>

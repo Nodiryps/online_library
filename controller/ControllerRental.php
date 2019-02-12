@@ -27,7 +27,6 @@ class ControllerRental extends Controller {
             $date = Tools::sanitize($_POST["date"]);
             $filter = Tools::sanitize($_POST["filtre"]);
             $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
-            var_dump($filter);
         }
         (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
     }
@@ -54,7 +53,6 @@ class ControllerRental extends Controller {
                     $rental->insert_book_without_rent();
                 } else {
                     $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
-                    echo "lkjdqsflj";
                     $rental->insert_book_without_rent();
                 }
             }
@@ -72,12 +70,13 @@ class ControllerRental extends Controller {
         $usertoAddRent = "";
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
-        $allrentofUser = Rental::get_this_rental_not_validate($user->id);
+       
         $usertoAddRent ="";
          
         if (isset($_POST["panierof"])) {
             $value = $_POST["panierof"];
             $usertoAddRent = User::get_user_by_id($value);
+                $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
             if ($user->id != $usertoAddRent->id) {
                 if (!Rental::rent_rented($usertoAddRent->id)) {
                     foreach ($allrentofUser as $rent) {
@@ -123,16 +122,12 @@ class ControllerRental extends Controller {
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
         $allrentofUser = Rental::get_this_rental_not_validate($user->id);
-        if (isset($_POST["member_rents"])) {
+        if (isset($_POST["panierof"])) {
             $value = $_POST["member_rents"];
             $usertoAddRent = User::get_user_by_id($value);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
         }
-        if (isset($_POST["panierof"])) {
-
-            echo"lmskdfmksdf";
-        }
-
+       
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
