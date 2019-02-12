@@ -96,7 +96,7 @@
                         <tr>
                             <td class="text-center"><?= $book->rentaldate ?></td>
                             <td class="text-center"><?= User::get_username_by_id($book->user) ?></td>
-                            <td class="text-center"><?= Book::get_title_by_id($book->book) ?> (<?= strtoupper(Book::get_author_by_id($book->book)) ?>)</td>
+                            <td class="text-center"><strong><?= Book::get_title_by_id($book->book) ?></strong> (<?= strtoupper(Book::get_author_by_id($book->book)) ?>)</td>
                             <td class="text-center"><?= $book->returndate ?></td>
                             <?php if ($profile->role == "admin"): ?>
 
