@@ -22,23 +22,31 @@
                 <h1><strong>Confirmation</strong></h1>
             </div>
             <br>
-            <?php if ($member->role !== "admin" || ($member->role === "admin" && sizeof($tabAllAdmins) > 1)): ?>
-                <p>Êtes-vous sûr.e de vouloir supprimer: <strong><?= $member->fullname; ?></strong></p>
+            <p>Êtes-vous sûr.e de vouloir supprimer: 
                 <br>
-                    <form method="POST" action="user/delete_user">
-                        <input name="conf" type="hidden" value="<?= $member->id ?>">
-                        <input style="float:left;" class="col-lg-offset-2 btn btn-danger" name="confirmer" type="submit" value="Supprimer">
-                    </form>
-                    <form method="POST" action="user/user_list ">
-                        <input class="btn btn-info" name="retour" type="submit" value="Retour">
-                    </form>
-
-            <?php else: ?>
-                <p> Dis, <?= $utilisateur->fullname; ?>. Il doit rester au moins UN administrateur ! Allez, ZOU!</p>
-                <form method="POST" action="user/user_list ">
-                    <input name="retour" type="submit" value="retour">
-                </form>
-            <?php endif; ?>
+                <?php if (isset($_POST["iddelete"])): ?>
+                    "<strong><?= $member->fullname; ?></strong>"
+                <?php elseif (isset($_POST["delbook"])): ?>
+                    <strong><?= $book->title; ?></strong> de <strong><?= $book->author; ?></strong>
+                <?php endif; ?>
+            </p>
+            <br>
+            <form method="POST"
+                <?php if (isset($_POST["iddelete"])): ?> action="user/delete_user"
+                <?php elseif (isset($_POST["delbook"])): ?> action="book/delete_book"
+                <?php endif; ?>>
+                <input name="conf" type="hidden" 
+                    <?php if (isset($_POST["iddelete"])): ?> value="<?= $member->id ?>"
+                    <?php elseif (isset($_POST["delbook"])): ?> value="<?= $book->id ?>"
+                    <?php endif; ?>>
+                <input style="float:left;" class="col-lg-offset-2 btn btn-danger" name="confirmer" type="submit" value="Supprimer">
+            </form>
+            <form method="POST" 
+                <?php if(isset($_POST["iddelete"])):?> action="user/user_list "
+                <?php elseif (isset($_POST["delbook"])): ?> action="book/index"
+                <?php endif; ?>>
+                <input class="btn btn-info" name="retour" type="submit" value="Retour">
+            </form>
         </div>
     </body>
 </html>

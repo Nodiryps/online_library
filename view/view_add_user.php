@@ -2,7 +2,7 @@
 <html>
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
-        <title>Ajouter un membre</title>
+        <title>Nouveau membre</title>
         <meta charset="UTF-8">
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">

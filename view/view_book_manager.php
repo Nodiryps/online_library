@@ -63,7 +63,6 @@
                         <?php else: ?>
                             <td class="text-center">  
                                 <img id="zoomimg" style="width: 45px;" src='uploads/images.png' width="100" alt="Couverture">
-
                             </td>
                         <?php endif; ?>
                         <?php if ($profile->role == "admin"): ?>
@@ -114,19 +113,19 @@
 
 
             </table>
-            <p style="color: red;"><?= strtoupper($msg) ?></p>
         </div>
+        <br>
         <?php if ($profile->is_admin()): ?>
-            <div class="container text-right">
+            <div class="container text-left">
                 <form method="get" action="book/add_book">
-                    <button class="btn btn-success">
-                        <span>Nouveau livre</span>
+                    <button class="btn btn-success glyphicon glyphicon-plus">
+                        <span> Livre</span>
                     </button>
                 </form>
             </div>
         <?php endif; ?>
 
-        <br>
+        <br><br>
 
         <div class="container">
             <table class="table table-striped table-condensed">
@@ -151,17 +150,20 @@
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $rent->id ?>">
                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                                    <button type="submit" name="idsubmit" class="btn btn-info"><span >apercu</span ></button>
+                                    <button type="submit" name="idsubmit" class="btn btn-info">
+                                        <span >apercu</span>
+                                    </button>
                                 </form>
                             </td>
                             <td style="border:none;" bgcolor="white"> 
                                 <form  method="post" action="rental/del_one_rental_in_basket">
                                     <input type="hidden" name="delrent" value="<?= $rent->id ?>">
                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                                    <button type="submit"  name="idsubmit" class="btn btn-danger"><span >supprimer du panier</span></button>
+                                    <button type="submit"  name="idsubmit" class="btn btn-danger">
+                                        <span >supprimer du panier</span>
+                                    </button>
                                 </form>
                             </td>
-
                         </tr>
 
                     <?php endforeach; ?>
@@ -192,8 +194,12 @@
                 <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
                     <div class="text-right">
                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                        <button class="btn btn-success" class="form-group " type="submit" name="test" value="<?php $profile->username ?>"><span class="glyphicon glyphicon-check"> Louer</span></button>
-                        <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+                        <button class="btn btn-success" class="form-group " type="submit" name="test" value="<?php $profile->username ?>">
+                            <span class="glyphicon glyphicon-check"> Louer</span>
+                        </button>
+                        <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler">
+                            <span class="glyphicon glyphicon-remove"> Vider</span>
+                        </button>
                     </div>
                 </form>
             <?php else: ?>
@@ -201,8 +207,12 @@
                     <div class="text-right">
                         <input type="hidden" name="solo" value="<?php $profile->id ?>" >
                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                        <button class="btn btn-success" class="form-group " type="submit"  ><span class="glyphicon glyphicon-check"> Louer</span></button>
-                        <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler"><pan class="glyphicon glyphicon-remove"> vider</pan></button>
+                        <button class="btn btn-success" class="form-group " type="submit"  >
+                            <span class="glyphicon glyphicon-check"> Louer</span>
+                        </button>
+                        <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler">
+                            <span class="glyphicon glyphicon-remove"> Vider</span>
+                        </button>
                     </div>
 
                 <?php endif; ?>

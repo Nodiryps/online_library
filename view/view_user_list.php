@@ -1,7 +1,7 @@
 <html>
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
-        <title>membres</title>
+        <title>Liste membres</title>
         <base href="<?= $web_root ?>"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">

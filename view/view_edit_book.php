@@ -3,7 +3,7 @@
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <meta charset="UTF-8">
-        <title>edit books!</title>
+        <title>Modif livre</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
             </div>
         </nav>
 
-    <legend class="text-center">EDITION DE <?= strtoupper($book->title) ?> </legend>
+    <legend class="text-center"><?= strtoupper($book->title) ?> </legend>
     <div class="container row">
 
         <div class="col-lg-offset-2 col-lg-5">
@@ -45,7 +45,7 @@
 
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-lg-5 control-label" for="textinput">AUTHOR</label>  
+                        <label class="col-lg-5 control-label" for="textinput">AUTEUR.E</label>  
                         <div class="col-lg-7">
                             <input id="textinput" name="author" type="text"  
                                    class="form-control input-md" value="<?= $book->author ?>">
@@ -63,7 +63,7 @@
 
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-lg-5 control-label" for="textinput">EDITOR</label>  
+                        <label class="col-lg-5 control-label" for="textinput">EDITION</label>  
                         <div class="col-lg-7">
                             <input id="textinput" name="editor" type="text" 
                                    class="form-control input-md" value="<?= $book->editor ?>">
@@ -86,10 +86,12 @@
                         <div class="col-md-8">
                             <input type="hidden" name="idbook" value="<?= $book->id ?>">
                             <button id="idbook" class="btn btn-success"  type="submit">
-                                <span>Valide</span>
+                                <span>Valider</span>
                             </button>
-
-                            <a href="book/index" alt="book manager" class="btn btn-warning">Annuler</a>
+                            <button id="cancel" name="cancel" class="btn btn-warning"  type="submit">
+                                <span>Annuler</span>
+                            </button>
+                            <!--<a href="book/index" alt="book manager" class="btn btn-warning">Annuler</a>-->
                         </div>
                     </div>
                 </fieldset>
@@ -97,7 +99,7 @@
         </div>
 
         <div class="col-lg-4">
-            <?php if (!empty($book->picture)): ?>
+            <?php if ($book->picture !== null): ?>
                 <img src='uploads/<?= $book->picture ?>' width="250" alt="Book image">
                 <br><br>
             <?php else: ?>
@@ -124,9 +126,7 @@
                     <li><?= $error ?></li>
                 <?php endforeach; ?>
             </ul>
+            <?php endif; ?>
         </div>
-    <?php elseif (strlen($success) != 0): ?>
-        <p><span class='success'><?= $success ?></span></p>
-        <?php endif; ?>
 </body>
 </html>
