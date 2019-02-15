@@ -19,14 +19,12 @@
     <body>
         <nav   class="text-right"> 
             <?php include('menuMember.html'); ?>
-            <div class="text-right" style="position:absolute;top:20px;right:10px;">
-                <p> <strong>  <?= $utilisateur->fullname; ?>'s profile! (<?= $utilisateur->role ?>) </strong></p>
-            </div>
         </nav>
+        <p style="position:absolute;top:80px;right:10px;"><strong><?php echo $utilisateur->fullname; ?>'s profile (<?= $utilisateur->role ?>) </strong></p>
 
-        <div class="container text-center ">
+        <table class="container text-center ">
             <legend>Update Your Profile</legend>
-        </div>
+        </table>>
         <div class="container row text-center" >
             <strong>Edition du membre : <?= $member->fullname ?>.</strong>
 

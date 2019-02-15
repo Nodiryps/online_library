@@ -29,40 +29,43 @@ class ControllerBook extends Controller {
 // on créé un livre sans img => comme ds msn
     public function add_book() {
         $user = self::get_user_or_redirect();
-        $isbn = "";
-        $title = "";
-        $author = "";
-        $editor = "";
-        $errors = [];
-        $picture_path = "";
+        if ($user->is_admin()) {
+            $isbn = "";
+            $title = "";
+            $author = "";
+            $editor = "";
+            $errors = [];
+            $picture_path = "";
 
-        if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"])) {
-            $isbn = $_POST["isbn"];
-            $title = $_POST["title"];
-            $author = $_POST["author"];
-            $editor = $_POST["editor"];
-            $errors = $this->rules_add_book($isbn, $title, $author);
-            if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
-                if ($_FILES['picture']['error'] == 0) {
-                    $infosfichier = pathinfo($_FILES['picture']['name']);
-                    $extension_upload = $infosfichier['extension'];
-                    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
-                    if (in_array($extension_upload, $extensions_autorisees)) {
-                        $titleOk = preg_replace('~[\\\\/.,;:*!?"<>|]~', '', $title); // remplace les char par '' dans $title
-                        $picture_path = $titleOk . "." . $extension_upload;
-                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+            if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"])) {
+                $isbn = $_POST["isbn"];
+                $title = $_POST["title"];
+                $author = $_POST["author"];
+                $editor = $_POST["editor"];
+                $errors = $this->rules_add_book($isbn, $title, $author, $editor);
+                if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
+                    if ($_FILES['picture']['error'] == 0) {
+                        $infosfichier = pathinfo($_FILES['picture']['name']);
+                        $extension_upload = $infosfichier['extension'];
+                        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+                        if (in_array($extension_upload, $extensions_autorisees)) {
+//                            $titleOk = preg_replace('~[\\\\/.,;:*!?"<>|]~', '', $title); // remplace les char par '' dans $title
+                            $picture_path = $title . "." . $extension_upload;
+                            move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+                        }
                     }
-                }
-            }
-//            $picture_path = $this->add_picture($title, $picture_path);
+                } else
+                    $picture_path = 'uploads/images.png';
 
-            if (empty($errors)) {
-                $book = new Book(0, $isbn, $title, $author, $editor, $picture_path);
-                $book->create();
-                if (isset($_POST["idbook"]))
-                    $this->redirect("book", "index");
-            }
-        } (new View("add_book"))->show(array("errors" => $errors, "isbn"));
+                if (empty($errors)) {
+                    $book = new Book(0, $isbn, $title, $author, $editor, $picture_path);
+                    $book->create();
+                    if (isset($_POST["idbook"]))
+                        $this->redirect("book", "index");
+                }
+            } (new View("add_book"))->show(array("errors" => $errors, "isbn"));
+        } else
+            $this->redirect("book", "index");
     }
 
     private function add_picture($title, $picture_path) {
@@ -80,7 +83,7 @@ class ControllerBook extends Controller {
         } return $picture_path;
     }
 
-    private function rules_add_book($isbn, $title, $author) {
+    private function rules_add_book($isbn, $title, $author, $editor) {
         $errors = [];
         if (strlen($isbn) !== 13)
             $errors[] = "isbn: isbn incorrect (13 chiffres)!";
@@ -88,7 +91,7 @@ class ControllerBook extends Controller {
             $errors[] = "titre: trop court (2 min.)!";
         if (strlen($author) < 5)
             $errors[] = "auteur.e: trop court (5 min.)!";
-        if (strlen($author) < 2)
+        if (strlen($editor) < 2)
             $errors[] = "édition: trop court (2 min.)!";
         return $errors;
     }
@@ -124,51 +127,72 @@ class ControllerBook extends Controller {
 
     public function edit_book() {
         $user = $this->get_user_or_redirect();
-        $book = "";
-        $errors = [];
-        $picture_path = "";
-        if (isset($_POST['editbook'])) {
-            $book = Book::get_book_by_id($_POST['editbook']);
-        }
-        if (isset($_POST["cancel"])) // bouton annuler
-            $this->redirect("book", "index");
-
-        if (isset($_POST["delimageH"])) {
-            $edit = $_POST['delimageH'];
-            $book = Book::get_book_by_id($edit);
-            (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user));
-            if (isset($_POST["idbook"])) { //pour delete QUE si on valide
-                $this_book = Book::get_book_by_id($edit);
-                $this_book->delete_image();
+        if ($user->is_admin()) {
+            $book = "";
+            $errors = [];
+            $pathToDel = "";
+            $bookpicToDel = "";
+            if (isset($_POST['editbook'])) {
+                $book = Book::get_book_by_id($_POST['editbook']);
             }
-        }
-        if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
-            $book = Book::get_book_by_id($_POST["idbook"]);
-            $this->validate_book($book, 'isbn', 'title', 'author', 'editor');
-            $errors = $this->rules_add_book($book->isbn, $book->title, $book->author);
+            if (isset($_POST["delimageH"])) { // boutton effacer img
+                $book = Book::get_book_by_id($_POST["delimageH"]);
+                $bookpicToDel = $book;
+                $bookpicToDel->delete_image();
+                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user)); // pour "refresh" l'img suppr
+//                $this->delete_img($_POST['delimageH']);
+            }
 
-//            $picture_path = $this->add_picture($book->title, $picture_path);
-
-            if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
-                if ($_FILES['picture']['error'] == 0) {
-                    $infosfichier = pathinfo($_FILES['picture']['name']);
-                    $extension_upload = $infosfichier['extension'];
-                    $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
-                    if (in_array($extension_upload, $extensions_autorisees)) {
-                        $titleOk = preg_replace('~[\\\\/.,;:*!?"<>|]~', '', $book->title); // remplace les char par '' dans $book->title
-                        $picture_path = $titleOk . "." . $extension_upload;
-                        move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
-                    }
+            if (isset($_POST["cancel"])) { // boutton annuler
+                $book = Book::get_book_by_id($_POST['cancel']);
+                if (empty($errors)) {
+                    $book->update();
+                    $this->redirect("book", "index");
+//                    $this->update_book($book);
                 }
             }
-            if (empty($errors)) {
-                $book->update_book();
-                $this->redirect("book", "index");
+
+            if (isset($_POST['idbook']) //boutton valider
+                    && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
+                $book = Book::get_book_by_id($_POST['idbook']);
+                $this->validate_book($book, 'isbn', 'title', 'author', 'editor');
+                $errors = $this->rules_add_book($book->isbn, $book->title, $book->author, $book->editor);
+                $picture_path = "";
+                if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
+                    if ($_FILES['picture']['error'] == 0) {
+                        $infosfichier = pathinfo($_FILES['picture']['name']);
+                        $extension_upload = $infosfichier['extension'];
+                        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+                        if (in_array($extension_upload, $extensions_autorisees)) {
+//                            $titleOk = preg_replace('~[\\\\/.,;:*!?"<>|]~', '', $book->title); // remplace les char par '' dans $book->title
+                            $picture_path = $book->title . "." . $extension_upload;
+                            move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+                        }
+                    }
+                } else
+                    $picture_path = 'uploads/images.png';
+                if (empty($errors)) {
+                    $book->update();
+                    $this->redirect("book", "index");
+//                    $this->update_book($book);
+                }
             }
-        }
-        if (!isset($_POST["delimageH"])) {
-            (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "picturepath" => $picture_path));
-        }
+            if (!isset($_POST["delimageH"]))  // sinon 2 views qd on "refresh" avec le boutton effacer img
+                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user));
+        } else
+            $this->redirect("book", "index");
+    }
+
+    private function update_book($book) {
+        $book->update();
+        $this->redirect("book", "index");
+    }
+
+    private function delete_img($id) {
+        $book = Book::get_book_by_id($id);
+        $bookpicToDel = $book;
+        $bookpicToDel->delete_image();
+        (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user)); // pour "refresh" l'img suppr
     }
 
     private function validate_book($book, $isbn, $title, $author, $editor) {

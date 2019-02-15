@@ -20,11 +20,10 @@
             <?php include('menu.html'); ?>
         </nav>
 
-
         <form class=" container form-horizontal" action="book/add_book" method="post" enctype="multipart/form-data">
             <fieldset>
 
-                <legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend>
+                <table><legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend></table>
 
                 <!-- Text input-->
                 <div class=" form-group">

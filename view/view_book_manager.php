@@ -12,16 +12,14 @@
             if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
-            <div class="text-right" style="position:absolute;top:20px;right:10px;">
-                <p> <strong><?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>)</strong></p>
-            </div>
         </nav>
+        <p style="position:absolute;top:80px;right:10px;"><strong><?= $profile->fullname; ?>'s profile (<?= $profile->role ?>)</strong></p>
 
         <form class="" method="post"  action="book/index">
-            <div class="container" style="margin-top:100px;margin-bottom:-30px;">
+            <div class="container" >
                 <div class="row">
                     <div id="custom-search-input">
-                        <div class="input-group col-md-12">
+                        <div class="input-group col-md-10">
                             <input type="text" class="  search-query form-control" placeholder="rechercher un livre" name="search"/>
                             <span class="input-group-btn">
                                 <button class="btn btn-info" type="submit" value="rechercher">
@@ -30,7 +28,6 @@
                             </span>
                         </div>
                     </div>
-
                 </div>
             </div>
             <br><br><br>
@@ -38,7 +35,10 @@
 
         <div class="container table-wrapper-scroll-y">
             <table class="table table-striped table-condensed " >
-                <legend class="text-center"><h1>Bibliothèque</h1></legend>
+                <legend class="text-center">
+                    <h1>Bibliothèque</h1>
+
+                </legend>
                 <thead class="thead-dark">
                     <tr>
                         <th class="text-center" scope="col">ISNB</th>
@@ -55,7 +55,7 @@
                         <td class="text-center"><?= $book->title ?></td>
                         <td class="text-center"><?= strtoupper($book->author) ?></td>
                         <td class="text-center"><?= $book->editor ?></td>
-                        <?php if (!empty($book->picture)): ?>
+                        <?php if ($book->picture !== NULL): ?>
                             <td class="text-center">  
                                 <img  id="zoomimg" style="width: 45px;  " src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
 
@@ -71,7 +71,7 @@
                                     <input type="hidden" name="editbook" value="<?= $book->id ?>">
                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-info">
-                                        <span class="glyphicon glyphicon-pencil"></span >
+                                        <span class="glyphicon glyphicon-pencil"></span>
                                     </button>
                                 </form>
                             </td>
@@ -109,17 +109,14 @@
                         </td>
                     </tr>
                 <?php endforeach; ?>
-
-
-
             </table>
         </div>
         <br>
         <?php if ($profile->is_admin()): ?>
             <div class="container text-left">
                 <form method="get" action="book/add_book">
-                    <button class="btn btn-success glyphicon glyphicon-plus">
-                        <span> Livre</span>
+                    <button class="btn btn-success">
+                        <span>Nouveau livre</span>
                     </button>
                 </form>
             </div>
@@ -127,16 +124,16 @@
 
         <br><br>
 
-        <div class="container">
+        <div class="container col-lg-offset-1 col-lg-8" >
+
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
-                <legend><h1>Votre panier de locations (<?= sizeof($UserRentals) ?> locations)</h1></legend>
+                <legend><h1>Panier (<?= sizeof($UserRentals) ?> /5 loc.)</h1></legend>
                 <tr>
                     <th scope="col">ISNB</th>
                     <th scope="col">TITRE</th>
                     <th scope="col">AUTEUR.E</th>
                     <th scope="col">EDITION</th>
-
                 </tr>
                 </thead>
                 <?php if (!empty($UserRentals)): ?>
@@ -150,8 +147,7 @@
                                 <form  method="post" action="book/book_detail">
                                     <input type="hidden" name="idbook" value="<?= $rent->id ?>">
                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                                    <button type="submit" name="idsubmit" class="btn btn-info">
-                                        <span >apercu</span>
+                                    <button type="submit" name="idsubmit" class="btn btn-default glyphicon glyphicon-eye-open">
                                     </button>
                                 </form>
                             </td>
@@ -159,8 +155,7 @@
                                 <form  method="post" action="rental/del_one_rental_in_basket">
                                     <input type="hidden" name="delrent" value="<?= $rent->id ?>">
                                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                                    <button type="submit"  name="idsubmit" class="btn btn-danger">
-                                        <span >supprimer du panier</span>
+                                    <button type="submit"  name="idsubmit" class="btn btn-danger glyphicon glyphicon-trash">
                                     </button>
                                 </form>
                             </td>
@@ -169,42 +164,39 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
             </table>
-
-
-            <?php if ($profile->is_admin() || $profile->is_manager()): ?>
-                <form class="form-horizontal" method="post" action="rental/get_basket">
-                    <label>le panier est pour: <?= $actualpanier->username ?> </label>
-                    <div class="container row">
-                        <select id="selectbasic" name="member_rents" class="form-control col-lg-5">
-                            <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
-                            <?php foreach ($members as $member): ?>
-
-                                <option value="<?= $member->id ?>"><?= $member->username ?></option>
-
-                            <?php endforeach; ?>
-                        </select>
-                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                        <button class="btn btn-info" type="submit" name="member_selected">
-                            <span class=" glyphicon glyphicon-search"></span>
-                        </button>
-                    </div>
-                </form>
+        </div>
+        <div class="col-lg-2 ">
+        <?php if ($profile->is_admin() || $profile->is_manager()): ?>
+            <br>
+            <form class="form-horizontal" method="post" action="rental/get_basket">
+                <label>Panier pour:</label> <?= $actualpanier->username ?>
                 <br>
-                <br>
-                <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
-                    <div class="text-right">
-                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                        <button class="btn btn-success" class="form-group " type="submit" name="test" value="<?php $profile->username ?>">
-                            <span class="glyphicon glyphicon-check"> Louer</span>
-                        </button>
-                        <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler">
-                            <span class="glyphicon glyphicon-remove"> Vider</span>
-                        </button>
-                    </div>
-                </form>
-            <?php else: ?>
-                <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
-                    <div class="text-right">
+                <select id="selectbasic" name="member_rents" class="form-control">
+                    <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
+                    <?php foreach ($members as $member): ?>
+                        <option value="<?= $member->id ?>"><?= $member->username ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                <button class="btn btn-info col-lg-12" type="submit" name="member_selected">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </form>
+            <br><br><br>
+            <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
+                <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                <button class="btn btn-success" type="submit" value="<?php $profile->username ?>">
+                    <span class="glyphicon glyphicon-check"> Louer</span>
+                </button>
+                <button class="col-lg-offset-1 btn btn-danger" type="submit" name="annuler" value="annuler">
+                    <span class="glyphicon glyphicon-remove"> Vider</span>
+                </button>
+            </form>
+        </div>
+        <?php elseif ($profile->is_member()): ?>
+            <div class="container">
+                <form class="form-horizontal" method="post" action="rental/add_rental_for_user_in_basket">
+                    <div class="text-left">
                         <input type="hidden" name="solo" value="<?php $profile->id ?>" >
                         <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                         <button class="btn btn-success" class="form-group " type="submit"  >
@@ -214,12 +206,10 @@
                             <span class="glyphicon glyphicon-remove"> Vider</span>
                         </button>
                     </div>
-
-                <?php endif; ?>
-            </form>
-            <br>
-            <br>
-        </div>
+                </form>
+            </div>
+        <?php endif; ?>
+        <br>
 
     </body>
 </html>

@@ -17,13 +17,6 @@
     </head>
     <body>
 
-        <!--        <div  class="navbar navbar-default">
-                    <nav>
-                        <ul  class="nav navbar-nav">
-                            <li> <a href="main/index" class="glyphicon glyphicon-arrow-left"></a></li>
-                        </ul>
-                    </nav>
-                </div>-->
         <div class="container" style="width:350px;margin:5% auto;">
             <div class="row">
             <h1 class="text-center"><strong>Inscription</strong></h1>

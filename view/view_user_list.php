@@ -21,11 +21,9 @@
 
         <nav class="menu">
             <?php include('menu.html'); ?>
-            <div class="title" style="position:absolute;top:20px;right:10px;">
-                <strong>  <?= $utilisateur->fullname ?>'s profile! (<?= $utilisateur->role ?>) </strong>
-            </div>
         </nav>
-
+        <p style="position:absolute;top:80px;right:10px;"><strong><?php echo $utilisateur->fullname; ?>'s profile! (<?= $utilisateur->role ?>) </strong></p>
+        
         <div class="container" style="margin-top:110px;">
 
             <table class="table table-striped table-condensed">

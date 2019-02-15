@@ -15,11 +15,10 @@
             if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
-            <div class="title" style="position:absolute;top:20px;right:10px;">
-                <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong>
-            </div>
         </nav>
-        <div class="container  ">
+        <p style="position:absolute;top:80px;right:10px;"><strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
+        
+        <div class="container col-md-11">
             <form method="post" action="rental/search_book" class="form-control-static">
                 <div class="row align-items-center justify-content-center " >
 
@@ -66,6 +65,9 @@
                 </div>
             </form>
         </div>
+        <br>
+        <br>
+        <br>
         <br>
         <br>
         <div>

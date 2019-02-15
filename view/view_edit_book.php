@@ -23,12 +23,10 @@
             if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
-            <div class="title" style="position:absolute;top:20px;right:10px;">
-                <strong> <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong>
-            </div>
         </nav>
-
-    <legend class="text-center"><?= strtoupper($book->title) ?> </legend>
+        <p style="position:absolute;top:80px;right:10px;"><strong> <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
+        
+        <table><legend class="text-center"><?= strtoupper($book->title) ?> </legend></table>
     <div class="container row">
 
         <div class="col-lg-offset-2 col-lg-5">
@@ -88,7 +86,8 @@
                             <button id="idbook" class="btn btn-success"  type="submit">
                                 <span>Valider</span>
                             </button>
-                            <button id="cancel" name="cancel" class="btn btn-warning"  type="submit">
+                            <input type="hidden" name="cancel" value="<?= $book->id?>">
+                            <button id="cancel"  class="btn btn-warning"  type="submit">
                                 <span>Annuler</span>
                             </button>
                             <!--<a href="book/index" alt="book manager" class="btn btn-warning">Annuler</a>-->
@@ -99,7 +98,7 @@
         </div>
 
         <div class="col-lg-4">
-            <?php if ($book->picture !== null): ?>
+            <?php if ($book->picture !== NULL): ?>
                 <img src='uploads/<?= $book->picture ?>' width="250" alt="Book image">
                 <br><br>
             <?php else: ?>
@@ -113,11 +112,7 @@
                 </button>
             </form>
         </div>
-
     </div>
-
-
-
     <div class='errors'>
         <?php if ($errors !== []): ?>
             <p>Erreur(s) à corriger:</p>

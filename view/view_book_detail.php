@@ -16,19 +16,15 @@
     </head>
     <body>
 
-        <nav   class="text-right"> 
-
+        <nav> 
             <?php
             if ($profile->is_member())
                 include('menuMember.html');
             if ($profile->is_admin() || $profile->is_manager())
                 include('menu.html');
             ?>
-            <div class="text-right" style="position:absolute;top:20px;right:10px;">
-                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
-            </div>
-
         </nav>
+        <p style="position:absolute;top:80px;right:10px;"> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
 
         <div class="container text-capitalize">
             <h1 class="text-center "> <?= $book->title ?></h1>

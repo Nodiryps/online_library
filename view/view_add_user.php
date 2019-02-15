@@ -15,24 +15,13 @@
     </head>
     <body>
 
-        <nav   class="text-right"> 
-
-            <?php
-            if ($profile->is_member())
-                include('menuMember.html');
-            if ($profile->is_admin() || $profile->is_manager())
-                include('menu.html');
-            ?>
-            <div class="text-right" style="position:absolute;top:20px;right:10px;">
-                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
-            </div>
-
+        <nav> 
+            <?php include('menu.html'); ?>
         </nav>
-        <div class="container text-center">
-
-            <legend>Ajouter un utilisateur</legend>
-
-        </div>
+        <p style="position:absolute;top:80px;right:10px;"> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
+        
+        <table class="container text-center"><legend>Ajouter un utilisateur</legend></table>
+        
         <div class="container row text-center">
             Please enter your details to sign up :
             <br><br>
