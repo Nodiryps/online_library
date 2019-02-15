@@ -170,12 +170,12 @@ class Rental extends Model {
         }
     }
 
-    public static function rent_valid($id) {
+    public static function cpt_basket_ok($id) {
         try {
-            $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
-            $books = $query->fetch();
+            $query = self::execute("SELECT * FROM rental WHERE user=:id and rentaldate is null", array("id" => $id));
+            $books = $query->fetchAll();
 
-            return $books[0] > Configuration::get("max_rents");
+            return sizeof($books) < Configuration::get("max_rents");
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();
@@ -184,12 +184,12 @@ class Rental extends Model {
         }
     }
 
-    public static function rent_rented($id) {
+    public static function cpt_book_rented_ok($id) {
         try {
-            $query = self::execute("SELECT COUNT(*) FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
-            $books = $query->fetch();
+            $query = self::execute("SELECT * FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
+            $books = $query->fetchAll();
             
-            return $books[0] >  Configuration::get("max_rents");
+            return sizeof($books) <  Configuration::get("max_rents");
         } catch (Exception $ex) {
             die("soucis de db");
             echo $ex->getLine();

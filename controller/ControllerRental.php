@@ -45,7 +45,7 @@ class ControllerRental extends Controller {
         if (isset($_POST["idbook"]) && isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
-            if (Rental::rent_valid($usertoAddRent->id)) {
+            if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres a la fois";
             } else {
                 if ($user->id != $usertoAddRent->id) {
@@ -78,7 +78,7 @@ class ControllerRental extends Controller {
             $usertoAddRent = User::get_user_by_id($value);
                 $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
             if ($user->id != $usertoAddRent->id) {
-                if (!Rental::rent_rented($usertoAddRent->id)) {
+                if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
                     foreach ($allrentofUser as $rent) {
                         $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
                     }
@@ -86,7 +86,7 @@ class ControllerRental extends Controller {
                     $msg = "cet utilisateur a deja 5 location en cours";
                 }
             } else {
-                if (!Rental::rent_rented($user->id)) {
+                if (Rental::cpt_book_rented_ok($user->id)) {
                     foreach ($allrentofUser as $rent) {
                         $rent->update_rental_rentdate($datetime);
                     }
@@ -102,7 +102,7 @@ class ControllerRental extends Controller {
             }
         }
         if (isset($_POST["solo"])) {
-            if (!Rental::rent_rented($user->id)) {
+            if (Rental::cpt_book_rented_ok($user->id)) {
                 foreach ($allrentofUser as $rent) {
                     $rent->update_rental_rentdate($datetime);
                 }

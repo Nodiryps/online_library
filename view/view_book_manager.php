@@ -123,9 +123,9 @@
         <?php endif; ?>
 
         <br><br>
-
+        
         <div class="container col-lg-offset-1 col-lg-8" >
-
+            <p style="color: red;"><?= strtoupper($msg) ?></p>
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
                 <legend><h1>Panier (<?= sizeof($UserRentals) ?> /5 loc.)</h1></legend>
@@ -166,33 +166,33 @@
             </table>
         </div>
         <div class="col-lg-2 ">
-        <?php if ($profile->is_admin() || $profile->is_manager()): ?>
-            <br>
-            <form class="form-horizontal" method="post" action="rental/get_basket">
-                <label>Panier pour:</label> <?= $actualpanier->username ?>
+            <?php if ($profile->is_admin() || $profile->is_manager()): ?>
                 <br>
-                <select id="selectbasic" name="member_rents" class="form-control">
-                    <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
-                    <?php foreach ($members as $member): ?>
-                        <option value="<?= $member->id ?>"><?= $member->username ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                <button class="btn btn-info col-lg-12" type="submit" name="member_selected">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </form>
-            <br><br><br>
-            <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
-                <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                <button class="btn btn-success" type="submit" value="<?php $profile->username ?>">
-                    <span class="glyphicon glyphicon-check"> Louer</span>
-                </button>
-                <button class="col-lg-offset-1 btn btn-danger" type="submit" name="annuler" value="annuler">
-                    <span class="glyphicon glyphicon-remove"> Vider</span>
-                </button>
-            </form>
-        </div>
+                <form class="form-horizontal" method="post" action="rental/get_basket">
+                    <label>Panier pour:</label> <?= $actualpanier->username ?>
+                    <br>
+                    <select id="selectbasic" name="member_rents" class="form-control">
+                        <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
+                        <?php foreach ($members as $member): ?>
+                            <option value="<?= $member->id ?>"><?= $member->username ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                    <button class="btn btn-info col-lg-12" type="submit" name="member_selected">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </form>
+                <br><br><br>
+                <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
+                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                    <button class="btn btn-success" type="submit" value="<?php $profile->username ?>">
+                        <span class="glyphicon glyphicon-check"> Louer</span>
+                    </button>
+                    <button class="col-lg-offset-1 btn btn-danger" type="submit" name="annuler" value="annuler">
+                        <span class="glyphicon glyphicon-remove"> Vider</span>
+                    </button>
+                </form>
+            </div>
         <?php elseif ($profile->is_member()): ?>
             <div class="container">
                 <form class="form-horizontal" method="post" action="rental/add_rental_for_user_in_basket">
@@ -210,6 +210,5 @@
             </div>
         <?php endif; ?>
         <br>
-
     </body>
 </html>
