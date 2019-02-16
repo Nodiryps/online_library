@@ -18,94 +18,78 @@
     </style>
     <body>
         <nav   class="text-right"> 
-            <?php include('menuMember.html'); ?>
+            <?php include('menu.html'); ?>
         </nav>
         <p style="position:absolute;top:80px;right:10px;"><strong><?php echo $utilisateur->fullname; ?>'s profile (<?= $utilisateur->role ?>) </strong></p>
 
-        <table class="container text-center ">
-            <legend>Update Your Profile</legend>
-        </table>>
-        <div class="container row text-center" >
-            <strong>Edition du membre : <?= $member->fullname ?>.</strong>
-
+        <div class="container text-center col-lg-offset-4 col-lg-5" >
             <br><br>
-
             <form action="user/edit_profile" method="post" class=" form-horizontal col-lg-12 ">
                 <table class="table-dark ">
-
-                 
-                   <div class=" form-group">
-                       <lab
-                    <div class="col-md-5">
-                        <input id="ISBN" name="username" type="text" class="form-control input-md" value="<?= $member->username ?>" >
-                    </div>
-                </div>
+                    <legend><h1>Modificiation du profile de: <?= $member->username ?></h1></legend>
                     <tr>
-                        <td>fullname:</td>
+                        <td>Pseudo:</td>
+                        <td><input  name="username" type="text" value="<?= $member->username ?>"  class="form-control my-input"></td>
+                    </tr>
+                    <tr>
+                        <td>Nom complet:</td>
                         <td><input  name="fullname" type="text" value="<?= $member->fullname ?>"  class="form-control my-input"></td>
                     </tr>
                     <tr>
-                        <td>email:</td>
+                        <td>Email:</td>
                         <td><input  name="email" type="text" value="<?= $member->email ?>"  class="form-control my-input"></td>
                     </tr>
                     <tr>
-                        <td>birthdate</td>
+                        <td>Date de naissance:</td>
                         <td><input  name="birthdate" type="date" value="<?= $member->birthdate ?>"  class="form-control my-input"></td>
                     </tr> 
-                    <?php if (!$utilisateur->is_manager()): ?>
+                    <?php if ($utilisateur->is_admin()): ?>
                         <tr>
-                            <td>Role</td>
+                            <td>Role:</td>
                             <td>
                                 <select id="selectbasic" name="role" class="form-control form-control my-input">
-                                    <option value="<?= $utilisateur->role ?>"  ><?= $utilisateur->role ?></option>
-                                    <?php foreach ($members as $m): ?>
-                                        <?php if ($m->role !== $utilisateur->role): ?>
-                                            <option value="<?= $m->role ?>"><?= $m->role ?></option>
-
-                                            <?php
-                                        endif;
-                                    endforeach;
+                                    <option value="<?= $member->role ?>"  ><?= $member->role ?></option>
+                                    <?php
+                                    foreach ($tabRoles as $rol)
+                                        if ($member->role !== $rol)
+                                            echo "<option value='$rol'>$rol</option>";
                                     ?>
                                 </select>
                             </td>
                         </tr>
-
-                    <?php endif; ?> 
+<?php endif; ?> 
                     <tr>
-                        <td>Password</td>
+                        <td>Mot de passe:</td>
                         <td><input  name="password" type="password"  class="form-control my-input"></td>
                     </tr>
-
                     <tr>
-                        <td>Confirmation du password</td>
+                        <td>Confirmation du mdp:</td>
                         <td><input  name="confirm_password" type="password"  class="form-control my-input"></td>
                     </tr>
-                    <?php //endif;   ?>
-
-
-
-
-                </table >
+<?php //endif;    ?>
+                </table>
                 <br><br>
-                <div class="container row ">
-                    <input type="hidden" name="idmember" value="<?= $member->id ?>">
-                    <button class="btn btn-success col-lg-offset-3 col-lg-5" type="submit" name="valider" value="Valider">
-                        <span>Valider</span>
-                    </button>
-                    <br> <a href="user/user_list" class="row ">Retour a la liste des membres</a>
+                <input type="hidden" name="idmember" value="<?= $member->id ?>">
+                <button class="btn btn-success col-lg-offset-3 col-lg-5" type="submit" name="valider" value="Valider">
+                    <span>Valider</span>
+                </button>
+                <br><br>
+                <a class="btn btn-info col-lg-offset-3 col-lg-5" href="user/user_list" class="row ">Retour</a>
+
             </form>
-
-            
-
         </div>
-    </div>
-    <div class="container text text-danger"  >
-        <?php foreach ($error as $e): ?>
-            <div class='errors'><?= $e ?></div>
-        <?php endforeach; ?>
-    </div>
+        <div class='text-danger'>
+<?php if ($error !== []): ?>
+                <p>Erreur(s) à corriger:</p>
+                <ul>
+                    <?php foreach ($error as $e): ?>
+                        <li><?= $e ?></li>
+                <?php endforeach; ?>
+                </ul>
+<?php endif; ?>
+        </div>
 
 
-</body>
+    </body>
 </html>
 

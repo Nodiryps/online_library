@@ -50,18 +50,15 @@
                 
             </form>
         </div>
-        <div class="text-center">
-            <?php
-            if ($errors !== []) {
-                echo "<div class='errors'>
-                              <p>Erreur(s) à corriger:</p>
-                              <ul>";
-                foreach ($errors as $error) {
-                    echo "<li>" . $error . "</li>";
-                }
-                echo '</ul></div>';
-            }
-            ?>
+        <div class='text-danger'>
+            <?php if ($errors !== []): ?>
+                <p>Erreur(s) à corriger:</p>
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?= $error ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </div>
     </body>
 </html>

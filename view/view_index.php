@@ -35,22 +35,20 @@
                             </button> 
                         </div>
                         <a href="main/signup" style="position:absolute;bottom:-30px;left:120px;">Créer un compte</a>
-                        <?php if ($errors !== []): ?>
-                    <div class='errors'>
-                        <p>Erreur(s) à corriger:</p>
-                        <ul>
-                            <?php foreach ($errors as $error): ?>
-                                <li><?= $error ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
                     </form>
                 </div>
-                
-                
             </div>
-            
+            <div class='text-danger'>
+                <?php if ($errors !== []): ?>
+                    <p>Erreur(s) à corriger:</p>
+                    <ul>
+                        <?php foreach ($errors as $error): ?>
+                            <li><?= $error ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+
         </div>
     </body>
 </html>

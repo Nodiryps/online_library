@@ -2,7 +2,6 @@
 
 <html>
     <head>
-        <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <title>Bibliothèque</title>
     </head>
     <body>
@@ -111,8 +110,6 @@
                     </tr>
                 <?php endforeach; ?>
             </table>
-            
-              
         </div>
         <br>
         <?php if ($profile->is_admin()): ?>
@@ -128,7 +125,7 @@
         <br><br>
         
         <div class="container col-lg-offset-1 col-lg-8" >
-            <p style="color: red;font-style: italic;font: bolder;"><?= strtoupper($msg) ?></p>
+            <p class="text text-danger"><?= strtoupper($msg) ?></p>
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
                 <legend><h1>Panier (<?= sizeof($UserRentals) ?> /5 loc.)</h1></legend>
@@ -170,7 +167,7 @@
         </div>
         <div class="col-lg-2 ">
             <?php if ($profile->is_admin() || $profile->is_manager()): ?>
-                <br>
+            <br><br><br>
                 <form class="form-horizontal" method="post" action="rental/get_basket">
                     <label>Panier pour:</label> <?= $actualpanier->username ?>
                     <br>
@@ -212,6 +209,6 @@
                 </form>
             </div>
         <?php endif; ?>
-        <br>
     </body>
+    <br><br><br><br>
 </html>

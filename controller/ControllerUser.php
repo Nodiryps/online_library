@@ -14,7 +14,7 @@ class ControllerUser extends Controller {
     }
 
     public function profil() {
-        $profile = self::get_user_or_redirect();
+        $profile = $this->get_user_or_redirect();
         $returndate = [];
         $datetoreturn = [];
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
@@ -22,117 +22,127 @@ class ControllerUser extends Controller {
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate));
     }
 
-    public static function gestion_date($datereturn) {
+    public static function is_return_late($datereturn) {
         return strtotime(date("d/m/Y")) > strtotime($datereturn);
     }
 
     public function user_list() {
         $user = $this->get_user_or_redirect();
-        $utilisateur = User::get_user_by_username($user->username);
-        $id = $utilisateur->id;
-        $members = User::get_all_user();
-        (new View("user_list"))->show(array("utilisateur" => $utilisateur, "members" => $members, "id" => $id));
+        if ($user->is_admin() || $user->is_manager()) {
+            $utilisateur = User::get_user_by_username($user->username);
+            $id = $utilisateur->id;
+            $members = User::get_all_user();
+            (new View("user_list"))->show(array("utilisateur" => $utilisateur, "members" => $members, "id" => $id));
+        } else
+            $this->redirect();
     }
 
     public function add_user() {
-        $utilisateur = self::get_user_or_redirect();
-        $id = "";
-        $username = '';
-        $password = '';
-        $password_confirm = '';
-        $fullname = "";
-        $email = "";
-        $birthdate = "";
-        $query = "";
-        $role = "";
-        $errors = [];
+        $utilisateur = $this->get_user_or_redirect();
+        if ($utilisateur->is_admin() || $utilisateur->is_manager()) {
+            $id = "";
+            $username = '';
+            $password = '';
+            $password_confirm = '';
+            $fullname = "";
+            $email = "";
+            $birthdate = "";
+            $query = "";
+            $role = "";
+            $errors = [];
 
-        if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) &&
-                isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            $password_confirm = $_POST['password_confirm'];
-            $fullname = $_POST["fullname"];
-            $email = $_POST["mail"];
-            $birthdate = $_POST["birthdate"];
-            $role = $_POST["role"];
-            $query = User::get_user_by_username($username);
-            if (!User::is_username_not_available($username))
-                $errors[] = "l'utilisateur existe deja";
-            if (trim($username) == '')
-                $errors[] = "Le username est obligatoire";
-            if (strlen(trim($username)) < 3)
-                $errors[] = "Le username doit contenir 3 caractères au minimum";
-            if ($password != $password_confirm)
-                $errors[] = "Les mots de passe doivent être identiques";
-            $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
-            if (empty($errors)) {
-                $member->insert();
-                //Controller::redirect("user","user_list");
+            if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) &&
+                    isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+                $password_confirm = $_POST['password_confirm'];
+                $fullname = $_POST["fullname"];
+                $email = $_POST["mail"];
+                $birthdate = $_POST["birthdate"];
+                $role = $_POST["role"];
+                $query = User::get_user_by_username($username);
+                if (!User::is_username_not_available($username))
+                    $errors[] = "l'utilisateur existe deja";
+                if (trim($username) == '')
+                    $errors[] = "Le username est obligatoire";
+                if (strlen(trim($username)) < 3)
+                    $errors[] = "Le username doit contenir 3 caractères au minimum";
+                if ($password != $password_confirm)
+                    $errors[] = "Les mots de passe doivent être identiques";
+                $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
+                if (empty($errors)) {
+                    $member->insert();
+                    //Controller::redirect("user","user_list");
+                }
             }
+            (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors, "email" => $email));
+        } else {
+            $this->redirect();
         }
-        (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors,"email"=>$email));
     }
 
     public function edit_profile() {
-
-        $error = [];
-        $confirm_password = "";
-        $utilisateur = Controller::get_user_or_redirect();
-        $id = "";
-        if (isset($_POST["idmembers"]))
-            $id = $_POST["idmembers"];
-        $oldpass = User::get_password($id);
-        $member = User::get_user_by_id($id);
-        $members = User::get_all_user();
-        if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) ||
-                isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) ||
-                isset($_POST["confirm_password"])) {
-            $oldpass = User::get_password($_POST["idmember"]);
-            $member = User::get_user_by_id($_POST["idmember"]);
-            if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
-                $member->birthdate = $_POST["birthdate"];
-            if (isset($_POST["role"]) && $_POST["role"] !== "")
-                $member->role = $_POST["role"];
-            if (isset($_POST["username"]) && $_POST["username"] !== "")
-                $member->username = $_POST["username"];
-            else
-                $error[] = "Il faut indiquer un username!";
-            if (isset($_POST["email"]) && $_POST["email"] !== "")
-                $member->email = $_POST["email"];
-            else
-                $error[] = "Il faut indiquer un email!";
-            if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
-                $member->hash_password = Tools::my_hash($_POST["password"]);
-            if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
-                $confirm_password = $_POST["confirm_password"];
-            if (isset($_POST["fullname"]) && $_POST["fullname"] !== "")
-                $member->fullname = $_POST["fullname"];
-            if (empty($member->fullname))
-                $error[] = "Le champ \"fullname\" est obligatoire!";
-            if (empty($member->role))
-                $error[] = "Il faut indiquer un role!";
-            if (strlen($member->username) < 3)
-                $error[] = "Le username doit faire plus de 3 caractères";
-            if (($_POST["password"]) !== ($confirm_password)) {
-                $error[] = "Les mots de passe ne correspondent pas!";
-            }
-            if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {
-                $oldpass = $member->hash_password;
-            } else {
-                $member->hash_password = $oldpass;
-            }
-            if (empty($error)) {
-
-                $member->update2();
-                if ($utilisateur->id === $member->id) {
-
-                    $_SESSION["user"] = $member;
+        $utilisateur = $this->get_user_or_redirect();
+        if ($utilisateur->is_admin() || $utilisateur->is_manager()) {
+            $tabRoles = ["admin", "manager", "member"];
+            $error = [];
+            $confirm_password = "";
+            $id = "";
+            if (isset($_POST["idmembers"]))
+                $id = $_POST["idmembers"];
+            $oldpass = User::get_password($id);
+            $member = User::get_user_by_id($id);
+            $members = User::get_all_user();
+            if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) ||
+                    isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) ||
+                    isset($_POST["confirm_password"])) {
+                $oldpass = User::get_password($_POST["idmember"]);
+                $member = User::get_user_by_id($_POST["idmember"]);
+                if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
+                    $member->birthdate = $_POST["birthdate"];
+                if (isset($_POST["role"]) && $_POST["role"] !== "")
+                    $member->role = $_POST["role"];
+                if (isset($_POST["username"]) && $_POST["username"] !== "")
+                    $member->username = $_POST["username"];
+                else
+                    $error[] = "Il faut indiquer un username!";
+                if (isset($_POST["email"]) && $_POST["email"] !== "")
+                    $member->email = $_POST["email"];
+                else
+                    $error[] = "Il faut indiquer un email!";
+                if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
+                    $member->hash_password = Tools::my_hash($_POST["password"]);
+                if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
+                    $confirm_password = $_POST["confirm_password"];
+                if (isset($_POST["fullname"]) && $_POST["fullname"] !== "")
+                    $member->fullname = $_POST["fullname"];
+                if (empty($member->fullname))
+                    $error[] = "Le champ \"fullname\" est obligatoire!";
+                if (empty($member->role))
+                    $error[] = "Il faut indiquer un role!";
+                if (strlen($member->username) < 3)
+                    $error[] = "Le username doit faire plus de 3 caractères";
+                if (($_POST["password"]) !== ($confirm_password)) {
+                    $error[] = "Les mots de passe ne correspondent pas!";
                 }
-                Controller::redirect("user", "user_list");
+                if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {
+                    $oldpass = $member->hash_password;
+                } else {
+                    $member->hash_password = $oldpass;
+                }
+                if (empty($error)) {
+
+                    $member->update2();
+                    if ($utilisateur->id === $member->id) {
+
+                        $_SESSION["user"] = $member;
+                    }
+                    Controller::redirect("user", "user_list");
+                }
             }
-        }
-        (new View("edit_profile"))->show(array("members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));
+            (new View("edit_profile"))->show(array("tabRoles" => $tabRoles, "members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));
+        } else
+            $this->redirect();
     }
 
     private function rules_edit_profile($member, $fullname, $email, $role, $username, $password, $confirm_password) {
@@ -167,19 +177,19 @@ class ControllerUser extends Controller {
     }
 
     public function delete_user() {
-        $utilisateur = self::get_user_or_redirect();
+        $utilisateur = $this->get_user_or_redirect();
         if ($utilisateur->is_admin()) {
             $memberToDelete = "";
-            if (isset($_POST["iddelete"])) 
+            if (isset($_POST["iddelete"]))
                 $memberToDelete = User::get_user_by_id($_POST["iddelete"]);
-            
+
             if (isset($_POST["conf"]) && !empty($_POST["conf"])) {
                 $memberToDelete = User::get_user_by_id($_POST["conf"]);
                 $memberToDelete->delete_user();
                 $this->redirect("user", "user_list");
             }
             (new View("delete_confirm"))->show(array("utilisateur" => $utilisateur, "member" => $memberToDelete));
-        } else 
+        } else
             $this->redirect();
     }
 

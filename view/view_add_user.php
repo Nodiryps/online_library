@@ -15,30 +15,17 @@
     </head>
     <body>
 
-        <nav   class="text-right"> 
-
-            <?php
-            if ($profile->is_member())
-                include('menuMember.html');
-            if ($profile->is_admin() || $profile->is_manager())
-                include('menu.html');
-            ?>
-            <div class="text-right" style="position:absolute;top:20px;right:10px;">
-                <p> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
-            </div>
-
+        <nav> 
+            <?php include('menu.html'); ?>
         </nav>
-        <div class="container text-center">
-            <table>
-               
-            </table>
-        </div>
-        <div class="container ">
+        <p style="position:absolute;top:80px;right:10px;"> <strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
+
+        <div class="container row text-center">
             <br><br>
-            <div class="form-horizontal">
+            <div class="form-horizontal text-center col-lg-offset-4 col-lg-5">
                 <form action="user/add_user" method="post" class="form-horizontal">
-                    <table class="table table-dark col-lg-offset-0 col-lg-5 ">
-                        <legend style="font-size: 2em;" class="text-center"><strong>Ajouter un utilisateur</strong></legend>
+                    <table class="table table-dark">
+                        <legend><h1>Nouveau membre</h1></legend>
                         <thead class="thead-dark">
                             <tr class="form-group">
                                 <td><input id="username" name="username" type="text" value="" class="form-control my-input" id="username" placeholder="username" value="<?= $username ?>"></td>
@@ -61,37 +48,34 @@
 
                             <?php if ($profile->role == "admin"): ?>
                                 <tr class="form-group ">
-
-                                    <td><select name="role" class="form-control my-input" id="username">
+                                    <td>
+                                        <select name="role" class="form-control my-input" id="username">
                                             <option value="admin" >admin</option>
                                             <option value="manager">manager</option>
                                             <option value="member" selected="selected">member</option>
-                                        </select></td>
+                                        </select>
+                                    </td>
                                 </tr > 
-
                             <?php endif; ?>   
                             <?php if ($profile->role == "manager"): ?>
                                 <tr class="form-group ">
-
-                                    <td><select name="role" class="form-control my-input" id="username">
-
+                                    <td>
+                                        <select name="role" class="form-control my-input" id="username">
                                             <option value="member" selected="selected">member</option>
-                                        </select></td>
+                                        </select>
+                                    </td>
                                 </tr > 
-
                             <?php endif; ?>   
 
                     </table>
-                    <button type="submit" class=" btn btn-block send-button tx-tfm btn-success" style="margin:auto;width:150px;">
+                    <button type="submit" class="btn btn-block btn-success">
                         Valider
                     </button>
-
                 </form>
+                <br> <a  class="btn btn-block btn-info" href="user/user_list">Retour</a>
             </div>
         </div>
-        <div class="container text-center">
-            <br> <a  class="btn btn-info text-right" href="user/user_list">Retour a la liste des membres</a>
-        </div>
+            
         <?php
         if (!empty($errors)) {
             echo "<div class='errors'>
@@ -103,9 +87,8 @@
             echo '</ul></div>';
         }
         ?>
-    </div>
 
-</body>
-
+    </body>
+    <br><br><br><br>
 </html>
 

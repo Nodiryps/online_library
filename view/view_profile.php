@@ -51,7 +51,7 @@
                         <td><?= $rental->get_book()->title ?>   (<?= $rental->get_book()->author ?>)</td>
                         <td><?= date('d-m-Y ', strtotime($rental->rentaldate)) ?></td>
 
-                        <?php if (ControllerUser::gestion_date(date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate))))): ?>
+                        <?php if (ControllerUser::is_return_late(date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate))))): ?>
                             <td style="color: red; font-weight: bold ; "><?= date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate))); ?> (RETARD)</td>
                         <?php else : ?>
                             <td><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>

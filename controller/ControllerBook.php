@@ -15,20 +15,22 @@ class ControllerBook extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $members = User::get_all_user();
         $usertoAddRent = $user;
-        $msg = "";
+        $msg = " ";
+
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
+            $msg = " ";
         }
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
 
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "members" => $members, "actualpanier" => $usertoAddRent, "msg" => $msg));
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
 // on créé un livre sans img => comme ds msn
     public function add_book() {
-        $user = self::get_user_or_redirect();
+        $user = $this->get_user_or_redirect();
         if ($user->is_admin()) {
             $isbn = "";
             $title = "";
@@ -85,6 +87,8 @@ class ControllerBook extends Controller {
 
     private function rules_add_book($isbn, $title, $author, $editor) {
         $errors = [];
+        if(empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
+            $errors[] = "TOUS les champs sont obligatoires !";
         if (strlen($isbn) !== 13)
             $errors[] = "isbn: isbn incorrect (13 chiffres)!";
         if (strlen($title) < 2)
@@ -109,7 +113,7 @@ class ControllerBook extends Controller {
             if (isset($_POST["conf"])) {
                 $delbook = Book::get_book_by_id($_POST["conf"]);
                 $delbook->delete_book();
-                  unlink("uploads/" . $delbook->picture);
+                unlink("uploads/" . $delbook->picture);
                 $this->redirect("book", "index");
             }
             (new View("delete_confirm"))->show(array("book" => $delbook));
@@ -119,7 +123,7 @@ class ControllerBook extends Controller {
     }
 
     public function book_detail() {
-        $user = Controller::get_user_or_redirect();
+        $user = $this->get_user_or_redirect();
         if (isset($_POST["idbook"])) {
             $value = $_POST["idbook"];
             $book = Book::get_book_by_id($value);
@@ -136,17 +140,16 @@ class ControllerBook extends Controller {
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
             }
-            if (isset($_POST["delimageH"])) {
-                $edit = $_POST['delimageH'];
-                $this_book = Book::get_book_by_id($edit);
-                if ($this_book->picture != NULL) {
-                    unlink("uploads/" . $this_book->picture);
-                    $this_book->delete_image();
-                } else {
-                    $errors[] = "veuillez ajouter une image";
-                }
+            if (isset($_POST["delimageH"])) { // boutton effacer img
+                $edit = $_POST["delimageH"];
+                $bookpicToDel = Book::get_book_by_id($edit);
+                if($bookpicToDel->picture !== NULL) {
+                    unlink("uploads/" . $bookpicToDel->picture);
+                    $bookpicToDel->delete_image();
+                } else
+                    $errors[] = "Pas d'image à effacer...";
                 $book = Book::get_book_by_id($edit);
-                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user));
+                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user)); // pour "refresh" l'img suppr
             }
 
             if (isset($_POST["cancel"])) { // boutton annuler
@@ -158,10 +161,17 @@ class ControllerBook extends Controller {
                 }
             }
 
-            if (isset($_POST['idbook']) //boutton valider
-                    && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
+            if (isset($_POST['idbook']) && isset($_POST['isbn']) && isset($_POST['title']) && isset($_POST['editor']) && isset($_POST['author'])) {
                 $book = Book::get_book_by_id($_POST['idbook']);
-                $this->validate_book($book, 'isbn', 'title', 'author', 'editor');
+//                $this->validate_book($book, $_POST['isbn'], $_POST['title'], $_POST['author'], $_POST['editor']);
+                if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
+                    $book->isbn = $this->isbn_format_string($_POST['isbn']);
+                if (isset($_POST['title']) && isset($_POST['title']) !== "")
+                    $book->title = $_POST['title'];
+                if (isset($_POST['author']) && isset($_POST['author']) !== "")
+                    $book->author = $_POST['author'];
+                if (isset($_POST['editor']) && isset($_POST['editor']) !== "")
+                    $book->editor = $_POST['editor'];
                 $errors = $this->rules_add_book($book->isbn, $book->title, $book->author, $book->editor);
                 $picture_path = "";
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
@@ -175,10 +185,13 @@ class ControllerBook extends Controller {
                             move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
                         }
                     }
-                } else
-                    $picture_path = 'uploads/images.png';
+                } 
+//                else
+//                    $picture_path = 'uploads/images.png';
+                
                 if (empty($errors)) {
                     $book->update();
+//                    $book = Book::get_author_by_id($book->id);
                     $this->redirect("book", "index");
 //                    $this->update_book($book);
                 }
@@ -202,14 +215,14 @@ class ControllerBook extends Controller {
     }
 
     private function validate_book($book, $isbn, $title, $author, $editor) {
-        if (isset($_POST[$isbn]) && isset($_POST[$isbn]) !== "")
-            $book->isbn = $this->isbn_format_string($_POST[$isbn]);
-        if (isset($_POST[$title]) && isset($_POST[$title]) !== "")
-            $book->title = $_POST[$title];
-        if (isset($_POST[$author]) && isset($_POST[$author]) !== "")
-            $book->author = $_POST[$author];
-        if (isset($_POST[$editor]) && isset($_POST[$editor]) !== "")
-            $book->editor = $_POST[$editor];
+        if (isset($isbn) && isset($isbn) !== "")
+            $book->isbn = $this->isbn_format_string($isbn);
+        if (isset($title) && isset($title) !== "")
+            $book->title = $title;
+        if (isset($author) && isset($author) !== "")
+            $book->author = $author;
+        if (isset($editor) && isset($editor) !== "")
+            $book->editor = $editor;
     }
 
     public static function isbn_format_EAN_13($isbn) {
