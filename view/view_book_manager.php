@@ -173,9 +173,10 @@
                     <br>
                     <select id="selectbasic" name="member_rents" class="form-control">
                         <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
-                        <?php foreach ($members as $member): ?>
+                        <?php foreach ($members as $member): 
+                            if($member->id !== $actualpanier->id):?>
                             <option value="<?= $member->id ?>"><?= $member->username ?></option>
-                        <?php endforeach; ?>
+                        <?php endif; endforeach; ?>
                     </select>
                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                     <button class="btn btn-info col-lg-12" type="submit" name="member_selected">
