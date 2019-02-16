@@ -15,7 +15,7 @@ class ControllerBook extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $members = User::get_all_user();
         $usertoAddRent = $user;
-
+        $msg = "";
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
@@ -23,7 +23,7 @@ class ControllerBook extends Controller {
         if (empty($_POST["search"]))
             $books = Book::get_all_books();
 
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "members" => $members, "actualpanier" => $usertoAddRent));
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "members" => $members, "actualpanier" => $usertoAddRent, "msg" => $msg));
     }
 
 // on créé un livre sans img => comme ds msn
@@ -109,6 +109,7 @@ class ControllerBook extends Controller {
             if (isset($_POST["conf"])) {
                 $delbook = Book::get_book_by_id($_POST["conf"]);
                 $delbook->delete_book();
+                  unlink("uploads/" . $delbook->picture);
                 $this->redirect("book", "index");
             }
             (new View("delete_confirm"))->show(array("book" => $delbook));
@@ -135,12 +136,17 @@ class ControllerBook extends Controller {
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
             }
-            if (isset($_POST["delimageH"])) { // boutton effacer img
-                $book = Book::get_book_by_id($_POST["delimageH"]);
-                $bookpicToDel = $book;
-                $bookpicToDel->delete_image();
-                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user)); // pour "refresh" l'img suppr
-//                $this->delete_img($_POST['delimageH']);
+            if (isset($_POST["delimageH"])) {
+                $edit = $_POST['delimageH'];
+                $this_book = Book::get_book_by_id($edit);
+                if ($this_book->picture != NULL) {
+                    unlink("uploads/" . $this_book->picture);
+                    $this_book->delete_image();
+                } else {
+                    $errors[] = "veuillez ajouter une image";
+                }
+                $book = Book::get_book_by_id($edit);
+                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user));
             }
 
             if (isset($_POST["cancel"])) { // boutton annuler

@@ -21,6 +21,7 @@ class ControllerRental extends Controller {
         $author = "";
         $date = "";
         $filter = "";
+
         if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
             $title = $_POST["title"];
             $author = $_POST["author"];
@@ -42,7 +43,7 @@ class ControllerRental extends Controller {
         $members = User::get_all_user();
         $usertoAddRent = "";
 
-        if (isset($_POST["idbook"]) && isset($_POST["panierof"])) {
+        if (isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
             if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
@@ -52,7 +53,7 @@ class ControllerRental extends Controller {
                     $rental = new Rental($id, $usertoAddRent->id, $rent->id, NULL, NULL);
                     $rental->insert_book_without_rent();
                 } else {
-                    $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
+                    $rental = new Rental($id, $usertoAddRent->id, $rent->id, NULL, NULL);
                     $rental->insert_book_without_rent();
                 }
             }
@@ -70,13 +71,13 @@ class ControllerRental extends Controller {
         $usertoAddRent = "";
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
-       
-        $usertoAddRent ="";
-         
+
+        $usertoAddRent = "";
+
         if (isset($_POST["panierof"])) {
             $value = $_POST["panierof"];
             $usertoAddRent = User::get_user_by_id($value);
-                $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
+            $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
             if ($user->id != $usertoAddRent->id) {
                 if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
                     foreach ($allrentofUser as $rent) {
@@ -86,7 +87,7 @@ class ControllerRental extends Controller {
                     $msg = "cet utilisateur a deja 5 location en cours";
                 }
             } else {
-                if (Rental::cpt_book_rented_ok($user->id)) {
+                if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
                     foreach ($allrentofUser as $rent) {
                         $rent->update_rental_rentdate($datetime);
                     }
@@ -96,21 +97,13 @@ class ControllerRental extends Controller {
             }
         }
         if (isset($_POST["annuler"]) && isset($_POST["panierof"])) {
-            $usertoAddRent= User::get_user_by_id($_POST["panierof"]);
+            $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             foreach ($allrentofUser as $rent) {
                 $rent->delete_rental();
             }
         }
-        if (isset($_POST["solo"])) {
-            if (Rental::cpt_book_rented_ok($user->id)) {
-                foreach ($allrentofUser as $rent) {
-                    $rent->update_rental_rentdate($datetime);
-                }
-            } else {
-                $msg = "vous avez deja 5 livre en location";
-            }
-        }
-        $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
+
+        $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
@@ -127,7 +120,7 @@ class ControllerRental extends Controller {
             $usertoAddRent = User::get_user_by_id($value);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
         }
-       
+
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }

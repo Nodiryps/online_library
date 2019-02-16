@@ -2,6 +2,7 @@
 
 <html>
     <head>
+        <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <title>Bibliothèque</title>
     </head>
     <body>
@@ -110,6 +111,8 @@
                     </tr>
                 <?php endforeach; ?>
             </table>
+            
+              
         </div>
         <br>
         <?php if ($profile->is_admin()): ?>
@@ -125,7 +128,7 @@
         <br><br>
         
         <div class="container col-lg-offset-1 col-lg-8" >
-            <p style="color: red;"><?= strtoupper($msg) ?></p>
+            <p style="color: red;font-style: italic;font: bolder;"><?= strtoupper($msg) ?></p>
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
                 <legend><h1>Panier (<?= sizeof($UserRentals) ?> /5 loc.)</h1></legend>

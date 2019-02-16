@@ -71,7 +71,7 @@ class ControllerUser extends Controller {
                 //Controller::redirect("user","user_list");
             }
         }
-        (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors));
+        (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors,"email"=>$email));
     }
 
     public function edit_profile() {
