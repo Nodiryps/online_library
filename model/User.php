@@ -206,9 +206,11 @@ class User extends Model {
 
     public function delete_user() {
         try {
+             self::execute("DELETE FROM rental WHERE  user=:id", array("id" => $this->id));
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             //Tools::abort("Problème lors de l'accès a la base de données ");
+            echo $e->getMessage();
         }
     }
 

@@ -139,9 +139,11 @@ class ControllerBook extends Controller {
             $book = "";
             $errors = [];
             $pathToDel = "";
+            $oldpath="";
             $bookpicToDel = "";
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
+                $oldpath=$book->picture;
             }
             if (isset($_POST["delimageH"])) { // bouton effacer img
                 $edit = $_POST["delimageH"];

@@ -72,7 +72,7 @@ class ControllerUser extends Controller {
                 $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
                 if (empty($errors)) {
                     $member->insert();
-                    //Controller::redirect("user","user_list");
+                      $this->redirect("user", "user_list");
                 }
             }
             (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors, "email" => $email));
@@ -122,7 +122,7 @@ class ControllerUser extends Controller {
                     $error[] = "Il faut indiquer un role!";
                 if (strlen($member->username) < 3)
                     $error[] = "Le username doit faire plus de 3 caractères";
-                if (($_POST["password"]) !== ($confirm_password)) {
+                if ($_POST["password"] !== $confirm_passwords) {
                     $error[] = "Les mots de passe ne correspondent pas!";
                 }
                 if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {

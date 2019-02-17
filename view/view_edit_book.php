@@ -84,14 +84,17 @@
                                 <button id="idbook" class="btn btn-success"  type="submit">
                                     <span>Valider</span>
                                 </button>
-                                <input type="hidden" name="cancel" value="<?= $book->id ?>">
-                                <button id="cancel"  class="btn btn-warning"  type="submit">
-                                    <span>Annuler</span>
-                                </button>
+
                                 <!--<a href="book/index" alt="book manager" class="btn btn-warning">Annuler</a>-->
                             </div>
                         </div>
                     </fieldset>
+                </form>
+                <form class="text-right" action="book/edit_book" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="cancel" value="<?= $book->id ?>">
+                    <button id="cancel"  class="btn btn-warning"  type="submit">
+                        <span>Annuler</span>
+                    </button>
                 </form>
             </div>
 
