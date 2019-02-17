@@ -55,11 +55,11 @@
                             <span class="glyphicon glyphicon-ok"></span>  Valider
                         </button>
 
-                        <button id="button2id" name="button2id" class="btn btn-warning">
-                            <span  class="glyphicon glyphicon-remove">
-                                <a  href="book/index" alt="book manager" ></a>
+                      
+                            <span>
+                                <a class="btn btn-success" href="book/index" alt="book manager" ></a>
                             </span> Annuler
-                        </button>
+                      
                     </div>
                 </table>
             </form>
