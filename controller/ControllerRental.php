@@ -11,24 +11,27 @@ require_once 'framework/Configuration.php';
 class ControllerRental extends Controller {
 
     public function index() {
-        Controller::redirect('Book', 'index');
+        $this->redirect('Book', 'index');
     }
 
     public function search_book() {
         $profile = $this->get_user_or_redirect();
-        $books = Rental::get_rental_join_book_join_user_rentdate($profile->id);
-        $title = "";
-        $author = "";
-        $date = "";
-        $filter = "";
-        if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
-            $title = $_POST["title"];
-            $author = $_POST["author"];
-            $date = $_POST["date"];
-            $filter = $_POST["filtre"];
-            $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
-        }
-        (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+        if ($profile->is_admin() || $profile->is_manager()) {
+            $books = Rental::get_rental_join_book_join_user_rentdate($profile->id);
+            $title = "";
+            $author = "";
+            $date = "";
+            $filter = "";
+            if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
+                $title = $_POST["title"];
+                $author = $_POST["author"];
+                $date = $_POST["date"];
+                $filter = $_POST["filtre"];
+                $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
+            }
+            (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+        } else
+            $this->redirect();
     }
 
     public function add_rental_in_basket() {// on recupere un user mais le champ id est vide
@@ -63,45 +66,28 @@ class ControllerRental extends Controller {
         (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
-    public function add_rental_for_user_in_basket() {
+    public function rent_books_in_basket() {
         $user = $this->get_user_or_redirect();
-        if ($user->is_admin() || $user->is_manager()) {
-            $books = Book::get_all_books();
-            $msg = " ";
-            $usertoAddRent = "";
-            $members = User::get_all_user();
-            $datetime = date("Y-m-d H:i:s");
+        $books = Book::get_all_books();
+        $msg = " ";
+        $usertoAddRent = "";
+        $members = User::get_all_user();
+        $datetime = date("Y-m-d H:i:s");
 
-            if (isset($_POST["panierof"])) {
-                $value = $_POST["panierof"];
-                $usertoAddRent = User::get_user_by_id($value);
-                $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
-                if ($user->id != $usertoAddRent->id) {
-                    if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
-                        foreach ($allrentofUser as $rent) {
-                            $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
-                        }
-                    } else {
-                        $msg = "Cet utilisateur a déjà 5 locations en cours!";
+        if (isset($_POST["panierof"])) {
+            $value = $_POST["panierof"];
+            $usertoAddRent = User::get_user_by_id($value);
+            $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
+            if ($user->id != $usertoAddRent->id) {
+                if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
+                    foreach ($allrentofUser as $rent) {
+                        $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
                     }
                 } else {
-                    if (Rental::cpt_book_rented_ok($usertoAddRentr->id)) {
-                        foreach ($allrentofUser as $rent) {
-                            $rent->update_rental_rentdate($datetime);
-                        }
-                    } else {
-                        $msg = "Vous avez déjà 5 livres en location!";
-                    }
+                    $msg = "Cet utilisateur a déjà 5 locations en cours!";
                 }
-            }
-            if (isset($_POST["annuler"]) && isset($_POST["panierof"])) {
-                $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
-                foreach ($allrentofUser as $rent) {
-                    $rent->delete_rental();
-                }
-            }
-            if (isset($_POST["solo"])) {
-                if (Rental::cpt_book_rented_ok($user->id)) {
+            } else {
+                if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
                     foreach ($allrentofUser as $rent) {
                         $rent->update_rental_rentdate($datetime);
                     }
@@ -109,10 +95,24 @@ class ControllerRental extends Controller {
                     $msg = "Vous avez déjà 5 livres en location!";
                 }
             }
-            $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
-            (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
-        } else
-            $this->redirect();
+        }
+        if (isset($_POST["annuler"]) && isset($_POST["panierof"])) {
+            $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
+            foreach ($allrentofUser as $rent) {
+                $rent->delete_rental();
+            }
+        }
+        if (isset($_POST["solo"])) {
+            if (Rental::cpt_book_rented_ok($user->id)) {
+                foreach ($allrentofUser as $rent) {
+                    $rent->update_rental_rentdate($datetime);
+                }
+            } else {
+                $msg = "Vous avez déjà 5 livres en location!";
+            }
+        }
+        $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
     public function get_basket() {
@@ -223,7 +223,7 @@ class ControllerRental extends Controller {
 
             (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
         } else
-            $this->redirect ();
+            $this->redirect();
     }
 
 }

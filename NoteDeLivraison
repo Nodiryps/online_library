@@ -1,12 +1,26 @@
+USERS: admin,manager et member
+MDP: epfc
+
 MENU:
-    - Home         => liste de vos locations (view_profile)
+    - Accueil      => liste de vos locations (view_profile)
     - Bibliothèque => liste des livres de la bibliothèque (view_book_manager)
     - Membres      => liste des membres (view_users_list)
+    - Retours      => liste des locations (gestion des retours)
    
-index == page de login (lien vers signup si pas encrore membre)
-edit_profile => on ne peut modifier que son propre mdp (pour éviter les mauvaises blagues) 
+index == page de login (lien vers signup si pas encrore membre).
+
+edit_profile => on ne peut modifier que son propre mdp (pour éviter les mauvaises blagues). 
+
+on peut supprimer un retour que s'il est encodé.
 
 
 Fonctionnalité non demander:
 
 1) On peut ajouter et supprimer une returndate dans view_return en re-appuyant sur le bouton.
+2) Vignette quand un livre n'a pas d'image de couverture.
+3) quand la date actuelle a dépassé la date du retour, elle s'affiche en rouge dans l'accueil.
+
+TODOLIST:
+    QUAND ON ADD UN LIVRE, PAS D'IMG
+    BTN CLEAR PR SELECT DU FILTRE
+    MSG SUCCESS QD LIVRE OU MEMBRE BIEN AJOUTÉ

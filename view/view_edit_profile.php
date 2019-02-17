@@ -50,23 +50,26 @@
                                 <select id="selectbasic" name="role" class="form-control form-control my-input">
                                     <option value="<?= $member->role ?>"  ><?= $member->role ?></option>
                                     <?php
-                                    foreach ($tabRoles as $rol)
-                                        if ($member->role !== $rol)
-                                            echo "<option value='$rol'>$rol</option>";
+                                    foreach ($tabRoles as $rol){
+                                        if ($member->role !== $rol){
+                                        echo "<option value='$rol'>$rol</option>";
+                                        }
+                                    }
                                     ?>
                                 </select>
                             </td>
                         </tr>
-<?php endif; ?> 
-                    <tr>
-                        <td>Mot de passe:</td>
-                        <td><input  name="password" type="password"  class="form-control my-input"></td>
-                    </tr>
-                    <tr>
-                        <td>Confirmation du mdp:</td>
-                        <td><input  name="confirm_password" type="password"  class="form-control my-input"></td>
-                    </tr>
-<?php //endif;    ?>
+                        <?php endif; ?>
+                        <?php if($utilisateur->id === $member->id):?>
+                        <tr>
+                            <td>Mot de passe:</td>
+                            <td><input  name="password" type="password"  class="form-control my-input"></td>
+                        </tr>
+                        <tr>
+                            <td>Confirmation du mdp:</td>
+                            <td><input  name="confirm_password" type="password"  class="form-control my-input"></td>
+                        </tr>
+                    <?php endif; ?>
                 </table>
                 <br><br>
                 <input type="hidden" name="idmember" value="<?= $member->id ?>">
@@ -79,14 +82,14 @@
             </form>
         </div>
         <div class='text-danger'>
-<?php if ($error !== []): ?>
+            <?php if ($error !== []): ?>
                 <p>Erreur(s) à corriger:</p>
                 <ul>
                     <?php foreach ($error as $e): ?>
                         <li><?= $e ?></li>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </ul>
-<?php endif; ?>
+            <?php endif; ?>
         </div>
 
 

@@ -37,9 +37,10 @@
                 <legend class="text-center"><strong><h1>Mes locations</h1></strong></legend>
                 <thead class="thead-dark">
                     <tr>
-                        <th>LIVRES</th>
+                        <th>ISBN</th>
                         <th>TITRE</th>
-                        <th>LOUER LE:</th>
+                        <th>AUTEUR.E</th>
+                        <th>LOUÉ LE:</th>
                         <th>À REMETTRE LE:</th>
                     </tr>
                 </thead>
@@ -48,14 +49,18 @@
 
                     <tr>
                         <td><?= ControllerBook::isbn_format_EAN_13($rental->get_book()->isbn) ?></td>
-                        <td><?= $rental->get_book()->title ?>   (<?= $rental->get_book()->author ?>)</td>
-                        <td><?= date('d-m-Y ', strtotime($rental->rentaldate)) ?></td>
+                        <td><?= $rental->get_book()->title ?></td>
+                        <td><?= $rental->get_book()->author ?></td>
+                        <td><?= date('d/m/Y ', strtotime($rental->rentaldate)) ?></td>
 
-                        <?php if (ControllerUser::is_return_late(date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate))))): ?>
-                            <td style="color: red; font-weight: bold ; "><?= date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate))); ?> (RETARD)</td>
-                        <?php else : ?>
-                            <td><?= date('d/m/Y', strtotime('+1 month', strtotime($rental->rentaldate))); ?></td>
-                        <?php endif; ?>
+                        <?php 
+                        $returnDate = date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate)));
+                        $isLate = ControllerUser::is_return_late($returnDate);
+                        $msg = "";
+                        ?>
+                        <td <?php if ($isLate): $msg = "(RETARD)"; ?>class="text-danger" <?php endif; ?>>
+                        <?= $returnDate . " " . $msg; ?>
+                        </td>
                     <?php endforeach; ?>
                 </tr>
             </table>

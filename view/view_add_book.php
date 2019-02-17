@@ -19,72 +19,61 @@
         <nav> 
             <?php include('menu.html'); ?>
         </nav>
+        <div class="form-horizontal text-center col-lg-offset-4 col-lg-4">
+            <form class="form-horizontal" action="book/add_book" method="post" enctype="multipart/form-data">
+                <table>
+                    <legend><h1>Nouveau livre</h1></legend>
 
-        <form class=" container form-horizontal" action="book/add_book" method="post" enctype="multipart/form-data">
-            <fieldset>
-
-                <table><legend class="text-center">AJOUT D'UN NOUVEAU LIVRE </legend></table>
-
-                <!-- Text input-->
-                <div class=" form-group">
-                    <div class="col-md-5">
-                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(en format EAN 13)" class="form-control input-md"  >
+                    <div class="">
+                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(13 chiffres)" class="form-control input-md"  >
                     </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                    <div class="col-md-5">
+                    <div class="">
                         <input id="textinput" name="author" type="text" placeholder="auteur.e" class="form-control input-md" >
                     </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                    <div class="col-md-5">
+                    <div class="">
                         <input id="textinput" name="title" type="text" placeholder="titre" class="form-control input-md">
                     </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                    <div class="col-md-5">
+                    <div class="">
                         <input id="textinput" name="editor" type="text" placeholder="edition" class="form-control input-md">
                     </div>
-                </div>
-
-                <!-- File Button --> 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="picture">CHOISIR UN FICHIER</label>
-                    <div class="col-md-4">
-                        <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
-                        <button  name="button2id" class="btn btn-warning"><span class="glyphicon glyphicon-"> effacer</span></button>
+                    
+                    <br>
+                    
+                    <div class="form-group text-left">
+                        <label  for="picture">Couverture:</label>
+                        <input id="picture" name="picture" class="" type="file" accept="image/x-png, image/gif, image/jpeg">
+                        <button  name="button2id" class="btn btn-default">
+                            <span>Effacer</span>
+                        </button>
                     </div>
-                </div>
+                    
+                    <div class="form-group">
+                        <button id="idbook" type="submit" name="idbook" class="btn btn-success">
+                            <span class="glyphicon glyphicon-ok"></span>  Valider
+                        </button>
 
-
-                <!-- Button (Double) -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="idbook"></label>
-                    <div class="col-md-8">
-
-                        <button id="idbook" type="submit" name="idbook" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>  Valider</button>
-
-
-                        <button id="button2id" name="button2id" class="btn btn-warning"><span style="color: white" class="glyphicon glyphicon-remove"><a href="book/index" alt="book manager" > Annuler</a></span></button>
+                        <button id="button2id" name="button2id" class="btn btn-warning">
+                            <span  class="glyphicon glyphicon-remove">
+                                <a  href="book/index" alt="book manager" ></a>
+                            </span> Annuler
+                        </button>
                     </div>
-                </div>
-            </fieldset>
-        </form>
-        <div class="container text-uppercase">
-            <?php if(!empty($errors)): ?>
-               <ul>
-        <?php foreach ($errors as $test):?>
-                   <li style="color: red"><p><?= $test ?></p></li>
-        <?php endforeach;?>
-                   <?php endif; ?>
-        </ul>
+                </table>
+            </form>
         </div>
-     
+
+        <div class="container text-uppercase">
+            <?php if (!empty($errors)): ?>
+                <ul>
+                    <?php foreach ($errors as $test): ?>
+                        <li style="color: red"><p><?= $test ?></p></li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+            </ul>
+        </div>
+
     </body>
 </html>

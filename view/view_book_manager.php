@@ -55,16 +55,16 @@
                         <td class="text-center"><?= $book->title ?></td>
                         <td class="text-center"><?= strtoupper($book->author) ?></td>
                         <td class="text-center"><?= $book->editor ?></td>
-                        <?php if ($book->picture !== NULL): ?>
+                        
                             <td class="text-center">  
-                                <img  id="zoomimg" style="width: 45px;  " src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
-
+                                <img  id="zoomimg" style="width:45px;height:65px;" 
+                                      <?php if ($book->picture !== NULL): ?>
+                                      src='uploads/<?= $book->picture ?>' width="100" alt="Couverture"
+                                      <?php else: ?> 
+                                      src='uploads/images.png' width="100" alt="Couverture">
+                                      <?php endif; ?>
                             </td>
-                        <?php else: ?>
-                            <td class="text-center">  
-                                <img id="zoomimg" style="width: 45px;" src='uploads/images.png' width="100" alt="Couverture">
-                            </td>
-                        <?php endif; ?>
+                        
                         <?php if ($profile->role == "admin"): ?>
                             <td style="border:none;" bgcolor="white">
                                 <form  method="post" action="book/edit_book">
@@ -128,7 +128,7 @@
             <p class="text text-danger"><?= strtoupper($msg) ?></p>
             <table class="table table-striped table-condensed">
                 <thead class="thead-dark">
-                <legend><h1>Panier (<?= sizeof($UserRentals) ?> /5 loc.)</h1></legend>
+                <legend><h1>Panier (<?= sizeof($UserRentals) ?>/5 loc.)</h1></legend>
                 <tr>
                     <th scope="col">ISNB</th>
                     <th scope="col">TITRE</th>
@@ -184,7 +184,11 @@
                     </button>
                 </form>
                 <br><br><br>
-                <form class="form-horizontal " method="post" action="rental/add_rental_for_user_in_basket">
+                <?php endif; 
+                if ($profile->is_admin() || $profile->is_manager() || $profile->is_member()): ?>
+                <?php if($profile->is_member()): ?><br><br><br><br><?php endif; ?>
+                <form class="form-horizontal" method="post" 
+                      action="rental/rent_books_in_basket">
                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                     <button class="btn btn-success" type="submit" value="<?php $profile->username ?>">
                         <span class="glyphicon glyphicon-check"> Louer</span>
@@ -194,22 +198,6 @@
                     </button>
                 </form>
             </div>
-        <?php elseif ($profile->is_member()): ?>
-            <div class="container">
-                <form class="form-horizontal" method="post" action="rental/add_rental_for_user_in_basket">
-                    <div class="text-left">
-                        <input type="hidden" name="solo" value="<?php $profile->id ?>" >
-                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                        <button class="btn btn-success" class="form-group " type="submit"  >
-                            <span class="glyphicon glyphicon-check"> Louer</span>
-                        </button>
-                        <button class="btn btn-danger" class="form-group" type="submit" name="annuler" value="annuler">
-                            <span class="glyphicon glyphicon-remove"> Vider</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
         <?php endif; ?>
     </body>
-    <br><br><br><br>
 </html>

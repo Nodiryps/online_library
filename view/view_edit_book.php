@@ -70,12 +70,10 @@
 
                         <!-- File Button --> 
                         <div class="form-group">
-                            <label class="col-lg-5 control-label" for="picture">CHOISIR UN FICHIER</label>
+                            <label class="col-lg-5 control-label" for="picture">COUVERTURE:</label>
                             <div class="col-lg-7">
                                 <input id="picture" name="picture" class="input-file" type="file" accept="image/x-png, image/gif, image/jpeg">
                                 <br><br>
-
-
                             </div>
                         </div>
 
