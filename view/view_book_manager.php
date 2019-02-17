@@ -115,7 +115,7 @@
         <?php if ($profile->is_admin()): ?>
             <div class="container text-left">
                 <form method="get" action="book/add_book">
-                    <button class="btn btn-success">
+                    <button type="submit"class="btn btn-success">
                         <span>Nouveau livre</span>
                     </button>
                 </form>

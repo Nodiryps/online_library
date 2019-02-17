@@ -56,17 +56,21 @@ class ControllerBook extends Controller {
                             move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
                         }
                     }
-                } 
+                }
 
                 if (empty($errors)) {
                     $book = new Book(0, $isbn, $title, $author, $editor, $picture_path);
                     $book->create();
-                    if (isset($_POST["idbook"]))
-                        $this->redirect("book", "index");
+                    if (isset($_POST["idbook"])) {
+                        //$this->redirect("book", "index");
+                    }
                 }
-            } (new View("add_book"))->show(array("errors" => $errors, "isbn"));
-        } else
-            $this->redirect("book", "index");
+                (new View("add_book"))->show(array("errors" => $errors));
+            } else {
+                (new View("add_book"))->show(array("errors" => $errors));
+                //$this->redirect("book", "index");
+            }
+        }
     }
 
     private function add_picture($title, $picture_path) {
@@ -86,7 +90,7 @@ class ControllerBook extends Controller {
 
     private function rules_add_book($isbn, $title, $author, $editor) {
         $errors = [];
-        if(empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
+        if (empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
             $errors[] = "TOUS les champs sont obligatoires !";
         if (strlen($isbn) !== 13)
             $errors[] = "isbn: isbn incorrect (13 chiffres)!";
@@ -142,7 +146,7 @@ class ControllerBook extends Controller {
             if (isset($_POST["delimageH"])) { // bouton effacer img
                 $edit = $_POST["delimageH"];
                 $bookpicToDel = Book::get_book_by_id($edit);
-                if($bookpicToDel->picture !== NULL) {
+                if ($bookpicToDel->picture !== NULL) {
                     unlink("uploads/" . $bookpicToDel->picture);
                     $bookpicToDel->delete_image();
                 } else
@@ -153,7 +157,6 @@ class ControllerBook extends Controller {
 
             if (isset($_POST["cancel"])) { // boutton annuler
                 $book = Book::get_book_by_id($_POST['cancel']);
-                echo "ezsqdkjhfigf";
                 if (empty($errors)) {
                     $book->update();
                     //$this->redirect("book", "index");
@@ -162,9 +165,9 @@ class ControllerBook extends Controller {
             }
 
             if (isset($_POST['idbook']) && isset($_POST['isbn']) || isset($_POST['title']) || isset($_POST['editor']) || isset($_POST['author'])) {
-                if(!empty($_POST['idbook']))
+                if (!empty($_POST['idbook']))
                     $book = Book::get_book_by_id($_POST['idbook']);
-                
+
 //                $this->validate_book($book, $_POST['isbn'], $_POST['title'], $_POST['author'], $_POST['editor']);
                 if (isset($_POST['isbn']) && isset($_POST['isbn']) !== "")
                     $book->isbn = $this->isbn_format_string($_POST['isbn']);
@@ -185,10 +188,11 @@ class ControllerBook extends Controller {
 //                            $titleOk = $this->titleOk($book->title); // remplace les char par '' dans $book->title
                             $picture_path = $book->title . "." . $extension_upload;
                             move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+                            $book->picture = $picture_path;
                         }
                     }
-                } 
-                
+                }
+
                 if (empty($errors)) {
                     $book->update();
 //                    $book = Book::get_author_by_id($book->id);
@@ -200,7 +204,7 @@ class ControllerBook extends Controller {
         } else
             $this->redirect("book", "index");
     }
-    
+
     private function titleOk($string) {
         $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
         $res = preg_replace('~[\\éè]~', 'e', $res);
