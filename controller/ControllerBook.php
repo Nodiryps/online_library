@@ -28,7 +28,6 @@ class ControllerBook extends Controller {
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
-// on créé un livre sans img => comme ds msn
     public function add_book() {
         $user = $this->get_user_or_redirect();
         if ($user->is_admin()) {
@@ -38,7 +37,6 @@ class ControllerBook extends Controller {
             $editor = "";
             $errors = [];
             $picture_path = "";
-
             if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"])) {
                 $isbn = $_POST["isbn"];
                 $title = $_POST["title"];
@@ -51,7 +49,6 @@ class ControllerBook extends Controller {
                         $extension_upload = $infosfichier['extension'];
                         $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
                         if (in_array($extension_upload, $extensions_autorisees)) {
-//                            $titleOk = preg_replace('~[\\\\/.,;:*!?"<>|]~', '', $title); // remplace les char par '' dans $title
                             $picture_path = $title . "." . $extension_upload;
                             move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
                         }
@@ -61,16 +58,11 @@ class ControllerBook extends Controller {
                 if (empty($errors)) {
                     $book = new Book(0, $isbn, $title, $author, $editor, $picture_path);
                     $book->create();
-                    if (isset($_POST["idbook"])) {
-                        //$this->redirect("book", "index");
-                    }
+                    $this->redirect("book", "index");
                 }
-                (new View("add_book"))->show(array("errors" => $errors));
-            } else {
-                (new View("add_book"))->show(array("errors" => $errors));
-                //$this->redirect("book", "index");
             }
         }
+        (new View("add_book"))->show(array("errors" => $errors));
     }
 
     private function add_picture($title, $picture_path) {
@@ -115,14 +107,13 @@ class ControllerBook extends Controller {
             }
             if (isset($_POST["conf"])) {
                 $delbook = Book::get_book_by_id($_POST["conf"]);
-                $delbook->delete_book();
                 unlink("uploads/" . $delbook->picture);
+                $delbook->delete_book();
                 $this->redirect("book", "index");
             }
+
             (new View("delete_confirm"))->show(array("book" => $delbook));
-        } else
-            $this->redirect();
-//        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "members" => $members, "actualpanier" => $usertoAddRent));
+        }
     }
 
     public function book_detail() {
@@ -139,11 +130,11 @@ class ControllerBook extends Controller {
             $book = "";
             $errors = [];
             $pathToDel = "";
-            $oldpath="";
+            $oldpath = "";
             $bookpicToDel = "";
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
-                $oldpath=$book->picture;
+                $oldpath = $book->picture;
             }
             if (isset($_POST["delimageH"])) { // bouton effacer img
                 $edit = $_POST["delimageH"];
@@ -158,7 +149,7 @@ class ControllerBook extends Controller {
             }
 
             if (isset($_POST["cancel"])) { // boutton annuler
-                $this->redirect("book","index");
+                $this->redirect("book", "index");
             }
 
             if (isset($_POST['idbook']) && isset($_POST['isbn']) || isset($_POST['title']) || isset($_POST['editor']) || isset($_POST['author'])) {

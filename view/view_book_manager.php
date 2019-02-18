@@ -45,6 +45,7 @@
                         <th class="text-center" scope="col">TITRE</th>
                         <th class="text-center" scope="col">AUTEUR.E</th>
                         <th class="text-center" scope="col">EDITION</th>
+                         <th class="text-center" scope="col">NBCOPIES</th>
                         <th class="text-center" scope="col">COUVERTURE</th>
                     </tr>
                 </thead>
@@ -55,6 +56,7 @@
                         <td class="text-center"><?= $book->title ?></td>
                         <td class="text-center"><?= strtoupper($book->author) ?></td>
                         <td class="text-center"><?= $book->editor ?></td>
+                           <td class="text-center"><?= $book->nbCopies ?></td>
                         
                             <td class="text-center">  
                                 <img  id="zoomimg" style="width:45px;height:65px;" 

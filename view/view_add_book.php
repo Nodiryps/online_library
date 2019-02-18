@@ -41,12 +41,15 @@
                     </div>
                     
                     <br>
-                    
+                  
                     <div class="form-group text-left">
                         <label  for="picture">Couverture:</label>
+                        
                         <input id="picture" name="picture" class="" type="file" accept="image/x-png, image/gif, image/jpeg">
+                          <br>
+                        <br>
                         <button  name="button2id" class="btn btn-default">
-                            <span>Effacer</span>
+                            <span>Effacer l'image</span>
                         </button>
                     </div>
                     
@@ -56,9 +59,9 @@
                         </button>
 
                       
-                            <span>
-                                <a class="btn btn-success" href="book/index" alt="book manager" ></a>
-                            </span> Annuler
+                           
+                                <a class="btn btn-success" href="book/index" alt="book manager" >Annuler</a>
+                            
                       
                     </div>
                 </table>

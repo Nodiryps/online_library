@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <link style="width:50%;" rel="shortcut icon" href="img/bibli_logo.ico">
         <meta charset="UTF-8">
