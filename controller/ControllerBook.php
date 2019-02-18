@@ -158,12 +158,7 @@ class ControllerBook extends Controller {
             }
 
             if (isset($_POST["cancel"])) { // boutton annuler
-                $book = Book::get_book_by_id($_POST['cancel']);
-                if (empty($errors)) {
-                    $book->update();
-                    //$this->redirect("book", "index");
-//                    $this->update_book($book);
-                }
+                $this->redirect("book","index");
             }
 
             if (isset($_POST['idbook']) && isset($_POST['isbn']) || isset($_POST['title']) || isset($_POST['editor']) || isset($_POST['author'])) {
