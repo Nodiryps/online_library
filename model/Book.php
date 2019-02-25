@@ -1,6 +1,7 @@
 <?php
 
 require_once 'framework/Model.php';
+require_once 'Model/Rental.php';
 
 class Book extends Model {
 
@@ -86,7 +87,7 @@ class Book extends Model {
     }
 
     public function create() {
-        self::execute("INSERT INTO book(isbn, title, author, editor, picture)"
+        self::execute("INSERT INTO book(isbn, title, author, editor, picture,nbCopies)"
                 . "VALUES(:isbn, :title, :author, :editor, :picture,:nbCopies)", array("isbn" => $this->isbn, "title" => $this->title,
             "author" => $this->author, "editor" => $this->editor, "picture" => $this->picture,"nbCopies"=> $this->nbCopies));
     }
@@ -94,9 +95,9 @@ class Book extends Model {
     public function update() {
         if (self::get_book_by_id($this->id)) {
             $query = self::execute("UPDATE book SET isbn = :isbn, title = :title, "
-                            . "author = :author, editor = :editor, picture = :picture WHERE id=:id", 
+                            . "author = :author, editor = :editor, picture = :picture, nbCopies=:nbCopie WHERE id=:id", 
                     array("isbn" => $this->isbn, "title" => $this->title, "author" => $this->author,
-                        "editor" => $this->editor, "picture" => $this->picture, "id" => $this->id));
+                        "editor" => $this->editor, "picture" => $this->picture, "id" => $this->id,"nbCopie"=>$this->nbCopies));
         }
     }
     
@@ -202,4 +203,17 @@ public static function validate_photo($file) {
              $ex->getMessage();
         }
     }
+    
+        
+    public  function nbCopies_of_a_book(){
+         try {
+            $query = self::execute("SELECT COUNT(*) FROM rental WHERE book=:id AND rentaldate IS NOT NULL", array("id"=> $this->id));
+            $books = $query->fetchAll();
+            return $books[0][0];
+        } catch (Exception $ex) {
+            Tools::abort("problemes lors de l'acces a la DB");
+        }
+        
+    }
+
 }

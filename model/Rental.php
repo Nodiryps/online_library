@@ -81,7 +81,7 @@ class Rental extends Model {
             $query = self::execute("SELECT * FROM book WHERE book.id NOT IN (select book.id from rental JOIN book on rental.book=book.id where rentaldate is null and rental.user= :id)", array("id"=>$id));
             $rental = $query->fetchAll();
             foreach ($rental as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
@@ -268,7 +268,7 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT * FROM book WHERE id = :id", array("id" => $this->book));
             $book = $query->fetch();
-            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"]);
+            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"],$book["nbCopies"]);
         } catch (Exception $ex) {
             abort("Problème lors de l'accès a la base de données");
         }

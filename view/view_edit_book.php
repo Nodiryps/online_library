@@ -67,6 +67,13 @@
                                        class="form-control input-md" value="<?= $book->editor ?>">
                             </div>
                         </div>
+                          <div class="form-group">
+                            <label class="col-lg-5 control-label" for="TITRE">nbCopie</label>  
+                            <div class="col-lg-7">
+                                <input id="textinput" name="nbCopie" type="number" 
+                                       class="form-control input-md" value="<?= $book->title ?>">
+                            </div>
+                        </div>
 
                         <!-- File Button --> 
                         <div class="form-group">

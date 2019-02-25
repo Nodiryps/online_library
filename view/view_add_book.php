@@ -39,6 +39,9 @@
                     <div class="">
                         <input id="textinput" name="editor" type="text" placeholder="edition" class="form-control input-md">
                     </div>
+                       <div class="">
+                           <input id="textinput" name="nbCopie" type="number" placeholder="nombre de copies" class="form-control input-md">
+                    </div>
                     
                     <br>
                   
