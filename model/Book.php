@@ -13,37 +13,37 @@ class Book extends Model {
     var $picture;
     var $nbCopies;
 
-    public function __construct($id, $isbn, $title, $author, $editor, $picture,$nbCopies) {
+    public function __construct($id, $isbn, $title, $author, $editor, $picture, $nbCopies) {
         $this->id = $id;
         $this->isbn = $isbn;
         $this->title = $title;
         $this->author = $author;
         $this->editor = $editor;
         $this->picture = $picture;
-        $this->nbCopies=$nbCopies;
+        $this->nbCopies = $nbCopies;
     }
 
     public static function get_all_books() {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book ", array());
+            $books = self::execute("SELECT * FROM book where book.id  not in (select rental.book from rental)  ", array());
             $query = $books->fetchAll();
             foreach ($query as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-        public static function get_all_books_join_rental() {
+
+    public static function get_all_books_join_rental() {
         $results = [];
         try {
             $books = self::execute("SELECT * FROM book join rental where book.id=rental.book ", array());
             $query = $books->fetchAll();
             foreach ($query as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
@@ -55,7 +55,7 @@ class Book extends Model {
         try {
             $query = self::execute("SELECT * FROM book WHERE title=:title", array("title" => $title));
             $book = $query->fetch();
-            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"],$book["nbCopies"]);
+            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"], $book["nbCopies"]);
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
@@ -66,10 +66,10 @@ class Book extends Model {
         try {
             $books = self::execute("SELECT * FROM book "
                             . "WHERE isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR "
-                            . "editor LIKE :critere", array(":critere" => "%" . $critere . "%"));
+                            . "editor LIKE :critere AND book.id  not in (select rental.book from rental)", array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
             foreach ($query as $row) {
-               $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
@@ -83,29 +83,27 @@ class Book extends Model {
         if ($query->rowCount() == 0)
             return false;
         else
-            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"],$book["nbCopies"]);
+            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"], $book["nbCopies"]);
     }
 
     public function create() {
         self::execute("INSERT INTO book(isbn, title, author, editor, picture,nbCopies)"
                 . "VALUES(:isbn, :title, :author, :editor, :picture,:nbCopies)", array("isbn" => $this->isbn, "title" => $this->title,
-            "author" => $this->author, "editor" => $this->editor, "picture" => $this->picture,"nbCopies"=> $this->nbCopies));
+            "author" => $this->author, "editor" => $this->editor, "picture" => $this->picture, "nbCopies" => $this->nbCopies));
     }
 
     public function update() {
         if (self::get_book_by_id($this->id)) {
             $query = self::execute("UPDATE book SET isbn = :isbn, title = :title, "
-                            . "author = :author, editor = :editor, picture = :picture, nbCopies=:nbCopie WHERE id=:id", 
-                    array("isbn" => $this->isbn, "title" => $this->title, "author" => $this->author,
-                        "editor" => $this->editor, "picture" => $this->picture, "id" => $this->id,"nbCopie"=>$this->nbCopies));
+                            . "author = :author, editor = :editor, picture = :picture, nbCopies=:nbCopie WHERE id=:id", array("isbn" => $this->isbn, "title" => $this->title, "author" => $this->author,
+                        "editor" => $this->editor, "picture" => $this->picture, "id" => $this->id, "nbCopie" => $this->nbCopies));
         }
     }
-    
-       public function update_nbCopies() {
+
+    public function update_nbCopies() {
         if (self::get_book_by_id($this->id)) {
             $query = self::execute("UPDATE book SET nbCopies = :nbCopies,"
-                            . "WHERE id=:id", 
-                    array("nbCopies" => $this->nbCopies));
+                            . "WHERE id=:id", array("nbCopies" => $this->nbCopies));
         }
     }
 
@@ -128,15 +126,13 @@ class Book extends Model {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-    
-    public function delete_image(){
-      try {
-               self::execute("UPDATE book SET picture=:picture  WHERE id=:id",
-                       array( "picture" => null, "id" => $this->id));
-              
-            } catch (Exception $ex) {
-              Tools::abort("Problème lors de l'accès a la base de données");
-            }
+
+    public function delete_image() {
+        try {
+            self::execute("UPDATE book SET picture=:picture  WHERE id=:id", array("picture" => null, "id" => $this->id));
+        } catch (Exception $ex) {
+            Tools::abort("Problème lors de l'accès a la base de données");
+        }
     }
 
     public static function validate_image($file) {// mettre la fonction dans controller
@@ -155,7 +151,7 @@ class Book extends Model {
     }
 
     public function validate_image_type($file) {
-     //note : time() est utilisé pour que la nouvelle image n'aie pas
+        //note : time() est utilisé pour que la nouvelle image n'aie pas
         //       le meme nom afin d'éviter que le navigateur affiche
         //       une ancienne image présente dans le cache
         if ($_FILES['image']['type'] == "image/gif") {
@@ -167,7 +163,8 @@ class Book extends Model {
         }
         return $saveTo;
     }
-public static function validate_photo($file) {
+
+    public static function validate_photo($file) {
         $errors = [];
         if (isset($file['name']) && $file['name'] != '') {
             if ($file['error'] == 0) {
@@ -181,39 +178,46 @@ public static function validate_photo($file) {
         }
         return $errors;
     }
-    
-    public static function get_title_by_id($id){
-        try{
-        $query = self::execute("SELECT title FROM book WHERE id=:id", array("id" => $id));
-        $book = $query->fetch();
-        return $book[0];
-        }
-        catch(Exception $ex){
-             $ex->getMessage();
-        }
-    }
-    
-    public static function get_author_by_id($id){
-        try{
-        $query = self::execute("SELECT author FROM book WHERE id=:id", array("id" => $id));
-        $book = $query->fetch();
-        return $book[0];
-        }
-        catch(Exception $ex){
-             $ex->getMessage();
+
+    public static function get_title_by_id($id) {
+        try {
+            $query = self::execute("SELECT title FROM book WHERE id=:id", array("id" => $id));
+            $book = $query->fetch();
+            return $book[0];
+        } catch (Exception $ex) {
+            $ex->getMessage();
         }
     }
-    
-        
-    public  function nbCopies_of_a_book(){
-         try {
-            $query = self::execute("SELECT COUNT(*) FROM rental WHERE book=:id AND rentaldate IS NOT NULL", array("id"=> $this->id));
+
+    public static function get_author_by_id($id) {
+        try {
+            $query = self::execute("SELECT author FROM book WHERE id=:id", array("id" => $id));
+            $book = $query->fetch();
+            return $book[0];
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+    }
+
+    public function nbCopies_of_a_book() {
+        try {
+            $query = self::execute("SELECT COUNT(*) FROM rental WHERE book=:id AND rentaldate IS NOT NULL", array("id" => $this->id));
             $books = $query->fetchAll();
             return $books[0][0];
         } catch (Exception $ex) {
             Tools::abort("problemes lors de l'acces a la DB");
         }
-        
+    }
+
+    public static function existIsbn($isbn) {
+        try {
+            $query = self::execute("SELECT * FROM book  WHERE isbn=:isbn", array("isbn" => $isbn));
+            $books = $query->fetchAll();
+            if (sizeof($books) == 0)
+                return false;
+        } catch (Exception $ex) {
+            Tools::abort("problemes lors de l'acces a la DB");
+        }
     }
 
 }

@@ -25,22 +25,22 @@
                     <legend><h1>Nouveau livre</h1></legend>
 
                     <div class="">
-                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(13 chiffres)" class="form-control input-md"  >
+                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(13 chiffres)" class="form-control input-md" value="<?= $isbn?>" >
                     </div>
 
                     <div class="">
-                        <input id="textinput" name="author" type="text" placeholder="auteur.e" class="form-control input-md" >
+                        <input id="textinput" name="author" type="text" placeholder="auteur.e" class="form-control input-md"value="<?= $author?>" >
                     </div>
 
                     <div class="">
-                        <input id="textinput" name="title" type="text" placeholder="titre" class="form-control input-md">
+                        <input id="textinput" name="title" type="text" placeholder="titre" class="form-control input-md" value="<?= $title ?>">
                     </div>
 
                     <div class="">
-                        <input id="textinput" name="editor" type="text" placeholder="edition" class="form-control input-md">
+                        <input id="textinput" name="editor" type="text" placeholder="edition" class="form-control input-md" value="<?= $editor ?>">
                     </div>
                        <div class="">
-                           <input id="textinput" name="nbCopie" type="number" placeholder="nombre de copies" class="form-control input-md">
+                           <input id="textinput" name="nbCopie" type="number" placeholder="nombre de copies" class="form-control input-md" value="<?= $nbCopie ?>">
                     </div>
                     
                     <br>

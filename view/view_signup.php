@@ -23,16 +23,16 @@
             <br>
             <form action="main/signup" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group">
-                    <input type="text" name="fullname"  class="form-control my-input" id="fullname" placeholder="Nom complet">
+                    <input type="text" name="fullname"  class="form-control my-input" id="fullname" placeholder="Nom complet" value="<?= $fullname?>">
                 </div>
                 <div class="form-group">
-                    <input type="text" name="username"  class="form-control my-input" id="username" placeholder="Pseudo">
+                    <input type="text" name="username"  class="form-control my-input" id="username" placeholder="Pseudo"  value="<?= $username?>">
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email"  class="form-control my-input" id="email" placeholder="Email">
+                    <input type="email" name="email"  class="form-control my-input" id="email" placeholder="Email"  value="<?= $email?>">
                 </div>
                 <div class="form-group">
-                    <input type="date" name="birthdate" id="birthdate"  class="form-control my-input" placeholder="Date de naissance">
+                    <input type="date" name="birthdate" id="birthdate"  class="form-control my-input" placeholder="Date de naissance"  value="<?= $birthdate?>">
                 </div>
                 <div class="form-group">
                     <input type="password" name="password"  class="form-control my-input" id="password" placeholder="Mot(phrase!) de passe">
