@@ -132,7 +132,7 @@ class ControllerUser extends Controller {
                 }
                 if (empty($error)) {
 
-                    $member->update2();
+                    $member->update();
                     if ($utilisateur->id === $member->id) {
 
                         $_SESSION["user"] = $member;
@@ -145,7 +145,7 @@ class ControllerUser extends Controller {
             $this->redirect();
     }
 
-    private function rules_edit_profile($member, $fullname, $email, $role, $username, $password, $confirm_password) {
+    private static function rules_edit_profile($member, $fullname, $email, $role, $username, $password, $confirm_password) {
         $errors = [];
         if (trim($fullname) === "")
             $errors[] = "Le champ \"fullname\" est obligatoire!";

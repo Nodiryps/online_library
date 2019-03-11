@@ -65,8 +65,9 @@ class Book extends Model {
         $results = [];
         try {
             $books = self::execute("SELECT * FROM book "
-                            . "WHERE isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR "
-                            . "editor LIKE :critere AND book.id  not in (select rental.book from rental)", array(":critere" => "%" . $critere . "%"));
+                            . "WHERE book.id  not in (select rental.book from rental) "
+                            . "AND (isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR "
+                            . "editor LIKE :critere)", array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
@@ -112,10 +113,7 @@ class Book extends Model {
             self::execute("DELETE FROM rental WHERE  book=:id", array("id" => $this->id));
             self::execute("DELETE FROM book WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $ex) {
-            $ex->getCode();
-            echo "//////////////////////////////";
-            echo $ex->getMessage();
-            //Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -219,5 +217,29 @@ class Book extends Model {
             Tools::abort("problemes lors de l'acces a la DB");
         }
     }
+    
+      public function titleOk($string) {
+        $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
+        $res = preg_replace('~[\\éè]~', 'e', $res);
+        $res = preg_replace('~[\\à]~', 'a', $res);
+        return $res;
+    }
+    
+    public static function rules_add_book($isbn, $title, $author, $editor) {
+        $errors = [];
+        if (empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
+            $errors[] = "TOUS les champs sont obligatoires !";
+
+        if (strlen($isbn) !== 13)
+            $errors[] = "isbn: isbn incorrect (13 chiffres)!";
+        if (strlen($title) < 2)
+            $errors[] = "titre: trop court (2 min.)!";
+        if (strlen($author) < 5)
+            $errors[] = "auteur.e: trop court (5 min.)!";
+        if (strlen($editor) < 2)
+            $errors[] = "édition: trop court (2 min.)!";
+        return $errors;
+    }
+
 
 }

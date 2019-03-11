@@ -44,7 +44,7 @@ class ControllerBook extends Controller {
                 $author = $_POST["author"];
                 $editor = $_POST["editor"];
                 $nbcopies = $_POST["nbCopie"];
-                $errors = $this->rules_add_book($isbn, $title, $author, $editor);
+                $errors = Book::rules_add_book($isbn, $title, $author, $editor);
                 if (!Book::existIsbn($isbn))
                     $errors[] = "ISBN existe deja !";
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
@@ -84,22 +84,7 @@ class ControllerBook extends Controller {
         } return $picture_path;
     }
 
-    private function rules_add_book($isbn, $title, $author, $editor) {
-        $errors = [];
-        if (empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
-            $errors[] = "TOUS les champs sont obligatoires !";
-
-        if (strlen($isbn) !== 13)
-            $errors[] = "isbn: isbn incorrect (13 chiffres)!";
-        if (strlen($title) < 2)
-            $errors[] = "titre: trop court (2 min.)!";
-        if (strlen($author) < 5)
-            $errors[] = "auteur.e: trop court (5 min.)!";
-        if (strlen($editor) < 2)
-            $errors[] = "édition: trop court (2 min.)!";
-        return $errors;
-    }
-
+    
     public function delete_book() {
         $user = Controller::get_user_or_redirect();
         if ($user->is_admin()) {
@@ -171,7 +156,7 @@ class ControllerBook extends Controller {
                     $book->editor = $_POST['editor'];
                  if (empty($_POST['nbCopie']))
                      $book->nbCopies = $_POST["nbCopie"];
-                $errors = $this->rules_add_book($book->isbn, $book->title, $book->author, $book->editor);
+                $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor);
                 $picture_path = "";
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                     if ($_FILES['picture']['error'] == 0) {
@@ -188,7 +173,6 @@ class ControllerBook extends Controller {
                 }
 
                 if (empty($errors)) {
-                    var_dump($book->nbCopies);
                     $book->update();
                     $this->redirect("book", "index");
                 }
@@ -199,18 +183,6 @@ class ControllerBook extends Controller {
             $this->redirect("book", "index");
     }
 
-    private function titleOk($string) {
-        $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
-        $res = preg_replace('~[\\éè]~', 'e', $res);
-        $res = preg_replace('~[\\à]~', 'a', $res);
-        return $res;
-    }
-
-    private function update_book($book) {
-        $book->update();
-        $this->redirect("book", "index");
-    }
-
     private function delete_img($id) {
         $book = Book::get_book_by_id($id);
         $bookpicToDel = $book;
@@ -218,16 +190,6 @@ class ControllerBook extends Controller {
         (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user)); // pour "refresh" l'img suppr
     }
 
-    private function validate_book($book, $isbn, $title, $author, $editor) {
-        if (isset($isbn) && isset($isbn) !== "")
-            $book->isbn = $this->isbn_format_string($isbn);
-        if (isset($title) && isset($title) !== "")
-            $book->title = $title;
-        if (isset($author) && isset($author) !== "")
-            $book->author = $author;
-        if (isset($editor) && isset($editor) !== "")
-            $book->editor = $editor;
-    }
 
     public static function isbn_format_EAN_13($isbn) {
         return substr($isbn, 0, 3) . "-" . substr($isbn, 3, 1) . "-"

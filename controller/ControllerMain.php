@@ -43,7 +43,7 @@ class ControllerMain extends Controller {
         $email="";
         $birthdate="";
         $role="";
-        $id="";
+        $id=0;
         $errors = [];
         
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
@@ -62,7 +62,7 @@ class ControllerMain extends Controller {
 
             if (count($errors) == 0) { 
                 $member->insert(); //sauve l'utilisateur
-               $this->log_user($member);
+               $this->log_user(User::get_user_by_username($member->username));
             }
         }
         (new View("signup"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm,"fullname"=>$fullname,"email"=>$email,"birthdate"=>$birthdate, "errors" => $errors));

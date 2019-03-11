@@ -127,9 +127,7 @@ class User extends Model {
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
-            echo $e->getMessage();
             Tools:: abort("Problème lors de l'accès a la base de données");
-            return false;
         }
     }
 
@@ -171,46 +169,14 @@ class User extends Model {
         }
     }
 
-    public static function add_user($username, $password, $fullname, $email, $birthdate) {
-        $role = "member";
-        try {
-            $query = self::execute("INSERT INTO user(username,password,fullname,email,birthdate,role)
-                                        VALUES(:username,:password,:fullname,:email,:birthdate,:role)", array(
-                        "username" => $username,
-                        "password" => my_hash($password),
-                        "fullname" => $fullname,
-                        "email" => $email,
-                        "birthdate" => $birthdate,
-                        "role" => $role
-            ));
-        } catch (Exception $e) {
-            Tools:: abort("Problème lors de l'accès a la base de données");
-        }
-    }
 
-    public static function admin_add_user($username, $password, $fullname, $email, $birthdate, $role) {
-        try {
-            $query = self::execute("INSERT INTO user(username,password,fullname,email,birthdate,role)
-                                        VALUES(:username,:password,:fullname,:email,:birthdate,:role)", array(
-                        "username" => $username,
-                        "password" => my_hash($password),
-                        "fullname" => $fullname,
-                        "email" => $email,
-                        "birthdate" => $birthdate,
-                        "role" => $role
-            ));
-        } catch (Exception $e) {
-            Tools:: abort("Problème lors de l'accès a la base de données");
-        }
-    }
 
     public function delete_user() {
         try {
              self::execute("DELETE FROM rental WHERE  user=:id", array("id" => $this->id));
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
-             //Tools::abort("Problème lors de l'accès a la base de données ");
-            echo $e->getMessage();
+             Tools::abort("Problème lors de l'accès a la base de données ");
         }
     }
 
@@ -225,31 +191,9 @@ class User extends Model {
         }
     }
 
-//
-    public static function get_role_by_id($id) {
-        try {
-            $query = self::execute("SELECT role FROM user WHERE id=:id", array("id" => $id));
-            $role = $query->fetch();
-            return $role["role"];
-        } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
-        }
-    }
-
-    public function update() {
-        $birthdate = $this->birthdate;
-        if($birthdate === "")
-            $birthdate = NULL;
-        
-        if (!self::is_username_not_available($this->username))
-            self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
-                        . "email = :email , birthdate = :birthdate, role = :role "
-                        . "WHERE id = :id", 
-                    array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
-                        "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
-    }
+   
     
-     public function update2() {
+     public function update() {
          try{
              self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
                         . "email = :email , birthdate = :birthdate, role = :role "
@@ -289,8 +233,8 @@ class User extends Model {
             return $results;
            
         } catch (Exception $e) {
-           // Tools::abort("Problème lors de l'accès a la base de données");
-            echo $e->getMessage();
+           Tools::abort("Problème lors de l'accès a la base de données");
+           
         }
     }
     

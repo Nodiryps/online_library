@@ -85,10 +85,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-           // Tools::abort("Problème lors de l'accès a la base de données");
-            echo $e->getMessage();
-            echo $e->getLine();
-            echo $e->getFile();
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
      public static function get_rental_join_book_join_user_rentdates() {
@@ -163,9 +160,6 @@ class Rental extends Model {
                 return $results;
             }
         } catch (Exception $e) {
-            echo $e->getMessage();
-            echo $e->getFile();
-            echo $e->getLine();
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
@@ -177,10 +171,7 @@ class Rental extends Model {
 
             return sizeof($books) < Configuration::get("max_rents");
         } catch (Exception $ex) {
-            die("soucis de db");
-            echo $ex->getLine();
-            echo '/////';
-            echo $ex->getMessage();
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -191,10 +182,7 @@ class Rental extends Model {
             
             return sizeof($books) <  Configuration::get("max_rents");
         } catch (Exception $ex) {
-            die("soucis de db");
-            echo $ex->getLine();
-            echo '/////';
-            echo $ex->getMessage();
+          Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -221,10 +209,7 @@ class Rental extends Model {
                 $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
             return $res;
         } catch (Exception $ex) {
-            //Tools::abort("Problème lors de l'accès à la base de données.");
-            $ex->getMessage();
-            $ex->getLine();
-            $ex->getFile();
+            Tools::abort("Problème lors de l'accès à la base de données.");
         }
     }
     
@@ -238,10 +223,7 @@ class Rental extends Model {
             }
             return $res;
         } catch (Exception $ex) {
-            //Tools::abort("Problème lors de l'accès à la base de données.");
-            $ex->getMessage();
-            $ex->getLine();
-            $ex->getFile();
+            Tools::abort("Problème lors de l'accès à la base de données.");
         }
     }
      public static function get_rentals_by_id($id) {
@@ -255,10 +237,8 @@ class Rental extends Model {
             return $res;
           
         } catch (Exception $ex) {
-            //Tools::abort("Problème lors de l'accès à la base de données.");
-            $ex->getMessage();
-            $ex->getLine();
-            $ex->getFile();
+            Tools::abort("Problème lors de l'accès à la base de données.");
+         
         }
     }
     
@@ -270,7 +250,7 @@ class Rental extends Model {
             $book = $query->fetch();
             return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"],$book["nbCopies"]);
         } catch (Exception $ex) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -279,7 +259,7 @@ class Rental extends Model {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE rentaldate =null ", array());
             return $query->fetch();
         } catch (Exception $ex) {
-            abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -297,7 +277,7 @@ class Rental extends Model {
             $books = $query->fetchAll();
             return count($books) != 0;
         } catch (Exception $ex) {
-            die("Soucis de db");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
