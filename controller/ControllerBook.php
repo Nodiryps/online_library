@@ -11,11 +11,12 @@ class ControllerBook extends Controller {
 
     public function index() {
         $user = $this->get_user_or_redirect();
-        $books = Book::get_all_books();
+        $books = Book::get_all_books($user->id);
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $members = User::get_all_user();
         $usertoAddRent = $user;
         $msg = " ";
+        var_dump(Rental::get_nbBook_rental(1));
 
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
@@ -23,7 +24,7 @@ class ControllerBook extends Controller {
             $msg = " ";
         }
         if (empty($_POST["search"]))
-            $books = Book::get_all_books();
+            $books = Book::get_all_books($user->id);
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
@@ -58,7 +59,6 @@ class ControllerBook extends Controller {
                         }
                     }
                 }
-
                 if (empty($errors)) {
                     $book = new Book(0, $isbn, $title, $author, $editor, $picture_path, $nbcopies);
                     $book->create();
@@ -84,13 +84,12 @@ class ControllerBook extends Controller {
         } return $picture_path;
     }
 
-    
     public function delete_book() {
         $user = Controller::get_user_or_redirect();
         if ($user->is_admin()) {
             $usertoAddRent = $user;
             $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
-            $books = Book::get_all_books();
+            $books = Book::get_all_books($usertoAddRent->id);
             $members = User::get_all_user();
             if (isset($_POST["delbook"])) {
                 $delbook = Book::get_book_by_id($_POST["delbook"]);
@@ -122,10 +121,11 @@ class ControllerBook extends Controller {
             $pathToDel = "";
             $oldpath = "";
             $bookpicToDel = "";
-            $nbCopie="";
+            $nbCopie = "";
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
                 $oldpath = $book->picture;
+                var_dump(Rental::get_all_rental());
             }
             if (isset($_POST["delimageH"])) { // bouton effacer img
                 $edit = $_POST["delimageH"];
@@ -136,13 +136,11 @@ class ControllerBook extends Controller {
                 } else
                     $errors[] = "Pas d'image à effacer...";
                 $book = Book::get_book_by_id($edit);
-                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user,"nbCopie"=>$nbCopie)); // pour "refresh" l'img suppr
+                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "nbCopie" => $nbCopie)); // pour "refresh" l'img suppr
             }
-
             if (isset($_POST["cancel"])) { // boutton annuler
                 $this->redirect("book", "index");
             }
-
             if (isset($_POST['idbook']) && isset($_POST['isbn']) || isset($_POST['title']) || isset($_POST['editor']) || isset($_POST['author']) || isset($_POST['nbCopie'])) {
                 if (!empty($_POST['idbook']))
                     $book = Book::get_book_by_id($_POST['idbook']);
@@ -154,9 +152,9 @@ class ControllerBook extends Controller {
                     $book->author = $_POST['author'];
                 if (isset($_POST['editor']) && isset($_POST['editor']) !== "")
                     $book->editor = $_POST['editor'];
-                 if (empty($_POST['nbCopie']))
-                     $book->nbCopies = $_POST["nbCopie"];
-                $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor);
+                if (!empty($_POST['nbCopie']))
+                    $book->nbCopies = $_POST["nbCopie"];
+                $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor, $book->nbCopies);
                 $picture_path = "";
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                     if ($_FILES['picture']['error'] == 0) {
@@ -171,14 +169,17 @@ class ControllerBook extends Controller {
                         }
                     }
                 }
+                var_dump(Rental::get_nbBook_rental($book->id));
+
 
                 if (empty($errors)) {
+
                     $book->update();
-                    $this->redirect("book", "index");
+                    //$this->redirect("book", "index");
                 }
             }
             if (!isset($_POST["delimageH"]))  // sinon 2 views qd on "refresh" avec le boutton effacer img
-                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user,"nbCopie"=>$nbCopie));
+                (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "nbCopie" => $nbCopie));
         } else
             $this->redirect("book", "index");
     }
@@ -190,7 +191,6 @@ class ControllerBook extends Controller {
         (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user)); // pour "refresh" l'img suppr
     }
 
-
     public static function isbn_format_EAN_13($isbn) {
         return substr($isbn, 0, 3) . "-" . substr($isbn, 3, 1) . "-"
                 . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn, 12, 1);
@@ -198,6 +198,16 @@ class ControllerBook extends Controller {
 
     public static function isbn_format_string($isbn) {
         return str_replace('-', '', $isbn);
+    }
+
+    public static function get_NbCopie($id) {
+        $valNB = Rental::get_rental_by_id_book($id);
+        $book = Book::get_book_by_id(intval($valNB->book));
+        var_dump($book);
+        if ($book !== null)
+            $nbCopie = $book->get_nbCopie() - Rental::get_nbBook_rental($book->id);
+
+        return $nbCopie;
     }
 
 }

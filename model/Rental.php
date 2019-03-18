@@ -78,17 +78,18 @@ class Rental extends Model {
     public static function get_rental_join_book_join_user_rentdate($id) {
         $results = [];
         try {
-            $query = self::execute("SELECT * FROM book WHERE book.id NOT IN (select book.id from rental JOIN book on rental.book=book.id where rentaldate is null and rental.user= :id)", array("id"=>$id));
+            $query = self::execute("SELECT * FROM book WHERE book.id NOT IN (select book.id from rental JOIN book on rental.book=book.id where rentaldate is null and rental.user= :id)", array("id" => $id));
             $rental = $query->fetchAll();
             foreach ($rental as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-     public static function get_rental_join_book_join_user_rentdates() {
+
+    public static function get_rental_join_book_join_user_rentdates() {
         $results = [];
         try {
             $query = self::execute("SELECT DISTINCT* FROM rental WHERE rentaldate IS NOT NULL", array());
@@ -131,7 +132,7 @@ class Rental extends Model {
     }
 
     // methode un peu tendnu a faire.
-    public static function  get_rental_by_critere($title, $author, $filter,$date) {
+    public static function get_rental_by_critere($title, $author, $filter, $date) {
         $results = [];
         try {
             if ($filter == "tous") {
@@ -179,10 +180,10 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT * FROM rental WHERE user=:id and rentaldate is not null", array("id" => $id));
             $books = $query->fetchAll();
-            
-            return sizeof($books) <  Configuration::get("max_rents");
+
+            return sizeof($books) < Configuration::get("max_rents");
         } catch (Exception $ex) {
-          Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
 
@@ -212,7 +213,7 @@ class Rental extends Model {
             Tools::abort("Problème lors de l'accès à la base de données.");
         }
     }
-    
+
     public static function get_rentals_b($user) {
         $res = [];
         try {
@@ -226,7 +227,8 @@ class Rental extends Model {
             Tools::abort("Problème lors de l'accès à la base de données.");
         }
     }
-     public static function get_rentals_by_id($id) {
+
+    public static function get_rentals_by_id($id) {
         $res = [];
         try {
             $query = self::execute("SELECT * FROM rental WHERE id = :id ", array("id" => $id));
@@ -235,20 +237,17 @@ class Rental extends Model {
                 $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
             }
             return $res;
-          
         } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès à la base de données.");
-         
         }
     }
-    
 
     // methode pas a la bonne place->dans BOOK
     public function get_book() {
         try {
             $query = self::execute("SELECT * FROM book WHERE id = :id", array("id" => $this->book));
             $book = $query->fetch();
-            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"],$book["nbCopies"]);
+            return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"], $book["nbCopies"]);
         } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
@@ -284,10 +283,12 @@ class Rental extends Model {
     public function update_rental_rentdate($rentaldate) {
         self::execute("UPDATE rental SET rentaldate = :rentaldate WHERE id=:id  ", array("rentaldate" => $rentaldate, "id" => $this->id));
     }
+
     public function update_rental_returndate($returndate) {
         self::execute("UPDATE rental SET returndate = :returndate WHERE id=:id  ", array("returndate" => $returndate, "id" => $this->id));
     }
-     public function cancel_rental_returndate() {
+
+    public function cancel_rental_returndate() {
         self::execute("UPDATE rental SET returndate = :returndate WHERE id=:id  ", array("returndate" => null, "id" => $this->id));
     }
 
@@ -295,4 +296,31 @@ class Rental extends Model {
         self::execute("UPDATE rental SET user=:user, rentaldate = :rentaldate WHERE id=:id ", array("user" => $user, "rentaldate" => $rentaldate, "id" => $this->id));
     }
 
+    public static function get_nbBook_rental($id) {
+        try {
+            $query = self::execute("SELECT * FROM rental WHERE book=:id where returndate IS NULL", array("id" => $id));
+            $book = $query->fetchAll();
+            if(count($book)==0){
+                $books= Book::get_book_by_id($id);
+                return $books;
+            }else{
+                return count($book);
+            }
+            
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+    }
+    
+     public static function get_nbBook_rental_bool($id) {
+        try {
+            $query = self::execute("SELECT * FROM rental WHERE book=:id where returndate IS NULL", array("id" => $id));
+            $book = $query->fetchAll();
+            return count($book)>0;
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+    }
+    
+    
 }

@@ -68,7 +68,7 @@ class ControllerRental extends Controller {
 
     public function rent_books_in_basket() {
         $user = $this->get_user_or_redirect();
-        $books = Book::get_all_books();
+        $books = Book::get_all_books($user->id);
         $msg = " ";
         $usertoAddRent = "";
         $members = User::get_all_user();
@@ -117,7 +117,7 @@ class ControllerRental extends Controller {
 
     public function get_basket() {
         $user = $this->get_user_or_redirect();
-        $books = Book::get_all_books();
+        $books = Book::get_all_books($user->id);
         $msg = " ";
         $usertoAddRent = "";
         $members = User::get_all_user();
@@ -135,7 +135,7 @@ class ControllerRental extends Controller {
 
     public function del_one_rental_in_basket() {
         $user = $this->get_user_or_redirect();
-        $books = Book::get_all_books();
+        $books = Book::get_all_books($user->id);
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $msg = " ";
         $members = User::get_all_user();
@@ -225,5 +225,7 @@ class ControllerRental extends Controller {
         } else
             $this->redirect();
     }
+    
+   
 
 }

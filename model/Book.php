@@ -23,10 +23,10 @@ class Book extends Model {
         $this->nbCopies = $nbCopies;
     }
 
-    public static function get_all_books() {
+    public static function get_all_books($id) {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book where book.id  not in (select rental.book from rental)  ", array());
+            $books = self::execute("SELECT * FROM book where book.id  not in (select rental.book from rental where user=:id)  ", array("id"=>$id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
@@ -225,7 +225,7 @@ class Book extends Model {
         return $res;
     }
     
-    public static function rules_add_book($isbn, $title, $author, $editor) {
+    public static function rules_add_book($isbn, $title, $author, $editor,$nbCopie) {
         $errors = [];
         if (empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
             $errors[] = "TOUS les champs sont obligatoires !";
@@ -238,8 +238,20 @@ class Book extends Model {
             $errors[] = "auteur.e: trop court (5 min.)!";
         if (strlen($editor) < 2)
             $errors[] = "édition: trop court (2 min.)!";
+        if($nbCopie <0)
+            $errors[]=" le nombre de copies de doit pas etre inferieur a Zero!";
+        
         return $errors;
     }
-
+    
+    public  function get_nbCopie() {
+        try {
+            $query = self::execute("SELECT nbCopies FROM book where id=:id", array("id" => $this->id));
+            $nb = $query->fetch();
+            return $nb[0];
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+    }
 
 }
