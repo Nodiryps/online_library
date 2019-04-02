@@ -37,6 +37,7 @@ class ControllerBook extends Controller {
             $errors = [];
             $picture_path = "";
             $nbcopies = "";
+            var_dump($this->calcul_isbn("123456787458"));
             if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"]) && isset($_POST["nbCopie"])) {
                 $isbn = $_POST["isbn"];
                 $title = $_POST["title"];
@@ -45,7 +46,9 @@ class ControllerBook extends Controller {
                 $nbcopies = $_POST["nbCopie"];
                 $errors = Book::rules_add_book($isbn, $title, $author, $editor,$nbcopies);
                  
-                if (!Book::existIsbn($isbn))
+                if (!Book::existIsbn($isbn)){
+                    $isbn = $this->calcul_isbn($isbn);
+                } else
                     $errors[] = "ISBN existe deja !";
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                     if ($_FILES['picture']['error'] == 0) {
@@ -61,7 +64,7 @@ class ControllerBook extends Controller {
                 if (empty($errors)) {
                     $book = new Book(0, $isbn, $title, $author, $editor, $picture_path, $nbcopies);
                     $book->create();
-                    $this->redirect("book", "index");
+//                    $this->redirect("book", "index");
                 }
             }
         }
