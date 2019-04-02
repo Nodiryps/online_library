@@ -48,8 +48,8 @@ class ControllerRental extends Controller {
         if (isset($_POST["idbook"]) && isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
-            
-            if (!Rental::cpt_basket_ok($usertoAddRent->id) ) {
+
+            if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres à la fois!";
             } else {
                 if ($user->id !== $usertoAddRent->id && intval($rent->nbCopies) > $rent->nbCopies_of_a_book()) {
@@ -64,7 +64,7 @@ class ControllerRental extends Controller {
             $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
         }
-       
+
         (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
@@ -124,6 +124,15 @@ class ControllerRental extends Controller {
         $usertoAddRent = "";
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
+
+        if (isset($_GET["param1"])) {
+            $filter = Tools::url_safe_decode($_GET["param1"]);
+            if (!$filter) {
+                Tools::abort("Bad url parameter");
+            } else {
+                $this->redirect("rental", "get_basket", Tools::url_safe_encode($filter));
+            }
+        }
         $allrentofUser = Rental::get_this_rental_not_validate($user->id);
         if (isset($_POST["panierof"])) {
             $value = $_POST["member_rents"];
@@ -227,7 +236,5 @@ class ControllerRental extends Controller {
         } else
             $this->redirect();
     }
-    
-   
 
 }
