@@ -51,12 +51,13 @@
                 </thead>
 
                 <?php foreach ($books as $book): ?>
+                <?php if($book->nbCopies_to_display()>0):?>
                     <tr>
                         <td class="text-center"><?= ControllerBook::isbn_format_EAN_13($book->isbn) ?></td>
                         <td class="text-center"><?= $book->title ?></td>
                         <td class="text-center"><?= strtoupper($book->author) ?></td>
                         <td class="text-center"><?= $book->editor ?></td>
-                           <td class="text-center"><?= $book->nbCopies ?></td>
+                           <td class="text-center"><?= $book->nbCopies_to_display(); ?></td>
                         
                             <td class="text-center">  
                                 <img  id="zoomimg" style="width:45px;height:65px;" 
@@ -110,6 +111,7 @@
                             </form>
                         </td>
                     </tr>
+                    <?php endif;?>
                 <?php endforeach; ?>
             </table>
         </div>

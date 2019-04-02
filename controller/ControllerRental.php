@@ -48,6 +48,7 @@ class ControllerRental extends Controller {
         if (isset($_POST["idbook"]) && isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
+            
             if (!Rental::cpt_basket_ok($usertoAddRent->id) ) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres à la fois!";
             } else {
@@ -63,6 +64,7 @@ class ControllerRental extends Controller {
             $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
         }
+       
         (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 

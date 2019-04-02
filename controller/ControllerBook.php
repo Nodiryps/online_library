@@ -16,8 +16,7 @@ class ControllerBook extends Controller {
         $members = User::get_all_user();
         $usertoAddRent = $user;
         $msg = " ";
-        var_dump(Rental::get_nbBook_rental(1));
-
+     
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
@@ -125,7 +124,6 @@ class ControllerBook extends Controller {
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
                 $oldpath = $book->picture;
-                var_dump(Rental::get_all_rental());
             }
             if (isset($_POST["delimageH"])) { // bouton effacer img
                 $edit = $_POST["delimageH"];
@@ -169,13 +167,12 @@ class ControllerBook extends Controller {
                         }
                     }
                 }
-                var_dump(Rental::get_nbBook_rental($book->id));
 
 
                 if (empty($errors)) {
 
                     $book->update();
-                    //$this->redirect("book", "index");
+                    $this->redirect("book", "index");
                 }
             }
             if (!isset($_POST["delimageH"]))  // sinon 2 views qd on "refresh" avec le boutton effacer img
@@ -200,14 +197,5 @@ class ControllerBook extends Controller {
         return str_replace('-', '', $isbn);
     }
 
-    public static function get_NbCopie($id) {
-        $valNB = Rental::get_rental_by_id_book($id);
-        $book = Book::get_book_by_id(intval($valNB->book));
-        var_dump($book);
-        if ($book !== null)
-            $nbCopie = $book->get_nbCopie() - Rental::get_nbBook_rental($book->id);
-
-        return $nbCopie;
-    }
 
 }

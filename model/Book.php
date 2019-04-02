@@ -248,10 +248,25 @@ class Book extends Model {
         try {
             $query = self::execute("SELECT nbCopies FROM book where id=:id", array("id" => $this->id));
             $nb = $query->fetch();
-            return $nb[0];
+            return intval($nb[0]);
         } catch (Exception $ex) {
             $ex->getMessage();
         }
+    }
+    
+     public  function get_nbCopie_from_rental() {
+        try {
+            $query = self::execute("SELECT count(*) FROM rental where book=:id", array("id" => $this->id));
+            $nb = $query->fetch();
+            return intval($nb[0]);
+        } catch (Exception $ex) {
+            $ex->getMessage();
+        }
+    }
+    
+    public  function nbCopies_to_display(){
+        return $this->get_nbCopie()-$this->get_nbCopie_from_rental();
+        
     }
 
 }
