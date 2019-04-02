@@ -37,19 +37,18 @@ class ControllerBook extends Controller {
             $errors = [];
             $picture_path = "";
             $nbcopies = "";
-            var_dump($this->calcul_isbn("123456787458"));
+
             if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"]) && isset($_POST["nbCopie"])) {
                 $isbn = $_POST["isbn"];
                 $title = $_POST["title"];
                 $author = $_POST["author"];
                 $editor = $_POST["editor"];
                 $nbcopies = $_POST["nbCopie"];
-                $errors = Book::rules_add_book($isbn, $title, $author, $editor,$nbcopies);
-                 
-                if (!Book::existIsbn($isbn)){
-                    $isbn = $this->calcul_isbn($isbn);
-                } else
+                $errors = Book::rules_add_book($isbn, $title, $author, $editor, $nbcopies);
+                echo $isbn;
+                if (Book::existIsbn($isbn)) {
                     $errors[] = "ISBN existe deja !";
+                }
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                     if ($_FILES['picture']['error'] == 0) {
                         $infosfichier = pathinfo($_FILES['picture']['name']);
@@ -62,9 +61,9 @@ class ControllerBook extends Controller {
                     }
                 }
                 if (empty($errors)) {
-                    $book = new Book(0, $isbn, $title, $author, $editor, $picture_path, $nbcopies);
+                    $book = new Book(0, self::calcul_isbn($isbn), $title, $author, $editor, $picture_path, $nbcopies);
                     $book->create();
-//                    $this->redirect("book", "index");
+                    $this->redirect("book", "index");
                 }
             }
         }
@@ -197,10 +196,11 @@ class ControllerBook extends Controller {
     }
 
     public static function calcul_isbn($isbn) {
-        $total=0;
-        $rest=0;
+        $total = 0;
+        $rest = 0;
+        $isbn = str_replace(' ', '', $isbn);
         $tabIsbn = str_split($isbn, 1);
-        for ($i = 1; $i < sizeof($tabIsbn);  ++$i) {
+        for ($i = 1; $i <= sizeof($tabIsbn); ++$i) {
             if ($i % 2 == 0) {
                 $tabIsbn[$i - 1] *= 3;
             }
@@ -208,21 +208,22 @@ class ControllerBook extends Controller {
                 $tabIsbn[$i - 1] *= 1;
             }
         }
-       $total=$this->addition_isbn($tabIsbn);
-       if($total%10!=0){
-           $rest=($total/10)-($total%10);
-       }
-   return $isbn.$rest;
+        var_dump($tabIsbn);
+        $total = self::addition_isbn($tabIsbn);
+        if ($total % 10 != 0) {
+            $rest = (int) 10 - (int) ($total % 10);
+        }
+        return $isbn . $rest;
     }
 
     public static function isbn_format_string($isbn) {
         return str_replace('-', '', $isbn);
     }
-    
-    public function addition_isbn($isbn){
-        $res=0;
-        foreach ($isbn as $s){
-           $res+=$s; 
+
+    public static function addition_isbn($isbn) {
+        $res = 0;
+        foreach ($isbn as $s) {
+            $res += $s;
         }
         return $res;
     }

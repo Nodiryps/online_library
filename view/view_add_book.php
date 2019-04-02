@@ -25,7 +25,7 @@
                     <legend><h1>Nouveau livre</h1></legend>
 
                     <div class="">
-                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(13 chiffres)" class="form-control input-md" value="<?= $isbn?>" >
+                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(12 chiffres)" class="form-control input-md" value="<?= $isbn?>" >
                     </div>
 
                     <div class="">
