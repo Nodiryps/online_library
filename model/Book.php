@@ -26,7 +26,7 @@ class Book extends Model {
     public static function get_all_books($id) {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book where book.id  not in (select rental.book from rental where user=:id)  ", array("id"=>$id));
+            $books = self::execute("SELECT * FROM book where book.id  not in (select rental.book from rental where user=:id)  ", array("id" => $id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
@@ -217,34 +217,34 @@ class Book extends Model {
             Tools::abort("problemes lors de l'acces a la DB");
         }
     }
-    
-      public function titleOk($string) {
+
+    public function titleOk($string) {
         $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
         $res = preg_replace('~[\\éè]~', 'e', $res);
         $res = preg_replace('~[\\à]~', 'a', $res);
         return $res;
     }
-    
-    public static function rules_add_book($isbn, $title, $author, $editor,$nbCopie) {
+
+    public static function rules_add_book($isbn, $title, $author, $editor, $nbCopie) {
         $errors = [];
         if (empty(trim($isbn)) || empty(trim($title)) || empty(trim($author)) || empty(trim($editor)))
             $errors[] = "TOUS les champs sont obligatoires !";
 
-        if (strlen($isbn) !== 13)
-            $errors[] = "isbn: isbn incorrect (13 chiffres)!";
+        if (strlen($isbn) !== 12)
+            $errors[] = "isbn: isbn incorrect (12 chiffres)!";
         if (strlen($title) < 2)
             $errors[] = "titre: trop court (2 min.)!";
         if (strlen($author) < 5)
             $errors[] = "auteur.e: trop court (5 min.)!";
         if (strlen($editor) < 2)
             $errors[] = "édition: trop court (2 min.)!";
-        if($nbCopie <0)
-            $errors[]=" le nombre de copies de doit pas etre inferieur a Zero!";
-        
+        if ($nbCopie < 0)
+            $errors[] = " le nombre de copies de doit pas etre inferieur a Zero!";
+
         return $errors;
     }
-    
-    public  function get_nbCopie() {
+
+    public function get_nbCopie() {
         try {
             $query = self::execute("SELECT nbCopies FROM book where id=:id", array("id" => $this->id));
             $nb = $query->fetch();
@@ -253,8 +253,8 @@ class Book extends Model {
             $ex->getMessage();
         }
     }
-    
-     public  function get_nbCopie_from_rental() {
+
+    public function get_nbCopie_from_rental() {
         try {
             $query = self::execute("SELECT count(*) FROM rental where book=:id", array("id" => $this->id));
             $nb = $query->fetch();
@@ -263,10 +263,9 @@ class Book extends Model {
             $ex->getMessage();
         }
     }
-    
-    public  function nbCopies_to_display(){
-        return $this->get_nbCopie()-$this->get_nbCopie_from_rental();
-        
+
+    public function nbCopies_to_display() {
+        return $this->get_nbCopie() - $this->get_nbCopie_from_rental();
     }
 
 }

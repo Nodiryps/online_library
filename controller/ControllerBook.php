@@ -16,7 +16,6 @@ class ControllerBook extends Controller {
         $members = User::get_all_user();
         $usertoAddRent = $user;
         $msg = " ";
-     
         if (isset($_POST["search"])) {
             $value = $_POST["search"];
             $books = Book::get_book_by_critere($value);
@@ -44,7 +43,8 @@ class ControllerBook extends Controller {
                 $author = $_POST["author"];
                 $editor = $_POST["editor"];
                 $nbcopies = $_POST["nbCopie"];
-                $errors = Book::rules_add_book($isbn, $title, $author, $editor);
+                $errors = Book::rules_add_book($isbn, $title, $author, $editor,$nbcopies);
+                 
                 if (!Book::existIsbn($isbn))
                     $errors[] = "ISBN existe deja !";
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
@@ -193,9 +193,35 @@ class ControllerBook extends Controller {
                 . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn, 12, 1);
     }
 
+    public static function calcul_isbn($isbn) {
+        $total=0;
+        $rest=0;
+        $tabIsbn = str_split($isbn, 1);
+        for ($i = 1; $i < sizeof($tabIsbn);  ++$i) {
+            if ($i % 2 == 0) {
+                $tabIsbn[$i - 1] *= 3;
+            }
+            if ($i % 2 != 0) {
+                $tabIsbn[$i - 1] *= 1;
+            }
+        }
+       $total=$this->addition_isbn($tabIsbn);
+       if($total%10!=0){
+           $rest=($total/10)-($total%10);
+       }
+   return $isbn.$rest;
+    }
+
     public static function isbn_format_string($isbn) {
         return str_replace('-', '', $isbn);
     }
-
+    
+    public function addition_isbn($isbn){
+        $res=0;
+        foreach ($isbn as $s){
+           $res+=$s; 
+        }
+        return $res;
+    }
 
 }
