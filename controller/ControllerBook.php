@@ -126,6 +126,10 @@ class ControllerBook extends Controller {
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
                 $oldpath = $book->picture;
+                $goodIsbn= substr($book->isbn, 0,12);
+                $book->isbn=$goodIsbn;
+              
+                
             }
             if (isset($_POST["delimageH"])) { // bouton effacer img
                 $edit = $_POST["delimageH"];
@@ -172,7 +176,7 @@ class ControllerBook extends Controller {
 
 
                 if (empty($errors)) {
-
+                    $book->isbn= self::calcul_isbn($book->isbn);
                     $book->update();
                     $this->redirect("book", "index");
                 }
@@ -226,6 +230,10 @@ class ControllerBook extends Controller {
             $res += $s;
         }
         return $res;
+    }
+    
+    public function functionName($param) {
+        
     }
 
 }

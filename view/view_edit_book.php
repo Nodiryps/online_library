@@ -37,7 +37,7 @@
                             <label class="col-lg-5 control-label" for="ISBN">ISBN</label>  
                             <div class="col-lg-7">
                                 <input id="ISBN" name="isbn" type="text" 
-                                       class="form-control input-md" value="<?= ControllerBook::isbn_format_EAN_13($book->isbn) ?>">
+                                       class="form-control input-md" value="<?= $book->isbn ?>">
                             </div>
                         </div>
 
