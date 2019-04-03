@@ -208,7 +208,7 @@ class User extends Model {
 
     public function insert() {
         if(empty($this->birthdate)){
-            $this->birthdate =null;
+            $this->birthdate = null;
         }
         try {
             self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) "

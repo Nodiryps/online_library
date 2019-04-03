@@ -65,10 +65,15 @@ class ControllerUser extends Controller {
                     $errors[] = "l'utilisateur existe deja";
                 if (trim($username) == '')
                     $errors[] = "Le username est obligatoire";
+                if (trim($fullname) == '')
+                    $errors[] = "Le fullname est obligatoire";
+                if (trim($email) == '')
+                    $errors[] = "L'email est obligatoire";
+
                 if (strlen(trim($username)) < 3)
                     $errors[] = "Le username doit contenir 3 caractères au minimum";
-                if ($password != $password_confirm)
-                    $errors[] = "Les mots de passe doivent être identiques";
+                if ($password != $password_confirm && !$password=='' && !$password_confirm='')
+                    $errors[] = "Les mots de passe doivent être identiques et non vide";
                 $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
                 if (empty($errors)) {
                     $member->insert();

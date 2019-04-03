@@ -127,7 +127,7 @@
         <?php endif; ?>
 
         <br><br>
-        
+       <!-- Debut de la partie Panier--> 
         <div class="container col-lg-offset-1 col-lg-8" >
             <p class="text text-danger"><?= strtoupper($msg) ?></p>
             <table class="table table-striped table-condensed">

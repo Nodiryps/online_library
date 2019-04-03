@@ -61,7 +61,7 @@ class ControllerRental extends Controller {
                 }
             }
 
-            $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
+            $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
         }
 
@@ -119,12 +119,13 @@ class ControllerRental extends Controller {
 
     public function get_basket() {
         $user = $this->get_user_or_redirect();
-        $books = Book::get_all_books($user->id);
+        $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
         $msg = " ";
         $usertoAddRent = "";
         $members = User::get_all_user();
         $datetime = date("Y-m-d H:i:s");
-
+        $getUserRental = $user->get_rental_join_book_join_user_by_user();
+        $members = User::get_all_user();
         if (isset($_GET["param1"])) {
             $filter = Tools::url_safe_decode($_GET["param1"]);
             if (!$filter) {
@@ -138,6 +139,7 @@ class ControllerRental extends Controller {
             $value = $_POST["member_rents"];
             $usertoAddRent = User::get_user_by_id($value);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
+            $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
         }
 
 
