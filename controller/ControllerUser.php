@@ -50,9 +50,7 @@ class ControllerUser extends Controller {
             $query = "";
             $role = "";
             $errors = [];
-
-            if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) &&
-                    isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
+            if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $password_confirm = $_POST['password_confirm'];
@@ -61,29 +59,35 @@ class ControllerUser extends Controller {
                 $birthdate = $_POST["birthdate"];
                 $role = $_POST["role"];
                 $query = User::get_user_by_username($username);
-                if (!User::is_username_not_available($username))
-                    $errors[] = "l'utilisateur existe deja";
-                if (trim($username) == '')
-                    $errors[] = "Le username est obligatoire";
-                if (trim($fullname) == '')
-                    $errors[] = "Le fullname est obligatoire";
-                if (trim($email) == '')
-                    $errors[] = "L'email est obligatoire";
-
-                if (strlen(trim($username)) < 3)
-                    $errors[] = "Le username doit contenir 3 caractères au minimum";
-                if ($password != $password_confirm && !$password=='' && !$password_confirm='')
-                    $errors[] = "Les mots de passe doivent être identiques et non vide";
+                $errors = $this->errors_add_user($username, $email, $fullname, $password, $password_confirm);
                 $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
                 if (empty($errors)) {
                     $member->insert();
-                      $this->redirect("user", "user_list");
+                    $this->redirect("user", "user_list");
                 }
-            }
-            (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors, "email" => $email));
-        } else {
+            } (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors, "email" => $email));
+        } else 
             $this->redirect();
-        }
+    }
+
+    private function errors_add_user($username, $email, $fullname, $password, $password_confirm) {
+        $errors = [];
+        if (!User::is_username_not_available($username))
+            $errors[] = "l'utilisateur existe deja";
+        if (trim($username) == '')
+            $errors[] = "Le username est obligatoire";
+        if (strlen(trim($username)) < 3)
+            $errors[] = "Le username doit contenir 3 caractères au minimum";
+        if (trim($fullname) == '')
+            $errors[] = "Le fullname est obligatoire";
+        if (trim($email) == '')
+            $errors[] = "L'email est obligatoire";
+        if (!User::is_email_available($email))
+            $errors[] = "l'email existe deja";
+
+        if ($password != $password_confirm && !$password == '' && !$password_confirm = '')
+            $errors[] = "Les mots de passe doivent être identiques et non vide";
+        return $errors;
     }
 
     public function edit_profile() {
@@ -98,9 +102,8 @@ class ControllerUser extends Controller {
             $oldpass = User::get_password($id);
             $member = User::get_user_by_id($id);
             $members = User::get_all_user();
-            if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) ||
-                    isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) ||
-                    isset($_POST["confirm_password"])) {
+            if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) || isset($_POST["birthdate"]) || isset($_POST["role"]) 
+                    || isset($_POST["password"]) || isset($_POST["confirm_password"])) {
                 $oldpass = User::get_password($_POST["idmember"]);
                 $member = User::get_user_by_id($_POST["idmember"]);
                 if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
@@ -111,14 +114,20 @@ class ControllerUser extends Controller {
                     $member->username = $_POST["username"];
                 else
                     $error[] = "Il faut indiquer un username!";
-                if (isset($_POST["email"]) && $_POST["email"] !== "")
-                    $member->email = $_POST["email"];
-                else
+                
+                if (isset($_POST["email"]) && $_POST["email"] !== ""){
+                    $var = $_POST["email"];
+                    if (User::get_email_by_id($id) !== $var || User::is_email_available($var)){
+                        $error[] = "L'email ($var) existe déjà !";
+                    } else 
+                        $member->email = $var;
+                } else
                     $error[] = "Il faut indiquer un email!";
-                if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
-                    $member->hash_password = Tools::my_hash($_POST["password"]);
-                if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
-                    $confirm_password = $_POST["confirm_password"];
+                
+//                if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
+//                    $member->hash_password = Tools::my_hash($_POST["password"]);
+//                if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
+//                    $confirm_password = $_POST["confirm_password"];
                 if (isset($_POST["fullname"]) && $_POST["fullname"] !== "")
                     $member->fullname = $_POST["fullname"];
                 if (empty($member->fullname))
@@ -127,9 +136,9 @@ class ControllerUser extends Controller {
                     $error[] = "Il faut indiquer un role!";
                 if (strlen($member->username) < 3)
                     $error[] = "Le username doit faire plus de 3 caractères";
-                if ($_POST["password"] !== $confirm_passwords) {
-                    $error[] = "Les mots de passe ne correspondent pas!";
-                }
+//                if ($_POST["password"] !== $confirm_passwords) {
+//                    $error[] = "Les mots de passe ne correspondent pas!";
+//                }
                 if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {
                     $oldpass = $member->hash_password;
                 } else {
@@ -143,7 +152,7 @@ class ControllerUser extends Controller {
                         $_SESSION["user"] = $member;
                     }
                     Controller::redirect("user", "user_list");
-                }
+                } 
             }
             (new View("edit_profile"))->show(array("tabRoles" => $tabRoles, "members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));
         } else
@@ -152,32 +161,7 @@ class ControllerUser extends Controller {
 
     private static function rules_edit_profile($member, $fullname, $email, $role, $username, $password, $confirm_password) {
         $errors = [];
-        if (trim($fullname) === "")
-            $errors[] = "Le champ \"fullname\" est obligatoire!";
-        if (trim($_POST[$username]) === "" && trim($_POST[$username]) < 3)
-            $errors[] = "Le pseudo est obligatoire (3 min.)";
-        if (trim($_POST[$password]) !== trim($_POST[$confirm_password]))
-            $errors[] = "Les mots de passe ne correspondent pas!";
-        if (trim($_POST[$password]) === "" || trim($_POST[$confirm_password]) === "")
-            $errors[] = "Mot de passe obligatoire!";
-        if ($_POST[$role] === "")
-            $errors[] = "Role invalide!";
-        if ($_POST[$email] === "")
-            $errors[] = "Il faut indiquer un email!";
-
-        if (!(isset($_POST["username"]) && $_POST["username"] !== ""))
-            $errors[] = "Il faut indiquer un username!";
-        if (!(isset($_POST["email"]) && $_POST["email"] !== ""))
-            $errors[] = "Il faut indiquer un email!";
-
-        if (empty($member->fullname))
-            $errors[] = "Le champ \"fullname\" est obligatoire!";
-        if (empty($member->role))
-            $errors[] = "Il faut indiquer un role!";
-        if (strlen($member->username) < 3)
-            $errors[] = "Le username doit faire plus de 3 caractères";
-        if ($member->hash_password !== trim($_POST[$confirm_password]))
-            $errors[] = "Les mots de passe ne correspondent pas!";
+        
         return $errors;
     }
 

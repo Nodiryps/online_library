@@ -13,7 +13,7 @@
  */
 require_once 'framework/Model.php';
 require_once 'model/Book.php';
-require_once 'model/rental.php';
+require_once 'model/Rental.php';
 
 class User extends Model {
 
@@ -43,6 +43,8 @@ class User extends Model {
             $errors[] = "Pseudo length must be between 3 and 16.";
         } if (!(isset($this->username) && is_string($this->username) && preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $this->username))) {
             $errors[] = "Pseudo must start by a letter and must contain only letters and numbers.";
+        } if (!User::is_email_available($this->email)) {
+            $errors[] = "l'email existe deja";
         }
         return $errors;
     }
@@ -134,16 +136,16 @@ class User extends Model {
     public static function get_email_by_id($id) {
         try {
             $query = self::execute("SELECT email FROM user WHERE id=:id", array("id" => $id));
-            return $email = $query->fetch();
+            return $query->fetch();
         } catch (Exception $e) {
              Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-
+    
     public static function get_user_by_mail($email) {
         try {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
-            return $email = $query->fetch();
+            return $query->fetch();
         } catch (Exception $e) {
              Tools::abort("Problème lors de l'accès a la base de données");
         }
@@ -161,15 +163,22 @@ class User extends Model {
 
     public static function is_email_available($email) {
         try {
-            $query = self::execute("SELECT email FROM user WHERE email=:email", array("email" => $email));
+            $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
             $result = $query->fetchAll();
             return count($result) === 0;
         } catch (Exception $e) {
-            Tools:: abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données111");
         }
     }
-
-
+    
+    public static function is_email_available_edit_profile($email) {
+        try{
+            $query = self::execute("SELECT * FROM user WHERE email != :email",array("email" => $email));
+            return sizeof($query->fetchAll()) === 0;
+        } catch (Exception $ex) {
+            Tools::abort("Problème lors de l'accès a la base de données77");
+        }
+    }
 
     public function delete_user() {
         try {
@@ -181,7 +190,6 @@ class User extends Model {
     }
 
     public static function get_password($id) {
-
         try {
             $query = self::execute("SELECT password FROM user WHERE id=:id", array("id" => $id));
             $password = $query->fetch();
@@ -190,8 +198,6 @@ class User extends Model {
              Tools::abort("Problème lors de l'accès a la base de données");
         }
     }
-
-   
     
      public function update() {
          try{
@@ -201,8 +207,8 @@ class User extends Model {
                     array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
                         "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
          }catch(Exception $e){
-            
-         }
+            Tools::abort("Problème lors de l'accès a la base de données");
+        }
             
     }
 
@@ -231,10 +237,8 @@ class User extends Model {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
             }
             return $results;
-           
         } catch (Exception $e) {
            Tools::abort("Problème lors de l'accès a la base de données");
-           
         }
     }
     
@@ -271,7 +275,7 @@ class User extends Model {
             return $query[0];
         }
         catch(Exception $ex){
-            die("probleme lors de l'acces a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données");
         }
         
     }

@@ -22,7 +22,7 @@
         </nav>
         <p style="position:absolute;top:80px;right:10px;"><strong><?php echo $utilisateur->fullname; ?>'s profile (<?= $utilisateur->role ?>) </strong></p>
 
-        <div class="container text-center col-lg-offset-4 col-lg-5" >
+        <div class="container text-center col-lg-offset-4 col-lg-6" >
             <br><br>
             <form action="user/edit_profile" method="post" class=" form-horizontal col-lg-12 ">
                 <table class="table-dark ">
