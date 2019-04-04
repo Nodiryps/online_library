@@ -66,7 +66,7 @@ class ControllerUser extends Controller {
                     $this->redirect("user", "user_list");
                 }
             } (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "role" => $role, "birthdate" => $birthdate, "errors" => $errors, "email" => $email));
-        } else 
+        } else
             $this->redirect();
     }
 
@@ -95,74 +95,75 @@ class ControllerUser extends Controller {
         if ($utilisateur->is_admin() || $utilisateur->is_manager()) {
             $tabRoles = ["admin", "manager", "member"];
             $error = [];
-            $confirm_password = "";
             $id = "";
             if (isset($_POST["idmembers"]))
                 $id = $_POST["idmembers"];
-            $oldpass = User::get_password($id);
             $member = User::get_user_by_id($id);
             $members = User::get_all_user();
-            if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) || isset($_POST["birthdate"]) || isset($_POST["role"]) 
-                    || isset($_POST["password"]) || isset($_POST["confirm_password"])) {
-                $oldpass = User::get_password($_POST["idmember"]);
+            if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) || isset($_POST["birthdate"]) || isset($_POST["role"])) {
                 $member = User::get_user_by_id($_POST["idmember"]);
-                if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
-                    $member->birthdate = $_POST["birthdate"];
-                if (isset($_POST["role"]) && $_POST["role"] !== "")
-                    $member->role = $_POST["role"];
-                if (isset($_POST["username"]) && $_POST["username"] !== "")
-                    $member->username = $_POST["username"];
-                else
-                    $error[] = "Il faut indiquer un username!";
-                
-                if (isset($_POST["email"]) && $_POST["email"] !== ""){
-                    $var = $_POST["email"];
-                    if (User::get_email_by_id($id) !== $var || User::is_email_available($var)){
-                        $error[] = "L'email ($var) existe déjà !";
-                    } else 
-                        $member->email = $var;
-                } else
-                    $error[] = "Il faut indiquer un email!";
-                
-//                if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
-//                    $member->hash_password = Tools::my_hash($_POST["password"]);
-//                if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
-//                    $confirm_password = $_POST["confirm_password"];
-                if (isset($_POST["fullname"]) && $_POST["fullname"] !== "")
-                    $member->fullname = $_POST["fullname"];
-                if (empty($member->fullname))
-                    $error[] = "Le champ \"fullname\" est obligatoire!";
-                if (empty($member->role))
-                    $error[] = "Il faut indiquer un role!";
-                if (strlen($member->username) < 3)
-                    $error[] = "Le username doit faire plus de 3 caractères";
-//                if ($_POST["password"] !== $confirm_passwords) {
-//                    $error[] = "Les mots de passe ne correspondent pas!";
-//                }
-                if (!User::same_hash($member->hash_password, $oldpass) && !empty($member->hash_password)) {
-                    $oldpass = $member->hash_password;
-                } else {
-                    $member->hash_password = $oldpass;
-                }
+                self::set_member_attr($member);
+                $error = self::rules_edit_profile($member, $_POST["email"]);
                 if (empty($error)) {
-
                     $member->update();
-                    if ($utilisateur->id === $member->id) {
-
+                    if ($utilisateur->id === $member->id) 
                         $_SESSION["user"] = $member;
-                    }
                     Controller::redirect("user", "user_list");
-                } 
+                }
             }
             (new View("edit_profile"))->show(array("tabRoles" => $tabRoles, "members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));
         } else
             $this->redirect();
     }
 
-    private static function rules_edit_profile($member, $fullname, $email, $role, $username, $password, $confirm_password) {
-        $errors = [];
-        
-        return $errors;
+    private static function set_member_attr($member) {
+        if ($_POST["birthdate"] !== "")
+            $member->birthdate = $_POST["birthdate"];
+        if ($_POST["role"] !== "")
+            $member->role = $_POST["role"];
+        if ($_POST["fullname"] !== "")
+            $member->fullname = $_POST["fullname"];
+        if ($_POST["username"] !== "")
+            $member->username = $_POST["username"];
+        if ($_POST["email"] !== "")
+            $member->email = $_POST["email"];
+    }
+
+    private static function is_email_available($id, $newEmail) {
+        $emails[] = self::get_all_emails(User::get_email_by_id($id));
+        foreach ($emails as $e) {
+            return $newEmail !== $e;
+        }
+    }
+
+    private static function get_all_emails($curr) {
+        $members = User::get_all_user();
+        $emails = [];
+        foreach ($members as $m) {
+            if ($m !== $curr)
+                $emails[] = User::get_email_by_id($m->id);
+        }
+        return $emails;
+    }
+
+    private static function rules_edit_profile($member, $email) {
+        $error = [];
+        if (empty($member->fullname)) {
+            $error[] = "Fullname obligatoire!";
+        }
+        if (empty($member->role)) {
+            $error[] = "Role obligatoir!";
+        }
+        if (strlen($member->username) < 3 || empty($member->username)) {
+            $error[] = "Pseudo obligatoir! (min. 3 caractères)";
+        }
+        if (!self::is_email_available($member->id, $email)) {
+            $error[] = "L'email existe déjà !";
+        }
+        if (empty($email)) {
+            $error[] = "Email obligatoir!";
+        }
+        return $error;
     }
 
     public function delete_user() {

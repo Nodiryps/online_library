@@ -53,7 +53,7 @@ class User extends Model {
         $errors = [];
         $member = self::is_username_not_available($pseudo);
         if (!$member) {
-            $errors[] = "This user already exists.";
+            $errors[] = "Pseudo existant!";
         }
         return $errors;
     }
@@ -95,7 +95,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données(allusers)");
         }
     }
     
@@ -109,7 +109,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données(byrole)");
         }
     }
 
@@ -119,7 +119,7 @@ class User extends Model {
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
-            Tools:: abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données(userbyid)");
         }
     }
 
@@ -129,7 +129,7 @@ class User extends Model {
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
-            Tools:: abort("Problème lors de l'accès a la base de données");
+            Tools:: abort("Problème lors de l'accès a la base de données(userbyusername)");
         }
     }
 
@@ -138,7 +138,7 @@ class User extends Model {
             $query = self::execute("SELECT email FROM user WHERE id=:id", array("id" => $id));
             return $query->fetch();
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données69");
         }
     }
     
@@ -147,7 +147,7 @@ class User extends Model {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
             return $query->fetch();
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données(userbymail)");
         }
     }
 
@@ -157,7 +157,7 @@ class User extends Model {
             $result = $query->fetchAll();
             return count($result) === 0;
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données(usernameavailable)");
         }
     }
 
@@ -170,22 +170,13 @@ class User extends Model {
             Tools:: abort("Problème lors de l'accès a la base de données111");
         }
     }
-    
-    public static function is_email_available_edit_profile($email) {
-        try{
-            $query = self::execute("SELECT * FROM user WHERE email != :email",array("email" => $email));
-            return sizeof($query->fetchAll()) === 0;
-        } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données77");
-        }
-    }
 
     public function delete_user() {
         try {
              self::execute("DELETE FROM rental WHERE  user=:id", array("id" => $this->id));
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données ");
+             Tools::abort("Problème lors de l'accès a la base de données(deluser)");
         }
     }
 
@@ -195,7 +186,7 @@ class User extends Model {
             $password = $query->fetch();
             return $password["password"];
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données");
+             Tools::abort("Problème lors de l'accès a la base de données(getPsw)");
         }
     }
     
@@ -207,7 +198,7 @@ class User extends Model {
                     array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
                         "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
          }catch(Exception $e){
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données(update)");
         }
             
     }
@@ -238,7 +229,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-           Tools::abort("Problème lors de l'accès a la base de données");
+           Tools::abort("Problème lors de l'accès a la base de données(user_by_user)");
         }
     }
     
@@ -252,7 +243,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données(user_not_rented)");
         }
     }
     
@@ -275,7 +266,7 @@ class User extends Model {
             return $query[0];
         }
         catch(Exception $ex){
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("Problème lors de l'accès a la base de données(get_username_by_id)");
         }
         
     }

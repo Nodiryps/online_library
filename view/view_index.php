@@ -38,6 +38,7 @@
                     </form>
                 </div>
             </div>
+            <br><br><br><br>
             <div class='text-danger'>
                 <?php if ($errors !== []): ?>
                     <p>Erreur(s) à corriger:</p>
