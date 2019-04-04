@@ -68,7 +68,7 @@
                             </div>
                         </div>
                           <div class="form-group">
-                            <label class="col-lg-5 control-label" for="TITRE">nbCopie</label>  
+                            <label class="col-lg-5 control-label" for="TITRE">COPIES</label>  
                             <div class="col-lg-7">
                                 <input id="textinput" name="nbCopie" type="number" name="quantity" min="1"
                                        class="form-control input-md" value="<?= $book->nbCopies?>">
