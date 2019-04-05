@@ -95,10 +95,10 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données(allusers)");
+            Tools::abort("Problème lors de l'accès a la base de données(allusers)");
         }
     }
-    
+
     public static function get_user_by_role($role) {
         $results = [];
         try {
@@ -109,7 +109,7 @@ class User extends Model {
             }
             return $results;
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données(byrole)");
+            Tools::abort("Problème lors de l'accès a la base de données(byrole)");
         }
     }
 
@@ -136,20 +136,20 @@ class User extends Model {
     public static function get_email_by_id($id) {
         try {
             $query = self::execute("SELECT email FROM user WHERE id=:id", array("id" => $id));
-            $email=$query->fetch();
+            $email = $query->fetch();
             return $email[0];
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données69");
-             echo $e->getMessage();
+            Tools::abort("Problème lors de l'accès a la base de données69");
+            echo $e->getMessage();
         }
     }
-    
+
     public static function get_user_by_mail($email) {
         try {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
             return $query->fetch();
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données(userbymail)");
+            Tools::abort("Problème lors de l'accès a la base de données(userbymail)");
         }
     }
 
@@ -159,7 +159,7 @@ class User extends Model {
             $result = $query->fetchAll();
             return count($result) === 0;
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données(usernameavailable)");
+            Tools::abort("Problème lors de l'accès a la base de données(usernameavailable)");
         }
     }
 
@@ -172,13 +172,68 @@ class User extends Model {
             Tools:: abort("Problème lors de l'accès a la base de données111");
         }
     }
+    
+    public static function validate_birthdate_add_user($birthdate) {
+        $today = self::today_one_int();
+        $res = self::age_calc($birthdate, $today);
+        
+        if (self::res_age_valid($res, $today, $birthdate)){
+            $res = self::res_age_valid($res, $today, $birthdate);
+            return $res >= 10;
+        } else
+            return FALSE;
+    }
+
+    public static function validate_birthdate_edit_user($id, $birthdate) {
+        $user = self::get_user_by_id($id);
+        $today = self::today_one_int();
+
+        $res = self::age_calc($birthdate, $today);
+        if (self::res_age_valid($res, $today, $birthdate))
+            $res = self::res_age_valid($res, $today, $birthdate);
+
+        if ($user->is_member())
+            return $res >= 10;
+        elseif ($user->is_admin() || $user->is_manager())
+            return $res >= 18;
+        else
+            return FALSE;
+    }
+
+    private static function res_age_valid($res, $today, $birthdate) {
+        if (sizeof($res) === 8) {
+            $res = substr(($today - $birthdate), 0, 2);
+            return TRUE;
+        } elseif (sizeof($res) === 7) {
+            $res = substr(($today - $birthdate), 0, 1);
+            return TRUE;
+        } else
+            return FALSE;
+        return $res;
+    }
+
+    private static function age_calc($birthdate, $today) {
+        $birthdate = self::birthdate_one_int($birthdate);
+        return $today - $birthdate;
+    }
+
+    public static function today_one_int() {
+        $today = date("Y-m-d");
+        $today = explode("-", $today);
+        return ($today[0] * 10000) + ($today[1] * 100) + $today[2];
+    }
+
+    public static function birthdate_one_int($birthdate) {
+        $birthdate = explode("-", $birthdate);
+        return ($birthdate[0] * 10000) + ($birthdate[1] * 100) + $birthdate[2];
+    }
 
     public function delete_user() {
         try {
-             self::execute("DELETE FROM rental WHERE  user=:id", array("id" => $this->id));
+            self::execute("DELETE FROM rental WHERE  user=:id", array("id" => $this->id));
             self::execute("DELETE FROM user WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données(deluser)");
+            Tools::abort("Problème lors de l'accès a la base de données(deluser)");
         }
     }
 
@@ -188,37 +243,34 @@ class User extends Model {
             $password = $query->fetch();
             return $password["password"];
         } catch (Exception $e) {
-             Tools::abort("Problème lors de l'accès a la base de données(getPsw)");
+            Tools::abort("Problème lors de l'accès a la base de données(getPsw)");
         }
     }
-    
-     public function update() {
-         try{
-             self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
-                        . "email = :email , birthdate = :birthdate, role = :role "
-                        . "WHERE id = :id", 
-                    array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
-                        "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
-         }catch(Exception $e){
+
+    public function update() {
+        try {
+            self::execute("UPDATE user SET username = :username, password = :password, fullname = :fullname,"
+                    . "email = :email , birthdate = :birthdate, role = :role "
+                    . "WHERE id = :id", array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
+                "email" => $this->email, "birthdate" => $this->birthdate, "role" => $this->role, "id" => $this->id));
+        } catch (Exception $e) {
             //Tools::abort("Problème lors de l'accès a la base de données(update)");
             $e->getMessage();
         }
-            
     }
 
     public function insert() {
-        if(empty($this->birthdate)){
+        if (empty($this->birthdate)) {
             $this->birthdate = null;
         }
         try {
             self::execute("INSERT INTO user(username, password, fullname, email, birthdate, role) "
-                        . "VALUES(:username, :password, :fullname, :email, :birthdate, :role)", 
-                    array("username" => $this->username, "password" => $this->hash_password,
-                          "fullname" => $this->fullname, "email" => $this->email,
-                          "birthdate" => $this->birthdate, "role" => $this->role));
+                    . "VALUES(:username, :password, :fullname, :email, :birthdate, :role)", array("username" => $this->username, "password" => $this->hash_password,
+                "fullname" => $this->fullname, "email" => $this->email,
+                "birthdate" => $this->birthdate, "role" => $this->role));
             return $this;
         } catch (Exception $ex) {
-           Tools::abort("Problème lors de l'accès a la base de données :".$ex->getMessage());   
+            Tools::abort("Problème lors de l'accès a la base de données :" . $ex->getMessage());
         }
     }
 
@@ -228,51 +280,58 @@ class User extends Model {
             $books = self::execute("select DISTINCT book.id,book.isbn,book.title,book.author,book.editor,book.picture ,book.nbCopies FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND rental.rentaldate IS  NULL ", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
-           Tools::abort("Problème lors de l'accès a la base de données(user_by_user)");
+            Tools::abort("Problème lors de l'accès a la base de données(user_by_user)");
         }
     }
-    
-    public function get_rental_join_book_join_user_by_user_not_rented(){
+
+    public function get_rental_join_book_join_user_by_user_not_rented() {
         $results = [];
         try {
             $books = self::execute("select DISTINCT book.id,book.isbn,book.title,book.author,book.editor,book.picture,book.nbCopies FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND rentaldate IS NULL", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
-                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"],$row["nbCopies"]);
+                $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données(user_not_rented)");
         }
     }
-    
+
     public function is_admin() {
         return $this->role === "admin";
     }
-    
+
     public function is_manager() {
         return $this->role === "manager";
     }
-    
+
     public function is_member() {
         return $this->role === "member";
     }
-    
-     public static function get_username_by_id($id){
-        try{
-            $user= self::execute("SELECT username FROM user WHERE id=:id", array("id"=>$id));
-            $query=$user->fetch();
+
+    public static function get_username_by_id($id) {
+        try {
+            $user = self::execute("SELECT username FROM user WHERE id=:id", array("id" => $id));
+            $query = $user->fetch();
             return $query[0];
-        }
-        catch(Exception $ex){
+        } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données(get_username_by_id)");
         }
-        
     }
-    
-    
+
+    public static function get_birthdate($id) {
+        try {
+            $b = self::execute("SELECT birthdate FROM user WHERE id=:id", array("id" => $id));
+            $query = $b->fetch();
+            return $query[0];
+        } catch (Exception $ex) {
+            Tools::abort("Problème lors de l'accès a la base de données(get_username_by_id)");
+        }
+    }
+
 }

@@ -46,7 +46,7 @@
                                 <td><input id="username" name="birthdate" type="date"  class="form-control my-input" id="username"  placeholder="date de naissance"></td>
                             </tr>
 
-                            <?php if ($profile->role == "admin"): ?>
+<!--                            <?php //if ($profile->role == "admin"): ?>
                                 <tr class="form-group ">
                                     <td>
                                         <select name="role" class="form-control my-input" id="username">
@@ -56,8 +56,8 @@
                                         </select>
                                     </td>
                                 </tr > 
-                            <?php endif; ?>   
-                            <?php if ($profile->role == "manager"): ?>
+                            <?php //endif; ?>   
+                            <?php //if ($profile->role == "manager"): ?>
                                 <tr class="form-group ">
                                     <td>
                                         <select name="role" class="form-control my-input" id="username">
@@ -65,7 +65,7 @@
                                         </select>
                                     </td>
                                 </tr > 
-                            <?php endif; ?>   
+                            <?php //endif; ?>   -->
 
                     </table>
                     <button type="submit" class="btn btn-block btn-success">
@@ -74,19 +74,17 @@
                 </form>
                 <br> <a  class="btn btn-block btn-info" href="user/user_list">Retour</a>
             </div>
+            <div class='text-danger'>
+                <?php if ($errors !== []): ?>
+                    <p>Erreur(s) à corriger:</p>
+                    <ul>
+                        <?php foreach ($errors as $e): ?>
+                            <li><?= $e ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
         </div>
-            
-        <?php
-        if (!empty($errors)) {
-            echo "<div class='errors'>
-                          <br><br><p>Veuillez corriger les erreurs suivantes :</p>
-                          <ul>";
-            foreach ($errors as $error) {
-                echo "<li>" . $error . "</li>";
-            }
-            echo '</ul></div>';
-        }
-        ?>
 
     </body>
     <br><br><br><br>

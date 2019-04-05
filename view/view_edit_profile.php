@@ -22,9 +22,9 @@
         </nav>
         <p style="position:absolute;top:80px;right:10px;"><strong><?php echo $utilisateur->fullname; ?>'s profile (<?= $utilisateur->role ?>) </strong></p>
 
-        <div class="container text-center col-lg-offset-4 col-lg-6" >
+        <div class="container text-center" >
             <br><br>
-            <form action="user/edit_profile" method="post" class=" form-horizontal col-lg-12 ">
+            <form action="user/edit_profile" method="post" class=" form-horizontal col-lg-12 col-lg-offset-3 col-lg-5">
                 <table class="table-dark ">
                     <legend><h1>Modificiation du profile de: <?= $member->username ?></h1></legend>
                     <tr>
@@ -40,8 +40,8 @@
                         <td><input  name="email" type="text" value="<?= $member->email ?>"  class="form-control my-input"></td>
                     </tr>
                     <tr>
-                        <td>Date de naissance:</td>
-                        <td><input  name="birthdate" type="date" value="<?= $member->birthdate ?>"  class="form-control my-input"></td>
+                        <td>Date de naissance:</td> <!-- max="<? strtotime(substr(User::today_one_int(), 0, 4)); ?>" -->
+                        <td><input  name="birthdate" type="date" value="<?= $member->birthdate ?>" class="form-control my-input"></td>
                     </tr> 
                     <?php if ($utilisateur->is_admin()): ?>
                         <tr>
@@ -50,17 +50,17 @@
                                 <select id="selectbasic" name="role" class="form-control form-control my-input">
                                     <option value="<?= $member->role ?>"  ><?= $member->role ?></option>
                                     <?php
-                                    foreach ($tabRoles as $rol){
-                                        if ($member->role !== $rol){
-                                        echo "<option value='$rol'>$rol</option>";
+                                    foreach ($tabRoles as $rol) {
+                                        if ($member->role !== $rol) {
+                                            echo "<option value='$rol'>$rol</option>";
                                         }
                                     }
                                     ?>
                                 </select>
                             </td>
                         </tr>
-                        <?php endif; ?>
-                        <?php if($utilisateur->id === $member->id):?>
+                    <?php endif; ?>
+                    <?php if ($utilisateur->id === $member->id): ?>
                         <tr>
                             <td>Mot de passe:</td>
                             <td><input  name="password" type="password"  class="form-control my-input"></td>
@@ -80,17 +80,19 @@
                 <a class="btn btn-info col-lg-offset-3 col-lg-5" href="user/user_list" class="row ">Retour</a>
 
             </form>
+
+            <div class='text-danger'>
+                <?php if ($error !== []): ?>
+                    <p>Erreur(s) à corriger:</p>
+                    <ul>
+                        <?php foreach ($error as $e): ?>
+                            <li><?= $e ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
         </div>
-        <div class='text-danger'>
-            <?php if ($error !== []): ?>
-                <p>Erreur(s) à corriger:</p>
-                <ul>
-                    <?php foreach ($error as $e): ?>
-                        <li><?= $e ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-        </div>
+
 
 
     </body>
