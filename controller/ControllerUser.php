@@ -105,10 +105,10 @@ class ControllerUser extends Controller {
                 self::set_member_attr($member);
                 $error = self::rules_edit_profile($member, $_POST["email"]);
                 if (empty($error)) {
-                    $member->update();
-                    if ($utilisateur->id === $member->id) 
-                        $_SESSION["user"] = $member;
-                    Controller::redirect("user", "user_list");
+                    //$member->update();
+//                    if ($utilisateur->id === $member->id)
+//                        $_SESSION["user"] = $member;
+//                    Controller::redirect("user", "user_list");
                 }
             }
             (new View("edit_profile"))->show(array("tabRoles" => $tabRoles, "members" => $members, "member" => $member, "error" => $error, "utilisateur" => $utilisateur));
@@ -132,6 +132,7 @@ class ControllerUser extends Controller {
     private static function is_email_available($id, $newEmail) {
         $emails[] = self::get_all_emails(User::get_email_by_id($id));
         foreach ($emails as $e) {
+            if($newEmail !== $e)
             return $newEmail !== $e;
         }
     }
@@ -140,15 +141,18 @@ class ControllerUser extends Controller {
         $members = User::get_all_user();
         $emails = [];
         foreach ($members as $m) {
-            if ($m !== $curr)
+            if ($m->email !== $curr)
                 $emails[] = User::get_email_by_id($m->id);
         }
+        var_dump($emails);
         return $emails;
     }
 
     private static function rules_edit_profile($member, $email) {
+      
         $error = [];
-        if (empty($member->fullname)) {
+        if ($member->fullname =='') {
+              echo "lkdsfjlkdsfj";
             $error[] = "Fullname obligatoire!";
         }
         if (empty($member->role)) {
@@ -158,6 +162,7 @@ class ControllerUser extends Controller {
             $error[] = "Pseudo obligatoir! (min. 3 caractères)";
         }
         if (!self::is_email_available($member->id, $email)) {
+            echo "lkqkdfmlksqd";
             $error[] = "L'email existe déjà !";
         }
         if (empty($email)) {
@@ -185,6 +190,14 @@ class ControllerUser extends Controller {
 
     public function rentals_by_user($user) {
         return Rental::get_rentals_by_user($user);
+    }
+
+    private function Validate_email($email) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo 'test reussi';
+        } else {
+            echo" poulouou";
+        }
     }
 
 }

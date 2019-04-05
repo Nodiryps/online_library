@@ -110,14 +110,6 @@ class ControllerBook extends Controller {
             $bookpicToDel = "";
             $nbCopie = "";
             $picture_path = "";
-//            
-//              if(!filter_var("md@gmail.com", FILTER_VALIDATE_EMAIL)){
-//                  echo 'test reussi';
-//              }  else{
-//                  echo" poulouou";
-//              }
-//                  
-
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
                 $oldpath = $book->picture;

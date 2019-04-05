@@ -136,9 +136,11 @@ class User extends Model {
     public static function get_email_by_id($id) {
         try {
             $query = self::execute("SELECT email FROM user WHERE id=:id", array("id" => $id));
-            return $query->fetch();
+            $email=$query->fetch();
+            return $email[0];
         } catch (Exception $e) {
              Tools::abort("Problème lors de l'accès a la base de données69");
+             echo $e->getMessage();
         }
     }
     
@@ -198,7 +200,8 @@ class User extends Model {
                     array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
                         "email" => $this->email , "birthdate" => $this->birthdate, "role" => $this->role,"id"=>$this->id));
          }catch(Exception $e){
-            Tools::abort("Problème lors de l'accès a la base de données(update)");
+            //Tools::abort("Problème lors de l'accès a la base de données(update)");
+            $e->getMessage();
         }
             
     }
@@ -270,4 +273,6 @@ class User extends Model {
         }
         
     }
+    
+    
 }
