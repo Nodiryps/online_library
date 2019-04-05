@@ -37,7 +37,7 @@
                             <label class="col-lg-5 control-label" for="ISBN">ISBN</label>  
                             <div class="col-lg-7">
                                 <input id="ISBN" name="isbn" type="text" 
-                                       class="form-control input-md" value="<?= $book->isbn ?>">
+                                       class="form-control input-md" value="<?= substr($book->isbn, 0, 12);?>">
                             </div>
                         </div>
 
@@ -113,7 +113,7 @@
                     <img src='uploads/images.png' width="250" alt="Book image">
                     <br><br>
                 <?php endif; ?>
-                <form action="book/edit_book" method="post">
+                <form action="book/delete_img" method="post">
                     <input type="hidden" name="delimageH" value="<?= $book->id ?>">
                     <button  name="delimage" class="btn btn-sm btn-warning" type="submit">
                         <span>effacer l'image</span>

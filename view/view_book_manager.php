@@ -61,7 +61,7 @@
                         
                             <td class="text-center">  
                                 <img  id="zoomimg" style="width:45px;height:65px;" 
-                                      <?php if ($book->picture !== NULL): ?>
+                                      <?php if ($book->picture !== NULL || $book->picture !=""): ?>
                                       src='uploads/<?= $book->picture ?>' width="100" alt="Couverture"
                                       <?php else: ?> 
                                       src='uploads/images.png' width="100" alt="Couverture">

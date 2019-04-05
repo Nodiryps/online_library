@@ -127,7 +127,7 @@ class Book extends Model {
 
     public function delete_image() {
         try {
-            self::execute("UPDATE book SET picture=:picture  WHERE id=:id", array("picture" => null, "id" => $this->id));
+            self::execute("UPDATE book SET picture=:picture  WHERE id=:id", array("picture" => NULL, "id" => $this->id));
         } catch (Exception $ex) {
             Tools::abort("Problème lors de l'accès a la base de données");
         }
@@ -184,6 +184,7 @@ class Book extends Model {
                     $titleOk = self::titleOk($title); // remplace les char par '' dans $title
                     $picture_path = $titleOk . "." . $extension_upload;
                     move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+                    
                 }
             }
         } return $picture_path;
