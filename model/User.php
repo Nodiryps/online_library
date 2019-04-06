@@ -80,6 +80,14 @@ class User extends Model {
         }
         return $errors;
     }
+    
+    public static function validate_email($email) {
+        $error = [];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error[] = 'email invalide!';
+        } 
+        return $error;
+    }
 
     public static function same_hash($clear_password, $hash) {
         return $hash === Tools::my_hash($clear_password);
@@ -151,6 +159,18 @@ class User extends Model {
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données(userbymail)");
         }
+    }
+    
+    public function is_admin() {
+        return $this->role === "admin";
+    }
+
+    public function is_manager() {
+        return $this->role === "manager";
+    }
+
+    public function is_member() {
+        return $this->role === "member";
     }
 
     public static function is_username_not_available($username) {
@@ -302,18 +322,6 @@ class User extends Model {
         }
     }
 
-    public function is_admin() {
-        return $this->role === "admin";
-    }
-
-    public function is_manager() {
-        return $this->role === "manager";
-    }
-
-    public function is_member() {
-        return $this->role === "member";
-    }
-
     public static function get_username_by_id($id) {
         try {
             $user = self::execute("SELECT username FROM user WHERE id=:id", array("id" => $id));
@@ -333,5 +341,68 @@ class User extends Model {
             Tools::abort("Problème lors de l'accès a la base de données(get_username_by_id)");
         }
     }
+    
+    public static function errors_add_user($username, $email, $fullname, $password, $password_confirm, $birthdate) {
+        $errors = [];
+        if (!User::is_username_not_available($username))
+            $errors[] = "l'utilisateur existe deja";
+        if (!isset($_POST['username']) || trim($username) == '' || strlen(trim($username)) < 3)
+            $errors[] = "Le username est obligatoire(3 caract. min.)";
+        if (!isset($_POST['fullname']) || trim($fullname) == '')
+            $errors[] = "Le fullname est obligatoire";
+        if (!isset($_POST['mail']) || trim($email) == '')
+            $errors[] = "L'email est obligatoire";
+        if (!User::is_email_available($email))
+            $errors[] = "l'email existe deja";
+        if (!isset($_POST["birthdate"]) && $birthdate == "")
+            $error[] = "Date de naissance invalide!";
+        if (!User::validate_birthdate_add_user($_POST["birthdate"]))
+            $error[] = "Date de naissance invalide!";
+        if(!isset($_POST['password']) || !isset($_POST['pasword_confirm']) || $password == '' || $password_confirm = '')
+            $errors[] = "Les mdp sont obligatoires!";
+        if ($password != $password_confirm)
+            $errors[] = "Les mdp doivent être identiques!";
+        $errors[] = self::validate_email($email);
+        return $errors;
+    }
 
+    public static function errors_edit_profile($member, $oldmail) {
+        $error = [];
+        if (!isset($_POST["username"]) || $_POST["fullname"] === '')
+            $error[] = "Fullname obligatoire!";
+        if (strlen($_POST["username"]) < 3 || empty($_POST["username"]))
+            $error[] = "Pseudo obligatoir! (min. 3 caractères)";
+        if (!self::is_email_available($member->id, $_POST["email"], $oldmail))
+            $error[] = "L'email existe déjà !";
+        if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
+            if (!User::validate_birthdate_edit_user($member->id, $_POST["birthdate"]))
+                $error[] = "Date de naissance invalide!";
+        if (!isset($_POST["email"]) || empty($_POST["email"]))
+            $error[] = "Email obligatoir!";
+        if (isset($_POST["password"]) && ($_POST["password"] !== $_POST["confirm_password"]))
+            $error[] = "Les mdp ne correspondent pas!";
+        if (!isset($_POST["password"]) || !isset($_POST["confirm_password"]))
+            $error[] = "Les mdp sont obligatoires!";
+        $error[] = self::validate_email($_POST["email"]);
+        return $error;
+    }
+    
+    public static function set_member_attr_edit_profile(&$member, &$confirm_password) {
+        if ($_POST["birthdate"] !== "")
+            $member->birthdate = $_POST["birthdate"];
+        if ($_POST["role"] !== "")
+            $member->role = $_POST["role"];
+        if ($_POST["fullname"] !== "")
+            $member->fullname = $_POST["fullname"];
+        if ($_POST["username"] !== "")
+            $member->username = $_POST["username"];
+        if ($_POST["email"] !== "")
+            $member->email = $_POST["email"];
+        if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
+            $member->hash_password = Tools::my_hash($_POST["password"]);
+        if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
+            $confirm_password = $_POST["confirm_password"];
+    }
+    
+    
 }
