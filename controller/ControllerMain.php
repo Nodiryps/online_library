@@ -54,9 +54,8 @@ class ControllerMain extends Controller {
             $email = $_POST["email"];
             $birthdate = $_POST["birthdate"];
             $role = "member";
-
-            $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
-            $errors = User::validate_unicity($username);
+             $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
+            $errors = array_merge( User::validate_unicity($username));
             $errors = array_merge($errors, $member->validate());
             $errors = array_merge($errors, User::validate_passwords($password, $password_confirm));
             if (!filter_var($email, FILTER_VALIDATE_EMAIL))
@@ -65,9 +64,9 @@ class ControllerMain extends Controller {
                 $error[] = "Date de naissance obligatoire!";
             if (!User::validate_birthdate_add_user($_POST["birthdate"]))
                 $error[] = "Date de naissance invalide!";
-
+             
             if (count($errors) == 0) {
-                $member->insert(); //sauve l'utilisateur
+                $member->insert();
                 $this->log_user(User::get_user_by_username($member->username));
             }
         }

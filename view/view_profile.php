@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
         <nav> 
@@ -19,6 +20,15 @@
                 include('menu.html');
             ?>
         </nav>
+
+        <div class="container">
+            <div class="row"><div class="box">
+                    <div class="circle-effect">
+                        <h4 class="rotate"><?= $vignette ?> Locations</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
         <p style="position:absolute;top:80px;right:10px;"><strong><?php echo $profile->fullname; ?>'s profile (<?= $profile->role ?>) </strong></p>
 
         <div class="container">

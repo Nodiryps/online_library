@@ -18,8 +18,8 @@ class ControllerUser extends Controller {
         $returndate = [];
         $datetoreturn = [];
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
-
-        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate));
+        $vignette= count(Rental::get_rentals_by_user($profile->id));
+        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate,"vignette"=>$vignette));
     }
 
     public static function is_return_late($datereturn) {
@@ -90,7 +90,7 @@ class ControllerUser extends Controller {
                 echo substr((User::today_one_int() - User::birthdate_one_int($_POST["birthdate"])), 0, 2);
                 echo User::today_one_int() - User::birthdate_one_int($_POST["birthdate"]);
                 User::set_member_attr_edit_profile($member, $confirm_password);
-                $error = User::errors_edit_profile($member, $oldmail);
+                $error = User::errors_edit_profile($member, $_POST["email"]);
                 if (empty($error)) {
                     $member->update();
                     if ($utilisateur->id === $member->id)
@@ -102,38 +102,14 @@ class ControllerUser extends Controller {
         } else
             $this->redirect();
     }
-
     
-
-//    private static function is_email_available($id, $newEmail, $oldmail) {
-//        var_dump("old: " . $oldmail . "\n");
-//        var_dump("new: " . $newEmail);
-//        if ($oldmail !== $newEmail) {
-//            $emails[] = self::get_all_emails(User::get_email_by_id($id));
-//            foreach ($emails as $e) {
-//                if ($newEmail !== $e)
-//                    return $newEmail !== $e;
-//            }
-//        } return FALSE;
-//    }
-
-//    private static function get_all_emails($curr) {
-//        $members = User::get_all_user();
-//        $emails = [];
-//        foreach ($members as $m) {
-//            if ($m->email !== $curr)
-//                $emails[] = User::get_email_by_id($m->id);
-//        }
-//        var_dump($emails);
-//        return $emails;
-//    }
-
     public function delete_user() {
         $utilisateur = $this->get_user_or_redirect();
         if ($utilisateur->is_admin()) {
             $memberToDelete = "";
-            if (isset($_POST["iddelete"]))
+            if (isset($_POST["iddelete"])) {
                 $memberToDelete = User::get_user_by_id($_POST["iddelete"]);
+            }
 
             if (isset($_POST["conf"]) && !empty($_POST["conf"])) {
                 $memberToDelete = User::get_user_by_id($_POST["conf"]);
@@ -141,8 +117,9 @@ class ControllerUser extends Controller {
                 $this->redirect("user", "user_list");
             }
             (new View("delete_confirm"))->show(array("utilisateur" => $utilisateur, "member" => $memberToDelete));
-        } else
+        } else {
             $this->redirect();
+        }
     }
 
     public function rentals_by_user($user) {

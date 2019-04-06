@@ -76,7 +76,7 @@ class User extends Model {
     public static function validate_passwords($password, $password_confirm) {
         $errors = [];
         if ($password != $password_confirm) {
-            $errors[] = "Les MdP doivent être identiques!";
+            $errors[] = "Les mots de passes doivent être identiques!";
         }
         return $errors;
     }
@@ -374,9 +374,8 @@ class User extends Model {
             $error[] = "Email obligatoir!";
         if (isset($_POST["password"]) && ($_POST["password"] !== $_POST["confirm_password"]))
             $error[] = "Les mdp ne correspondent pas!";
-        if (!isset($_POST["password"]) || !isset($_POST["confirm_password"]))
-            $error[] = "Les mdp sont obligatoires!";
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+       
+        if (!filter_var($oldmail, FILTER_VALIDATE_EMAIL)) 
             $errors[] = "Email invalide!";
         return $error;
     }
