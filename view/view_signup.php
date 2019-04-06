@@ -49,8 +49,7 @@
                 </div>
                 
             </form>
-        </div>
-        <div class='text-danger'>
+            <div class='text-danger text-left'>
             <?php if ($errors !== []): ?>
                 <p>Erreur(s) à corriger:</p>
                 <ul>
@@ -60,5 +59,7 @@
                 </ul>
             <?php endif; ?>
         </div>
+        </div>
+        
     </body>
 </html>

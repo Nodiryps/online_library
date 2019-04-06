@@ -74,7 +74,7 @@
                 </form>
                 <br> <a  class="btn btn-block btn-info" href="user/user_list">Retour</a>
             </div>
-            <div class='text-danger'>
+            <div class='text-danger text-left'>
                 <?php if ($errors !== []): ?>
                     <p>Erreur(s) à corriger:</p>
                     <ul>

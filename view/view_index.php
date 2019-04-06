@@ -38,8 +38,8 @@
                     </form>
                 </div>
             </div>
-            <br><br><br><br>
-            <div class='text-danger'>
+            <br>
+            <div class='text-danger text-left'>
                 <?php if ($errors !== []): ?>
                     <p>Erreur(s) à corriger:</p>
                     <ul>

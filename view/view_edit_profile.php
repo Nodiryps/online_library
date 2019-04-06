@@ -81,7 +81,7 @@
 
             </form>
 
-            <div class='text-danger'>
+            <div class='text-danger text-left'>
                 <?php if ($error !== []): ?>
                     <p>Erreur(s) à corriger:</p>
                     <ul>

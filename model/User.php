@@ -81,14 +81,6 @@ class User extends Model {
         return $errors;
     }
     
-    public static function validate_email($email) {
-        $error = [];
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error[] = 'email invalide!';
-        } 
-        return $error;
-    }
-
     public static function same_hash($clear_password, $hash) {
         return $hash === Tools::my_hash($clear_password);
     }
@@ -355,14 +347,15 @@ class User extends Model {
         if (!User::is_email_available($email))
             $errors[] = "l'email existe deja";
         if (!isset($_POST["birthdate"]) && $birthdate == "")
-            $error[] = "Date de naissance invalide!";
+            $error[] = "Date de naissance obligatoire!";
         if (!User::validate_birthdate_add_user($_POST["birthdate"]))
             $error[] = "Date de naissance invalide!";
-        if(!isset($_POST['password']) || !isset($_POST['pasword_confirm']) || $password == '' || $password_confirm = '')
+        if(!isset($_POST['password']) || !isset($_POST['pasword_confirm']) || $password === '' || $password_confirm === '')
             $errors[] = "Les mdp sont obligatoires!";
         if ($password != $password_confirm)
             $errors[] = "Les mdp doivent être identiques!";
-        $errors[] = self::validate_email($email);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+            $errors[] = "Email invalide!";
         return $errors;
     }
 
@@ -383,7 +376,8 @@ class User extends Model {
             $error[] = "Les mdp ne correspondent pas!";
         if (!isset($_POST["password"]) || !isset($_POST["confirm_password"]))
             $error[] = "Les mdp sont obligatoires!";
-        $error[] = self::validate_email($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+            $errors[] = "Email invalide!";
         return $error;
     }
     
