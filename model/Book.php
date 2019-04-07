@@ -213,7 +213,7 @@ class Book extends Model {
         return $errors;
     }
 
-    public function get_nbCopie() {
+    private function get_nbCopie() {
         try {
             $query = self::execute("SELECT nbCopies FROM book where id=:id", array("id" => $this->id));
             $nb = $query->fetch();
@@ -223,7 +223,7 @@ class Book extends Model {
         }
     }
 
-    public function get_nbCopie_from_rental() {
+    private function get_nbCopie_from_rental() {
         try {
             $query = self::execute("SELECT count(*) FROM rental where book=:id", array("id" => $this->id));
             $nb = $query->fetch();

@@ -51,7 +51,7 @@
                 </thead>
 
                 <?php foreach ($books as $book): ?>
-                <?php if($book->nbCopies_to_display()>0):?>
+                <?php if($book->nbCopies_to_display() >= 0):?>
                     <tr>
                         <td class="text-center"><?= Book::isbn_format_EAN_13($book->isbn) ?></td>
                         <td class="text-center"><?= $book->title ?></td>
@@ -101,6 +101,7 @@
                                 </form>
                             </td>
                         <?php endif; ?>
+                        <?php if($book->nbCopies_to_display() > 0):?>
                         <td style="border:none;" bgcolor="white">
                             <form  method="post" action="rental/add_rental_in_basket">
                                 <input type="hidden" name="idbook" value="<?= $book->id ?>">
@@ -111,7 +112,7 @@
                             </form>
                         </td>
                     </tr>
-                    <?php endif;?>
+                    <?php endif; endif;?>
                 <?php endforeach; ?>
             </table>
         </div>
