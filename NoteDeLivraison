@@ -1,4 +1,11 @@
-USERS: admin,manager et member
+USERS:  Admin(role:admin), 
+        Manager(role:manager), 
+        Member(role:membre), 
+        Boris(role:admin),
+        Bru(role:manager),
+        Ben(role:membre),
+        Yas(role:membre),
+        Rod(role:membre)
 MDP: epfc
 
 MENU:
@@ -11,7 +18,7 @@ index == page de login (lien vers signup si pas encrore membre).
 
 edit_profile => on ne peut modifier que son propre mdp (pour éviter les mauvaises blagues). 
 
-on peut supprimer un retour que s'il est encodé.
+on ne peut supprimer un retour que s'il est encodé.
 
 
 Fonctionnalité non demander:
@@ -19,8 +26,3 @@ Fonctionnalité non demander:
 1) On peut ajouter et supprimer une returndate dans view_return en re-appuyant sur le bouton.
 2) Vignette quand un livre n'a pas d'image de couverture.
 3) quand la date actuelle a dépassé la date du retour, elle s'affiche en rouge dans l'accueil.
-
-TODOLIST:
-    QUAND ON ADD UN LIVRE, PAS D'IMG
-    BTN CLEAR PR SELECT DU FILTRE
-    MSG SUCCESS QD LIVRE OU MEMBRE BIEN AJOUTÉ

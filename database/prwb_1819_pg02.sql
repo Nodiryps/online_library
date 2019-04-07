@@ -45,20 +45,20 @@ CREATE TABLE `book` (
 --
 
 INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`, `nbCopies`) VALUES
-(1, '1111111111111', 'Harrys Potter à l Ecole des Sorciers', 'JK Rowlings', 'Pocket', 'Harrys Potter à l Ecole des Sorciers.jpg', 1),
-(2, '2222222222222', 'Mobyz Dick', 'Jules Verges', 'Pocket', 'Mobyz Dick.jpg', 1),
-(3, '3333333333333', 'Les Fleurs du Male', 'Beau De Lair', 'Pockets', 'Les Fleurs du Male.jpg', 1),
-(4, '4444444444444', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', 'Madame Bovary.jpg', 1),
-(5, '5555555555555', 'Peter Pan', 'Linus Torvalds', 'Pocket', 'Peter Pan.jpg', 1),
-(6, '6666666666666', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', NULL, 1),
-(7, '7777777777777', '1984', 'George Orwell', 'Pocket', NULL, 1),
-(8, '8888888888888', 'To Kill a Mockingbird', 'Harper Lee', 'Pocket', 'To Kill a Mockingbird.jpg', 1),
-(9, '9999999999999', 'Lord of the Flies', 'William Goldings', 'Pocket', NULL, 1),
-(10, '1111111111110', 'La Danse de la Colere', 'Lerner', 'Pocket', 'La Danse de la Colere.jpg', 1),
-(11, '2222222222220', 'Why Does He Do That', 'Lundy Bancroft', 'Pocket', NULL, 1),
-(12, '3333333333330', 'The Stranger', 'Albert Camus', 'Pocket', 'The Stranger.jpg', 1),
-(13, '4444444444440', 'Heart of Darkness', 'Joseph Conrad', 'Pocket', NULL, 1),
-(14, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL, 1);
+(1, '1125447785453', 'Harrys Potter à l Ecole des Sorciers', 'JK Rowlings', 'Pocket', "Harrys Potter a l'Ecole des Sorciers.jpg", 20),
+(2, '4585214569858', 'Mobyz Dick', 'Jules Verges', 'Pocket', 'Mobyz Dick.jpg', 20),
+(3, '4587456321454', 'Les Fleurs du Male', 'Beau De Lair', 'Pockets', 'Les Fleurs du Male.jpg', 20),
+(4, '2587413698522', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', 'Madame Bovary.jpg', 20),
+(5, '3258741258960', 'Peter Pan', 'Linus Torvalds', 'Pocket', 'Peter Pan.jpg', 20),
+(6, '9587465214582', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', NULL, 20),
+(7, '3215469875558', '1984', 'George Orwell', 'Pocket', NULL, 20),
+(8, '3216549874126', 'To Kill a Mockingbird', 'Harper Lee', 'Pocket', 'To Kill a Mockingbird.jpg', 20),
+(9, '9999999999994', 'Lord of the Flies', 'William Goldings', 'Pocket', NULL, 20),
+(10, '1111111111116', 'La Danse de la Colere', 'Lerner', 'Pocket', 'La Danse de la Colere.jpg', 20),
+(11, '2222222222222', 'Why Does He Do That', 'Lundy Bancroft', 'Pocket', NULL, 20),
+(12, '3333333333338', 'The Stranger', 'Albert Camus', 'Pocket', 'The Stranger.jpg', 20),
+(13, '4444444444444', 'Heart of Darkness', 'Joseph Conrad', 'Pocket', NULL, 20),
+(14, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL, 20);
 
 -- --------------------------------------------------------
 
@@ -95,9 +95,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `fullname`, `email`, `birthdate`, `role`) VALUES
-(1, 'admin', '903001ff9a17773d4a0b4cff3666f1e9', 'chaffi', 'admin@epfc.com', NULL, 'admin'),
-(2, 'manager', '903001ff9a17773d4a0b4cff3666f1e9', 'Spyridon', 'manager@epfc.com', NULL, 'manager'),
-(3, 'member', '903001ff9a17773d4a0b4cff3666f1e9', 'virginie', 'member@epfc.com', NULL, 'member');
+(1, 'Admin', '903001ff9a17773d4a0b4cff3666f1e9', 'Chaffi', 'admin@epfc.com', NULL, 'admin'),
+(2, 'Manager', '903001ff9a17773d4a0b4cff3666f1e9', 'Spyridon', 'manager@epfc.com', NULL, 'manager'),
+(3, 'Member', '903001ff9a17773d4a0b4cff3666f1e9', 'Virginie', 'member@epfc.com', NULL, 'member'),
+(4, 'Boris', '903001ff9a17773d4a0b4cff3666f1e9', 'Boris V.', 'boris@epfc.com', NULL, 'admin'),
+(5, 'Bru', '903001ff9a17773d4a0b4cff3666f1e9', 'Bruno L.', 'bruno@epfc.com', NULL, 'manager'),
+(6, 'Ben', '903001ff9a17773d4a0b4cff3666f1e9', 'Benoit P.', 'ben@epfc.com', NULL, 'member'),
+(7, 'Yas', '903001ff9a17773d4a0b4cff3666f1e9', 'Yasmina L.', 'yas@epfc.com', NULL, 'member'),
+(8, 'Rod', '903001ff9a17773d4a0b4cff3666f1e9', 'Rodolphe M.', 'rod@epfc.com', NULL, 'member');
 
 --
 -- Index pour les tables déchargées

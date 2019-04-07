@@ -107,7 +107,7 @@ class ControllerBook extends Controller {
                     if ($_FILES['picture']['error'] == 0) {
                         $book->edit_picture();
                     }
-                } elseif($book->picture === "") 
+                } else
                     $book->picture = NULL;
                 $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor, $book->nbCopies);
                 if (empty($errors)) {
@@ -135,6 +135,7 @@ class ControllerBook extends Controller {
                     unlink("uploads/" . $book->picture);
                 }
                 $book = Book::get_book_by_id($edit);
+                var_dump($book);
                 (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "nbCopie" => $nbCopie)); // pour "refresh" l'img suppr
             }
         } else

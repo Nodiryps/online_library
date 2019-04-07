@@ -176,8 +176,11 @@ class Book extends Model {
 
     private static function titleOk($string) {
         $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
-        $res = preg_replace('~[\\éè]~', 'e', $res);
-        $res = preg_replace('~[\\à]~', 'a', $res);
+        $res = str_replace('é', 'e', $res);
+        $res = str_replace('è', 'e', $res);
+        $res = str_replace('à', 'a', $res);
+        $res = str_replace('ê', 'e', $res);
+        $res = str_replace(' ', '', $res);
         return $res;
     }
 
@@ -295,6 +298,15 @@ class Book extends Model {
         $rest = 0;
         $isbn = str_replace(' ', '', $isbn);
         $tabIsbn = str_split($isbn, 1);
+        self::one_or_three($tabIsbn);
+        $total = self::addition_isbn($tabIsbn);
+        if ($total % 10 != 0) {
+            $rest = (int) 10 - (int) ($total % 10);
+        }
+        return $isbn . $rest;
+    }
+    
+    private static function one_or_three(&$tabIsbn) {
         for ($i = 1; $i <= sizeof($tabIsbn); ++$i) {
             if ($i % 2 == 0) {
                 $tabIsbn[$i - 1] *= 3;
@@ -303,11 +315,6 @@ class Book extends Model {
                 $tabIsbn[$i - 1] *= 1;
             }
         }
-        $total = self::addition_isbn($tabIsbn);
-        if ($total % 10 != 0) {
-            $rest = (int) 10 - (int) ($total % 10);
-        }
-        return $isbn . $rest;
     }
 
     private static function addition_isbn($isbn) {

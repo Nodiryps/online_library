@@ -61,7 +61,7 @@
                         
                             <td class="text-center">  
                                 <img  id="zoomimg" style="width:45px;height:65px;" 
-                                      <?php if ($book->picture !== NULL || $book->picture !=""): ?>
+                                      <?php if ($book->picture !== NULL || $book->picture != ""): ?>
                                       src='uploads/<?= $book->picture ?>' width="100" alt="Couverture"
                                       <?php else: ?> 
                                       src='uploads/images.png' width="100" alt="Couverture">
@@ -125,7 +125,6 @@
                 </form>
             </div>
         <?php endif; ?>
-
         <br><br>
        <!-- Debut de la partie Panier--> 
         <div class="container col-lg-offset-1 col-lg-8" >
@@ -173,7 +172,6 @@
                                 </form>
                             </td>
                         </tr>
-
                     <?php endforeach; ?>
                 <?php endif; ?>
             </table>
@@ -189,8 +187,10 @@
                         <?php foreach ($members as $member): 
                             if($member->id !== $actualpanier->id):?>
                             <option value="<?= $member->id ?>"><?= $member->username ?></option>
-                        <?php endif; endforeach; ?>
+                        <?php endif; 
+                        endforeach; ?>
                     </select>
+                    
                     <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
                     <button class="btn btn-info col-lg-12" type="submit" name="member_selected">
                         <span class="glyphicon glyphicon-search"></span>
@@ -200,18 +200,21 @@
                 <?php endif; 
                 if ($profile->is_admin() || $profile->is_manager() || $profile->is_member()): ?>
                 <?php if($profile->is_member()): ?><br><br><br><br><?php endif; ?>
-                <form class="form-horizontal" method="post" 
-                      action="rental/rent_books_in_basket">
-                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
-                    <button class="btn btn-success" type="submit" value="<?php $profile->username ?>">
-                        <span class="glyphicon glyphicon-check"> Louer</span>
-                    </button>
-                    <button class="col-lg-offset-1 btn btn-danger" type="submit" name="annuler" value="annuler">
-                        <span class="glyphicon glyphicon-remove"> Vider</span>
-                    </button>
-                </form>
+                <div>
+                    <form class="form-horizontal" method="post" 
+                          action="rental/rent_books_in_basket">
+                        <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                        <button class="btn btn-success" type="submit" value="<?php $profile->username ?>">
+                            <span class="glyphicon glyphicon-check"> Louer</span>
+                        </button>
+                        
+                        <button class="col-lg-offset-1 btn btn-danger" type="submit" name="annuler" value="annuler">
+                            <span class="glyphicon glyphicon-remove"> Vider</span>
+                        </button>
+                    </form>
+                </div>
                 <br><br><br><br>
-            </div>
+        </div>
         <?php endif; ?>
        
     </body>
