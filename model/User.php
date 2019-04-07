@@ -288,7 +288,9 @@ class User extends Model {
     public function get_rental_join_book_join_user_by_user() {
         $results = [];
         try {
-            $books = self::execute("select DISTINCT book.id,book.isbn,book.title,book.author,book.editor,book.picture ,book.nbCopies FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND rental.rentaldate IS  NULL ", array("id" => $this->id));
+            $books = self::execute("SELECT DISTINCT book.*"
+                                 . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                 . "WHERE user.id=:id AND rental.rentaldate IS  NULL ", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
@@ -302,7 +304,9 @@ class User extends Model {
     public function get_rental_join_book_join_user_by_user_not_rented() {
         $results = [];
         try {
-            $books = self::execute("select DISTINCT book.id,book.isbn,book.title,book.author,book.editor,book.picture,book.nbCopies FROM (rental join user on rental.user=user.id) join book on rental.book=book.id where user.id=:id AND rentaldate IS NULL", array("id" => $this->id));
+            $books = self::execute("SELECT DISTINCT book.*"
+                                 . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                 . "WHERE user.id=:id AND rentaldate IS NULL", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);

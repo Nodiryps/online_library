@@ -60,7 +60,6 @@ class ControllerRental extends Controller {
                     $rental->insert_book_without_rent();
                 }
             }
-
             $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
         }
@@ -74,46 +73,18 @@ class ControllerRental extends Controller {
         $msg = " ";
         $usertoAddRent = "";
         $members = User::get_all_user();
-        $datetime = date("Y-m-d H:i:s");
 
         if (isset($_POST["panierof"])) {
-            $value = $_POST["panierof"];
-            $usertoAddRent = User::get_user_by_id($value);
+            $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $allrentofUser = Rental::get_this_rental_not_validate($usertoAddRent->id);
-            if ($user->id != $usertoAddRent->id) {
-                if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
-                    foreach ($allrentofUser as $rent) {
-                        $rent->update_rental_rentdate_for_user($usertoAddRent->id, $datetime);
-                    }
-                } else {
-                    $msg = "Cet utilisateur a déjà 5 locations en cours!";
-                }
-            } else {
-                if (Rental::cpt_book_rented_ok($usertoAddRent->id)) {
-                    foreach ($allrentofUser as $rent) {
-                        $rent->update_rental_rentdate($datetime);
-                    }
-                } else {
-                    $msg = "Vous avez déjà 5 livres en location!";
-                }
-            }
+            Rental::rent_basket($user, $usertoAddRent, $allrentofUser, $msg);
         }
         if (isset($_POST["annuler"]) && isset($_POST["panierof"])) {
-            $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
-            foreach ($allrentofUser as $rent) {
-                $rent->delete_rental();
-            }
+            Rental::clear_basket($allrentofUser);
         }
         if (isset($_POST["solo"])) {
-            if (Rental::cpt_book_rented_ok($user->id)) {
-                foreach ($allrentofUser as $rent) {
-                    $rent->update_rental_rentdate($datetime);
-                }
-            } else {
-                $msg = "Vous avez déjà 5 livres en location!";
-            }
-        }
-        $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
+            $msg = Rental::rent_own_basket($usertoAddRent, $allrentofUser);
+        } $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
@@ -122,27 +93,14 @@ class ControllerRental extends Controller {
         $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
         $msg = " ";
         $usertoAddRent = "";
-        $members = User::get_all_user();
-        $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $members = User::get_all_user();
-        if (isset($_GET["param1"])) {
-            $filter = Tools::url_safe_decode($_GET["param1"]);
-            if (!$filter) {
-                Tools::abort("Bad url parameter");
-            } else {
-                $this->redirect("rental", "get_basket", Tools::url_safe_encode($filter));
-            }
-        }
-        $allrentofUser = Rental::get_this_rental_not_validate($user->id);
         if (isset($_POST["panierof"])) {
             $value = $_POST["member_rents"];
             $usertoAddRent = User::get_user_by_id($value);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
             $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
         }
-
-
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
@@ -159,9 +117,8 @@ class ControllerRental extends Controller {
             foreach ($delrent as $del) {
                 $del->delete_rental();
             }
-            $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
-        }
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
+        $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
+        } (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
     public function returns() {
@@ -171,7 +128,6 @@ class ControllerRental extends Controller {
         $author = "";
         $date = "";
         $filter = "";
-
         (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
     }
 
@@ -206,13 +162,10 @@ class ControllerRental extends Controller {
             $datetime = date("Y-m-d H:i:s");
             if (isset($_POST["idbook"])) {
                 $returnRental = Rental::get_rentals_by_id($_POST["idbook"]);
-                foreach ($returnRental as $return) {
+                foreach ($returnRental as $return) 
                     $return->update_rental_returndate($datetime);
-                }
                 $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
-            }
-
-            (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+            } (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
         } else
             $this->redirect();
     }
@@ -232,9 +185,7 @@ class ControllerRental extends Controller {
                     $return->cancel_rental_returndate();
                 }
                 $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
-            }
-
-            (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
+            } (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
         } else
             $this->redirect();
     }

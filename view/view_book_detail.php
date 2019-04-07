@@ -32,12 +32,12 @@
         <br><br>
         <div class="col-lg-offset-3 container" >
             <div class="col-lg-4">
-                <img  id="zoomimg" style="float:left;width:300px;height:450px;box-shadow:5px 5px 15px 0px rgba(36,36,36,0.42);" 
-                                  <?php if ($book->picture !== NULL || $book->picture != ""): ?>
-                                  src='uploads/<?= $book->picture ?>' alt="Couverture"
-                                  <?php else: ?> 
-                                  src='uploads/images.png' alt="Couverture">
-                                  <?php endif; ?>
+                <img  id="zoomimg" style="width:300px;height:450px;box-shadow:5px 5px 15px 0px rgba(36,36,36,0.42);" 
+                    <?php if ($book->picture !== NULL || $book->picture != ""): ?>
+                    src='uploads/<?= $book->picture ?>' alt="Couverture"
+                    <?php else: ?> 
+                    src='uploads/images.png' alt="Couverture">
+                    <?php endif; ?>
             </div>
         </div>
          <div class="col-lg-3 list-group">
@@ -60,7 +60,9 @@
                         </tr>
                     </table>
                     <form method="get" action="book/index">
-                        <button  class="text-center btn btn-info btn-block btn-huge"><span   class="glyphicon glyphicon-arrow-left">                 </span></button>
+                        <button  class="text-center btn btn-info btn-block btn-huge">
+                            <span   class="glyphicon glyphicon-arrow-left"></span>
+                        </button>
                     </form>
                 </div>
 

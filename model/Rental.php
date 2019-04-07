@@ -300,27 +300,57 @@ class Rental extends Model {
         try {
             $query = self::execute("SELECT * FROM rental WHERE book=:id where returndate IS NULL", array("id" => $id));
             $book = $query->fetchAll();
-            if(count($book)==0){
-                $books= Book::get_book_by_id($id);
+            if (count($book) == 0) {
+                $books = Book::get_book_by_id($id);
                 return $books;
-            }else{
+            } else {
                 return count($book);
             }
-            
         } catch (Exception $ex) {
             $ex->getMessage();
         }
     }
-    
-     public static function get_nbBook_rental_bool($id) {
+
+    public static function get_nbBook_rental_bool($id) {
         try {
             $query = self::execute("SELECT * FROM rental WHERE book=:id where returndate IS NULL", array("id" => $id));
             $book = $query->fetchAll();
-            return count($book)>0;
+            return count($book) > 0;
         } catch (Exception $ex) {
             $ex->getMessage();
         }
     }
-    
-    
+
+    public static function rent_own_basket($usertoAddRent, $allrentofUser) {
+        $msg = "";
+        if (Rental::cpt_book_rented_ok($usertoAddRent->id))
+            foreach ($allrentofUser as $rent)
+                $rent->update_rental_rentdate(date("Y-m-d H:i:s"));
+        else
+            $msg = "Vous avez déjà 5 livres en location!";
+        return $msg;
+    }
+
+    private static function rent_for_someone_else_basket($usertoAddRent, $allrentofUser) {
+        $msg = "";
+        if (Rental::cpt_book_rented_ok($usertoAddRent->id))
+            foreach ($allrentofUser as $rent)
+                $rent->update_rental_rentdate_for_user($usertoAddRent->id, date("Y-m-d H:i:s"));
+        else
+            $msg = "Cet utilisateur a déjà 5 locations en cours!";
+        return $msg;
+    }
+
+    public static function rent_basket($user, $usertoAddRent, $allrentofUser, &$msg) {
+        if ($user->id != $usertoAddRent->id)
+            $msg = self::rent_for_someone_else_basket($usertoAddRent, $allrentofUser);
+        else
+            $msg = self::rent_own_basket($usertoAddRent, $allrentofUser);
+    }
+
+    public static function clear_basket($allrentofUser) {
+        foreach ($allrentofUser as $rent)
+            $rent->delete_rental();
+    }
+
 }
