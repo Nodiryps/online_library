@@ -196,7 +196,7 @@
                         <span class="glyphicon glyphicon-search"></span>
                     </button>
                 </form>
-                <br><br><br>
+                <br><br><br><br>
                 <?php endif; 
                 if ($profile->is_admin() || $profile->is_manager() || $profile->is_member()): ?>
                 <?php if($profile->is_member()): ?><br><br><br><br><?php endif; ?>
@@ -210,7 +210,10 @@
                         <span class="glyphicon glyphicon-remove"> Vider</span>
                     </button>
                 </form>
+                <br><br><br><br>
             </div>
         <?php endif; ?>
+       
     </body>
+    
 </html>

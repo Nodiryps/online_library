@@ -22,7 +22,8 @@
         </nav>
 
         <div class="container">
-            <div class="row"><div class="box">
+            <div class="row">
+                <div class="box">
                     <div class="circle-effect">
                         <h4 class="rotate"><?= $vignette ?> Locations</h4>
                     </div>
