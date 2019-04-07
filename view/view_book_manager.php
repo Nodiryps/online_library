@@ -53,7 +53,7 @@
                 <?php foreach ($books as $book): ?>
                 <?php if($book->nbCopies_to_display()>0):?>
                     <tr>
-                        <td class="text-center"><?= ControllerBook::isbn_format_EAN_13($book->isbn) ?></td>
+                        <td class="text-center"><?= Book::isbn_format_EAN_13($book->isbn) ?></td>
                         <td class="text-center"><?= $book->title ?></td>
                         <td class="text-center"><?= strtoupper($book->author) ?></td>
                         <td class="text-center"><?= $book->editor ?></td>
@@ -143,7 +143,7 @@
                 <?php if (!empty($UserRentals)): ?>
                     <?php foreach ($UserRentals as $rent): ?>
                         <tr>
-                            <td><?= ControllerBook::isbn_format_EAN_13($rent->isbn) ?></td>
+                            <td><?= Book::isbn_format_EAN_13($rent->isbn) ?></td>
                             <td><?= $rent->title ?></td>
                             <td><?= strtoupper($rent->author) ?></td>
                             <td><?= $rent->editor ?></td>

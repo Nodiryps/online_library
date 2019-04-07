@@ -174,23 +174,7 @@ class Book extends Model {
         }
     }
 
-    public static function add_picture($title, $picture_path) {
-        if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
-            if ($_FILES['picture']['error'] == 0) {
-                $infosfichier = pathinfo($_FILES['picture']['name']);
-                $extension_upload = $infosfichier['extension'];
-                $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
-                if (in_array($extension_upload, $extensions_autorisees)) {
-                    $titleOk = self::titleOk($title); // remplace les char par '' dans $title
-                    $picture_path = $titleOk . "." . $extension_upload;
-                    move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
-                    
-                }
-            }
-        } return $picture_path;
-    }
-
-    public static function titleOk($string) {
+    private static function titleOk($string) {
         $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
         $res = preg_replace('~[\\éè]~', 'e', $res);
         $res = preg_replace('~[\\à]~', 'a', $res);
@@ -248,6 +232,90 @@ class Book extends Model {
 
     public function nbCopies_to_display() {
         return $this->get_nbCopie() - $this->get_nbCopie_from_rental();
+    }
+
+    public static function set_book_attr_add(&$isbn, &$title, &$author, &$editor, &$nbcopies) {
+        $isbn = $_POST["isbn"];
+        $title = $_POST["title"];
+        $author = $_POST["author"];
+        $editor = $_POST["editor"];
+        $nbcopies = $_POST["nbCopie"];
+    }
+
+    public static function set_book_attr_edit(&$book) {
+        if ($_POST['idbook'] !== "")
+            $book = Book::get_book_by_id($_POST['idbook']);
+        if ($_POST['isbn'] !== "")
+            $book->isbn = self::isbn_format_string($_POST['isbn']);
+        if ($_POST['title'] !== "")
+            $book->title = $_POST['title'];
+        if ($_POST['author'] !== "")
+            $book->author = $_POST['author'];
+        if ($_POST['editor'] !== "")
+            $book->editor = $_POST['editor'];
+        if ($_POST['nbCopie'] !== "")
+            $book->nbCopies = $_POST["nbCopie"];
+    }
+
+    private static function isbn_format_string($isbn) {
+        return str_replace('-', '', $isbn);
+    }
+
+    public function add_picture($picture_path, $title) {
+        $infosfichier = pathinfo($_FILES['picture']['name']);
+        $extension_upload = $infosfichier['extension'];
+        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'PNG', 'png', 'JPG', 'JPEG', 'GIF');
+        if (in_array($extension_upload, $extensions_autorisees)) {
+            $titleOk = self::titleOk($title); // remplace les char par '' dans $title
+            $picture_path = $titleOk . "." . $extension_upload;
+            move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+        }
+        return $picture_path;
+    }
+
+    public function edit_picture() {
+        $infosfichier = pathinfo($_FILES['picture']['name']);
+        $extension_upload = $infosfichier['extension'];
+        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'PNG', 'png', 'JPG', 'JPEG', 'GIF');
+        if (in_array($extension_upload, $extensions_autorisees)) {
+            $titleOk = self::titleOk($this->title); // remplace les char par '' dans $title
+            $picture_path = $titleOk . "." . $extension_upload;
+            move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
+            $this->picture = $picture_path;
+        }
+    }
+
+    public static function isbn_format_EAN_13($isbn) {
+        return substr($isbn, 0, 3) . "-" . substr($isbn, 3, 1) . "-"
+                . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn, 12, 1);
+    }
+
+    public static function calcul_isbn($isbn) {
+        $total = 0;
+        $rest = 0;
+        $isbn = str_replace(' ', '', $isbn);
+        $tabIsbn = str_split($isbn, 1);
+        for ($i = 1; $i <= sizeof($tabIsbn); ++$i) {
+            if ($i % 2 == 0) {
+                $tabIsbn[$i - 1] *= 3;
+            }
+            if ($i % 2 != 0) {
+                $tabIsbn[$i - 1] *= 1;
+            }
+        }
+        $total = self::addition_isbn($tabIsbn);
+        if ($total % 10 != 0) {
+            $rest = (int) 10 - (int) ($total % 10);
+        }
+        return $isbn . $rest;
+    }
+
+    private static function addition_isbn($isbn) {
+        $res = 0;
+        foreach ($isbn as $s) {
+            $res += $s;
+        }
+        return $res;
     }
 
 }

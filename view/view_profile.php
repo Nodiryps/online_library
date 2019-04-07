@@ -56,7 +56,7 @@
                 <?php foreach ($rentals as $rental): ?>
 
                     <tr>
-                        <td><?= ControllerBook::isbn_format_EAN_13($rental->get_book()->isbn) ?></td>
+                        <td><?= Book::isbn_format_EAN_13($rental->get_book()->isbn) ?></td>
                         <td><?= $rental->get_book()->title ?></td>
                         <td><?= $rental->get_book()->author ?></td>
                         <td><?= date('d/m/Y ', strtotime($rental->rentaldate)) ?></td>

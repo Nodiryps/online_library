@@ -40,7 +40,7 @@
                     <table style="border-collapse:separate;border-spacing:15px;">
                         <tr>
                             <th>ISBN:</th> 
-                            <td><?= ControllerBook::isbn_format_EAN_13($book->isbn) ?></td>
+                            <td><?= Book::isbn_format_EAN_13($book->isbn) ?></td>
                         </tr>
                         <tr>
                             <th>AUTHOR:</th> 

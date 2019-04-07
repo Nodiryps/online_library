@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label class="col-lg-5 control-label" for="TITRE">COPIES</label>  
                             <div class="col-lg-7">
-                                <input id="textinput" name="nbCopie" type="number" name="quantity" min="1"
+                                <input id="textinput" name="nbCopie" type="number" name="quantity" min="0"
                                        class="form-control input-md" value="<?= $book->nbCopies ?>">
                             </div>
                         </div>
@@ -83,21 +83,22 @@
                                 <br><br>
                             </div>
                         </div>
-                        
+
                         <div class="form-group col-md-10">
                             <input type="hidden" name="idbook" value="<?= $book->id ?>">
                             <button id="idbook" class="btn btn-success"  type="submit">
                                 <span>Valider</span>
                             </button>
                             <!--<a href="book/index" alt="book manager" class="btn btn-warning">Annuler</a>-->
-                            <input type="hidden" name="cancel" value="<?= $book->id ?>">
-                            <button id="cancel"  class="btn btn-warning" formenctype="multipart/form-data" formaction="book/edit_book"  type="submit">
-                                <span>Annuler</span>
-                            </button>
                         </div>
                     </fieldset>
                 </form>
-
+                <form class="text-right" action="book/edit_book" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="cancel" value="<?= $book->id ?>">
+                    <button id="cancel"  class="btn btn-warning"  type="submit">
+                        <span>Annuler</span>
+                    </button>
+                </form>
             </div>
 
             <div class="col-lg-4 text-center">

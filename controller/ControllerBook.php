@@ -37,33 +37,18 @@ class ControllerBook extends Controller {
             $errors = [];
             $picture_path = "";
             $nbcopies = "";
-
             if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"]) && isset($_POST["nbCopie"])) {
-                $isbn = $_POST["isbn"];
-                $title = $_POST["title"];
-                $author = $_POST["author"];
-                $editor = $_POST["editor"];
-                $nbcopies = $_POST["nbCopie"];
+                Book::set_book_attr_add($isbn, $title, $author, $editor, $nbcopies);
                 $errors = Book::rules_add_book($isbn, $title, $author, $editor, $nbcopies);
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
-                    if ($_FILES['picture']['error'] == 0) {
-                        $infosfichier = pathinfo($_FILES['picture']['name']);
-                        $extension_upload = $infosfichier['extension'];
-                        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'PNG', 'png', 'JPG', 'JPEG', 'GIF');
-                        if (in_array($extension_upload, $extensions_autorisees)) {
-                            $titleOk = Book::titleOk($title); // remplace les char par '' dans $title
-                            $picture_path = $titleOk . "." . $extension_upload;
-                            move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
-                        }
-                    }
-                } else {
+                    if ($_FILES['picture']['error'] == 0) 
+                        $picture_path = Book::add_picture($picture_path, $title);
+                } else 
                     $picture_path = NULL;
-                }
-
                 if (Book::existIsbn($isbn))
                     $errors[] = "ISBN existe deja !";
                 if (empty($errors)) {
-                    $book = new Book(0, self::calcul_isbn($isbn), $title, $author, $editor, $picture_path, $nbcopies);
+                    $book = new Book(0, Book::calcul_isbn($isbn), $title, $author, $editor, $picture_path, $nbcopies);
                     $book->create();
                     $this->redirect("book", "index");
                 }
@@ -79,6 +64,7 @@ class ControllerBook extends Controller {
             $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
             $books = Book::get_all_books($usertoAddRent->id);
             $members = User::get_all_user();
+            
             if (isset($_POST["delbook"])) {
                 $delbook = Book::get_book_by_id($_POST["delbook"]);
             }
@@ -87,9 +73,7 @@ class ControllerBook extends Controller {
                 unlink("uploads/" . $delbook->picture);
                 $delbook->delete_book();
                 $this->redirect("book", "index");
-            }
-
-            (new View("delete_confirm"))->show(array("book" => $delbook));
+            } (new View("delete_confirm"))->show(array("book" => $delbook));
         }
     }
 
@@ -102,14 +86,12 @@ class ControllerBook extends Controller {
     }
 
     public function edit_book() {
-        $user = $this->get_user_or_redirect();
+       $user = $this->get_user_or_redirect();
         if ($user->is_admin()) {
             $book = "";
             $errors = [];
             $oldpath = "";
-            $bookpicToDel = "";
             $nbCopie = "";
-            $picture_path = "";
             if (isset($_POST['editbook'])) {
                 $book = Book::get_book_by_id($_POST['editbook']);
                 $oldpath = $book->picture;
@@ -120,24 +102,16 @@ class ControllerBook extends Controller {
             if (isset($_POST['idbook']) && isset($_POST['isbn']) || isset($_POST['title']) || isset($_POST['editor']) || isset($_POST['author']) || isset($_POST['nbCopie'])) {
                 $book = Book::get_book_by_id($_POST['idbook']);
                 $book->isbn = substr($book->isbn, 0, 12);
-                self::set_book_attr($book);
+                Book::set_book_attr_edit($book);
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                     if ($_FILES['picture']['error'] == 0) {
-                        $infosfichier = pathinfo($_FILES['picture']['name']);
-                        $extension_upload = $infosfichier['extension'];
-                        $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'PNG', 'png', 'JPG', 'JPEG', 'GIF');
-                        if (in_array($extension_upload, $extensions_autorisees)) {
-
-                            $titleOk = Book::titleOk($book->title); // remplace les char par '' dans $title
-                            $picture_path = $titleOk . "." . $extension_upload;
-                            move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
-                            $book->picture = $picture_path;
-                        }
+                        $book->edit_picture();
                     }
-                }
+                } elseif($book->picture === "") 
+                    $book->picture = NULL;
                 $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor, $book->nbCopies);
                 if (empty($errors)) {
-                    $book->isbn = self::calcul_isbn($book->isbn);
+                    $book->isbn = Book::calcul_isbn($book->isbn);
                     $book->update();
                     $this->redirect("book", "index");
                 }
@@ -166,61 +140,4 @@ class ControllerBook extends Controller {
         } else
             $this->redirect("book", "index");
     }
-
-    private static function set_book_attr(&$book) {
-        if ($_POST['idbook'] !== "")
-            $book = Book::get_book_by_id($_POST['idbook']);
-        if ($_POST['isbn'] !== "")
-            $book->isbn = self::isbn_format_string($_POST['isbn']);
-        if ($_POST['title'] !== "")
-            $book->title = $_POST['title'];
-        if ($_POST['author'] !== "")
-            $book->author = $_POST['author'];
-        if ($_POST['editor'] !== "")
-            $book->editor = $_POST['editor'];
-        if ($_POST['nbCopie'] !== "")
-            $book->nbCopies = $_POST["nbCopie"];
-    }
-
-    public static function isbn_format_EAN_13($isbn) {
-        return substr($isbn, 0, 3) . "-" . substr($isbn, 3, 1) . "-"
-                . substr($isbn, 4, 4) . "-" . substr($isbn, 8, 4) . "-" . substr($isbn, 12, 1);
-    }
-
-    public static function calcul_isbn($isbn) {
-        $total = 0;
-        $rest = 0;
-        $isbn = str_replace(' ', '', $isbn);
-        $tabIsbn = str_split($isbn, 1);
-        for ($i = 1; $i <= sizeof($tabIsbn); ++$i) {
-            if ($i % 2 == 0) {
-                $tabIsbn[$i - 1] *= 3;
-            }
-            if ($i % 2 != 0) {
-                $tabIsbn[$i - 1] *= 1;
-            }
-        }
-        $total = self::addition_isbn($tabIsbn);
-        if ($total % 10 != 0) {
-            $rest = (int) 10 - (int) ($total % 10);
-        }
-        return $isbn . $rest;
-    }
-
-    public static function isbn_format_string($isbn) {
-        return str_replace('-', '', $isbn);
-    }
-
-    public static function addition_isbn($isbn) {
-        $res = 0;
-        foreach ($isbn as $s) {
-            $res += $s;
-        }
-        return $res;
-    }
-
-    public function functionName($param) {
-        
-    }
-
 }
