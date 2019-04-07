@@ -23,7 +23,7 @@ class ControllerUser extends Controller {
     }
 
     public static function is_return_late($datereturn) {
-        return strtotime(date("d/m/Y")) > strtotime($datereturn);
+        return date("d/m/Y") > $datereturn;
     }
 
     public function user_list() {

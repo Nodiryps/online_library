@@ -135,7 +135,6 @@ class ControllerBook extends Controller {
                     unlink("uploads/" . $book->picture);
                 }
                 $book = Book::get_book_by_id($edit);
-                var_dump($book);
                 (new View("edit_book"))->show(array("book" => $book, "errors" => $errors, "profile" => $user, "nbCopie" => $nbCopie)); // pour "refresh" l'img suppr
             }
         } else
