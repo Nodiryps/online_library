@@ -140,7 +140,6 @@ class User extends Model {
             return $email[0];
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données69");
-            echo $e->getMessage();
         }
     }
 

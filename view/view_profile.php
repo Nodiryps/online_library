@@ -65,7 +65,6 @@
                         $returnDate = date('d/m/Y', strtotime('+' . Configuration::get("one_month") . " month", strtotime($rental->rentaldate)));
                         $isLate = ControllerUser::is_return_late($returnDate);
                         $msg = "";
-                        echo "$returnDate";
                         ?>
                         <td <?php if ($isLate): $msg = "(RETARD)"; ?>class="text-danger" <?php endif; ?>>
                             <?= $returnDate . " " . $msg; ?>

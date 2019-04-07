@@ -30,13 +30,17 @@
             <h1 class="text-center "> <?= $book->title ?></h1>
         </div>
         <br><br>
-        <div class="container" >
-            <div class="row">
-                <div class="col-lg-4">
-                    <img style="width:450px;" src='uploads/<?= $book->picture ?>' width="100" alt="Couverture">
-                </div>
-                <br><br><br><br>
-                <div class="col-lg-offset-2 col-lg-5 list-group">
+        <div class="col-lg-offset-3 container" >
+            <div class="col-lg-4">
+                <img  id="zoomimg" style="float:left;width:300px;height:450px;box-shadow:5px 5px 15px 0px rgba(36,36,36,0.42);" 
+                                  <?php if ($book->picture !== NULL || $book->picture != ""): ?>
+                                  src='uploads/<?= $book->picture ?>' alt="Couverture"
+                                  <?php else: ?> 
+                                  src='uploads/images.png' alt="Couverture">
+                                  <?php endif; ?>
+            </div>
+        </div>
+         <div class="col-lg-3 list-group">
                     <table style="border-collapse:separate;border-spacing:15px;">
                         <tr>
                             <th>ISBN:</th> 
@@ -59,8 +63,6 @@
                         <button  class="text-center btn btn-info btn-block btn-huge"><span   class="glyphicon glyphicon-arrow-left">                 </span></button>
                     </form>
                 </div>
-            </div>
-        </div>
 
     </body>
 </html>
