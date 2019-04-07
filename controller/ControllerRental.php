@@ -39,7 +39,6 @@ class ControllerRental extends Controller {
         $users = User::get_user_by_username($user->username);
         $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
         $id = 0;
-        $datetime = date("Y-m-d H:i:s");
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $msg = " ";
         $members = User::get_all_user();
@@ -48,11 +47,10 @@ class ControllerRental extends Controller {
         if (isset($_POST["idbook"]) && isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
-
             if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres à la fois!";
             } else {
-                if ($user->id !== $usertoAddRent->id && intval($rent->nbCopies) > $rent->nbCopies_of_a_book()) {
+                if ($user->id !== $usertoAddRent->id && Rental::is_nbCopies_ok($rent)) {
                     $rental = new Rental($id, $usertoAddRent->id, $rent->id, NULL, NULL);
                     $rental->insert_book_without_rent();
                 } else {
@@ -62,9 +60,7 @@ class ControllerRental extends Controller {
             }
             $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
-        }
-
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
+        } (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
     public function rent_books_in_basket() {
@@ -81,11 +77,15 @@ class ControllerRental extends Controller {
         }
         if (isset($_POST["annuler"]) && isset($_POST["panierof"])) {
             Rental::clear_basket($allrentofUser);
+            $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
+            $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
+            (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
         }
         if (isset($_POST["solo"])) {
             $msg = Rental::rent_own_basket($usertoAddRent, $allrentofUser);
         } $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
-        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
+        if(!isset($_POST["annuler"]))
+            (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
     public function get_basket() {
@@ -113,12 +113,11 @@ class ControllerRental extends Controller {
         $usertoAddRent = "";
         if (isset($_POST["delrent"]) && isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
-            $delrent = Rental::get_rental_by_id_book($_POST["delrent"]);
-            foreach ($delrent as $del) {
-                $del->delete_rental();
-            }
-        $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
-        } (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
+            Rental::delete_rentals(Rental::get_rental_by_id_book($_POST["delrent"]));
+            $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
+        }
+        $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
+        (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
     public function returns() {
@@ -140,10 +139,7 @@ class ControllerRental extends Controller {
             $date = "";
             $filter = "";
             if (isset($_POST["delrent"])) {
-                $delrent = Rental::get_rentals_by_id($_POST["delrent"]);
-                foreach ($delrent as $del) {
-                    $del->delete_rental();
-                }
+                Rental::delete_rentals(Rental::get_rentals_by_id($_POST["delrent"]));
                 $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
             }
             (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
@@ -162,7 +158,7 @@ class ControllerRental extends Controller {
             $datetime = date("Y-m-d H:i:s");
             if (isset($_POST["idbook"])) {
                 $returnRental = Rental::get_rentals_by_id($_POST["idbook"]);
-                foreach ($returnRental as $return) 
+                foreach ($returnRental as $return)
                     $return->update_rental_returndate($datetime);
                 $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
             } (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));

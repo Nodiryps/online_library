@@ -162,15 +162,15 @@
                                     </button>
                                 </form>
                             </td>
-                             <td style="border:none;margin-left:10px;" bgcolor="white">
+<!--                             <td style="border:none;margin-left:10px;" bgcolor="white">
                                 <form  method="post" action="book/delete_book">
-                                    <input type="hidden" name="delbook" value="<?= $book->id ?>">
-                                    <input type="hidden" name="panierof" value="<?= $actualpanier->id ?>">
+                                    <input type="hidden" name="delbook" value="<? = $book->id ?>">
+                                    <input type="hidden" name="panierof" value="<? = $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span >
                                     </button>
                                 </form>
-                            </td>
+                            </td>-->
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

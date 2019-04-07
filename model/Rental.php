@@ -353,4 +353,12 @@ class Rental extends Model {
             $rent->delete_rental();
     }
 
+    public static function delete_rentals($rentalsTab){
+        foreach ($rentalsTab as $r)
+            $r->delete_rental();
+    }
+    
+    public static function is_nbCopies_ok($rent){
+        return intval($rent->nbCopies) > $rent->nbCopies_of_a_book();
+    }
 }
