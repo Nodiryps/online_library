@@ -353,12 +353,23 @@ class Rental extends Model {
             $rent->delete_rental();
     }
 
-    public static function delete_rentals($rentalsTab){
+    public static function delete_rentals($rentalsTab) {
         foreach ($rentalsTab as $r)
             $r->delete_rental();
     }
-    
-    public static function is_nbCopies_ok($rent){
+
+    public static function is_nbCopies_ok($rent) {
         return intval($rent->nbCopies) > $rent->nbCopies_of_a_book();
     }
+
+    public static function add_to_basket($user, $usertoAddRent, $rent, $id, $users) {
+        if ($user->id !== $usertoAddRent->id && Rental::is_nbCopies_ok($rent)) {
+            $rental = new Rental($id, $usertoAddRent->id, $rent->id, NULL, NULL);
+            $rental->insert_book_without_rent();
+        } else {
+            $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
+            $rental->insert_book_without_rent();
+        }
+    }
+
 }

@@ -50,13 +50,7 @@ class ControllerRental extends Controller {
             if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres à la fois!";
             } else {
-                if ($user->id !== $usertoAddRent->id && Rental::is_nbCopies_ok($rent)) {
-                    $rental = new Rental($id, $usertoAddRent->id, $rent->id, NULL, NULL);
-                    $rental->insert_book_without_rent();
-                } else {
-                    $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
-                    $rental->insert_book_without_rent();
-                }
+                Rental::add_to_basket($user, $usertoAddRent, $rent, $id, $users);
             }
             $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
             $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
