@@ -84,8 +84,8 @@ class ControllerUser extends Controller {
             if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) || isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) || isset($_POST["confirm_password"])) {
                 $oldpass = User::get_password($_POST["idmember"]);
                 $member = User::get_user_by_id($_POST["idmember"]);
+                 $error = User::errors_edit_profile($member, $_POST["email"]);
                 User::set_member_attr_edit_profile($member, $confirm_password);
-                $error = User::errors_edit_profile($member, $_POST["email"]);
                 if (empty($error)) {
                     $member->update();
                     if ($utilisateur->id === $member->id)

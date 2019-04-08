@@ -30,41 +30,43 @@
             <h1 class="text-center "> <?= $book->title ?></h1>
         </div>
         <br><br>
-        <div class="col-lg-offset-3 container" >
+       
+        <div class="col-lg-offset-4 col-lg-2 list-group">
+            <table style="border-collapse:separate;border-spacing:15px;">
+                <tr>
+                    <th>ISBN:</th> 
+                    <td><?= Book::isbn_format_EAN_13($book->isbn) ?></td>
+                </tr>
+                <tr>
+                    <th>AUTHOR:</th> 
+                    <td><?= $book->author ?></td>
+                </tr>
+                <tr>
+                    <th>TITLE:</th>
+                    <td><?= $book->title ?></td>
+                </tr>
+                <tr>
+                    <th>EDITOR:</th>
+                    <td><?= $book->editor ?></td>
+                </tr>
+            </table>
+            <form method="get" action="book/index">
+                <button  class="text-center btn btn-info btn-block btn-huge">
+                    <span   class="glyphicon glyphicon-arrow-left"></span>
+                </button>
+            </form>
+        </div>
+         <div class="col-lg-offset-3 container" >
             <div class="col-lg-4">
-                <img  id="zoomimg" style="width:300px;height:450px;box-shadow:5px 5px 15px 0px rgba(36,36,36,0.42);" 
-                    <?php if ($book->picture !== NULL || $book->picture != ""): ?>
-                    src='uploads/<?= $book->picture ?>' alt="Couverture"
-                    <?php else: ?> 
-                    src='uploads/images.png' alt="Couverture">
-                    <?php endif; ?>
+                <?php if ($book->picture !== NULL || $book->picture != ""): ?>
+                    <img  id="zoomimg" style="width:300px;height:450px;box-shadow:5px 5px 15px 0px rgba(36,36,36,0.42);" 
+                          src='uploads/<?= $book->picture ?>' alt="Couverture">
+                      <?php else: ?> 
+                    <img  id="zoomimg" style="width:300px;height:450px;box-shadow:5px 5px 15px 0px rgba(36,36,36,0.42);" 
+                          src='uploads/images.png' alt="Couverture">
+                      <?php endif; ?>
             </div>
         </div>
-         <div class="col-lg-3 list-group">
-                    <table style="border-collapse:separate;border-spacing:15px;">
-                        <tr>
-                            <th>ISBN:</th> 
-                            <td><?= Book::isbn_format_EAN_13($book->isbn) ?></td>
-                        </tr>
-                        <tr>
-                            <th>AUTHOR:</th> 
-                            <td><?= $book->author ?></td>
-                        </tr>
-                        <tr>
-                            <th>TITLE:</th>
-                            <td><?= $book->title ?></td>
-                        </tr>
-                        <tr>
-                            <th>EDITOR:</th>
-                            <td><?= $book->editor ?></td>
-                        </tr>
-                    </table>
-                    <form method="get" action="book/index">
-                        <button  class="text-center btn btn-info btn-block btn-huge">
-                            <span   class="glyphicon glyphicon-arrow-left"></span>
-                        </button>
-                    </form>
-                </div>
 
     </body>
 </html>
