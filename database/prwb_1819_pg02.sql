@@ -58,7 +58,8 @@ INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`, `nbCop
 (11, '2222222222222', 'Why Does He Do That', 'Lundy Bancroft', 'Pocket', NULL, 20),
 (12, '3333333333338', 'The Stranger', 'Albert Camus', 'Pocket', 'The Stranger.jpg', 20),
 (13, '4444444444444', 'Heart of Darkness', 'Joseph Conrad', 'Pocket', NULL, 20),
-(14, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL, 20);
+(14, '5555555555550', 'Men Without Women', 'Ernest Hemingway', 'Pocket', NULL, 20),
+(15, '5214569875213', 'Women Without men', 'Ernest Hemingway', 'Pocket', NULL, 0);
 
 -- --------------------------------------------------------
 
