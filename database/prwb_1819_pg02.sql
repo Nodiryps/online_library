@@ -45,13 +45,13 @@ CREATE TABLE `book` (
 --
 
 INSERT INTO `book` (`id`, `isbn`, `title`, `author`, `editor`, `picture`, `nbCopies`) VALUES
-(1, '1125447785453', 'Harrys Potter à l Ecole des Sorciers', 'JK Rowlings', 'Pocket', "Harrys Potter a l'Ecole des Sorciers.jpg", 20),
+(1, '1125447785453', 'Harrys Potter à l Ecole des Sorciers', 'JK Rowlings', 'Pocket', 'Harrys Potter a l Ecole des Sorciers.png', 20),
 (2, '4585214569858', 'Mobyz Dick', 'Jules Verges', 'Pocket', 'Mobyz Dick.jpg', 20),
 (3, '4587456321454', 'Les Fleurs du Male', 'Beau De Lair', 'Pockets', 'Les Fleurs du Male.jpg', 20),
-(4, '2587413698522', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', 'Madame Bovary.jpg', 20),
-(5, '3258741258960', 'Peter Pan', 'Linus Torvalds', 'Pocket', 'Peter Pan.jpg', 20),
-(6, '9587465214582', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', NULL, 20),
-(7, '3215469875558', '1984', 'George Orwell', 'Pocket', NULL, 20),
+(4, '2587413698522', 'Madame Bovary', 'Gustave Flaubert', 'Pocket', NULL, 20),
+(5, '3258741258960', 'Peter Pan', 'Linus Torvalds', 'Pocket', NULL, 20),
+(6, '9587465214582', 'A Brief History of Time', 'Stephen Hawking', 'Pocket', 'A Brief History of Time.jpg', 20),
+(7, '3215469875558', '1984', 'George Orwell', 'Pocket', '1984.jpg', 20),
 (8, '3216549874126', 'To Kill a Mockingbird', 'Harper Lee', 'Pocket', 'To Kill a Mockingbird.jpg', 20),
 (9, '9999999999994', 'Lord of the Flies', 'William Goldings', 'Pocket', NULL, 20),
 (10, '1111111111116', 'La Danse de la Colere', 'Lerner', 'Pocket', 'La Danse de la Colere.jpg', 20),
