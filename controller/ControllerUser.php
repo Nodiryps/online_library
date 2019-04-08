@@ -23,7 +23,13 @@ class ControllerUser extends Controller {
     }
 
     public static function is_return_late($datereturn) {
-        return date("d/m/Y") > $datereturn;
+       $return= self::birthdate_one_int($datereturn);
+       $today= self::birthdate_one_int(date("d/m/Y"));
+        return $today>$return;
+    }
+      public  static function birthdate_one_int($birthdate) {
+        $birthdate = explode("/", $birthdate);
+        return ($birthdate[2] * 10000) + ($birthdate[1] * 100) + $birthdate[0];
     }
 
     public function user_list() {
