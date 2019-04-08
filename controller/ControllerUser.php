@@ -18,11 +18,9 @@ class ControllerUser extends Controller {
         $returndate = [];
         $datetoreturn = [];
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
-        $vignette= count(Rental::get_rentals_by_user($profile->id));
-        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate,"vignette"=>$vignette));
+        $vignette = count(Rental::get_rentals_by_user($profile->id));
+        (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate, "vignette" => $vignette));
     }
-
-  
 
     public function user_list() {
         $user = $this->get_user_or_redirect();
@@ -48,7 +46,8 @@ class ControllerUser extends Controller {
             $query = "";
             $role = "";
             $errors = [];
-            if (isset($_POST['username']) || isset($_POST['password']) || isset($_POST['password_confirm']) || isset($_POST["fullname"]) || isset($_POST["mail"]) || isset($_POST["birthdate"]) || isset($_POST["role"])) {
+            $member="";
+            if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST["fullname"]) && isset($_POST["mail"]) && isset($_POST["birthdate"]) && isset($_POST["role"])) {
                 $username = strtolower($_POST['username']);
                 $password = $_POST['password'];
                 $password_confirm = $_POST['password_confirm'];
@@ -57,13 +56,14 @@ class ControllerUser extends Controller {
                 $birthdate = $_POST["birthdate"];
                 $role = "member";
                 $query = User::get_user_by_username($username);
-                $errors = User::errors_add_user($username, $email, $fullname, $password, $password_confirm,$birthdate);
-                $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
+                $errors = User::errors_add_user($username, $email, $fullname, $password, $password_confirm, $birthdate);
                 if (empty($errors)) {
+                    $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
                     $member->insert();
                     $this->redirect("user", "user_list");
                 }
-            } (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "birthdate" => $birthdate, "role" => $role, "errors" => $errors, "email" => $email));
+            }
+            (new View("add_user"))->show(array("profile" => $utilisateur, "username" => $username, "fullname" => $fullname, "birthdate" => $birthdate, "role" => $role, "errors" => $errors, "email" => $email));
         } else
             $this->redirect();
     }
@@ -84,7 +84,7 @@ class ControllerUser extends Controller {
             if (isset($_POST["username"]) || isset($_POST["fullname"]) || isset($_POST["email"]) || isset($_POST["birthdate"]) || isset($_POST["role"]) || isset($_POST["password"]) || isset($_POST["confirm_password"])) {
                 $oldpass = User::get_password($_POST["idmember"]);
                 $member = User::get_user_by_id($_POST["idmember"]);
-                 $error = User::errors_edit_profile($member, $_POST["email"]);
+                $error = User::errors_edit_profile($member, $_POST["email"]);
                 User::set_member_attr_edit_profile($member, $confirm_password);
                 if (empty($error)) {
                     $member->update();
@@ -97,7 +97,7 @@ class ControllerUser extends Controller {
         } else
             $this->redirect();
     }
-    
+
     public function delete_user() {
         $utilisateur = $this->get_user_or_redirect();
         if ($utilisateur->is_admin()) {
@@ -120,4 +120,5 @@ class ControllerUser extends Controller {
     public function rentals_by_user($user) {
         return Rental::get_rentals_by_user($user);
     }
+
 }

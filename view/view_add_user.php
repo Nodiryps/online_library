@@ -22,7 +22,7 @@
 
         <div class="container row text-center">
             <br><br>
-            <div class="form-horizontal text-center col-lg-offset-4 col-lg-5">
+            <div class="form-horizontal text-center col-lg-offset-6 col-lg-5">
                 <form action="user/add_user" method="post" class="form-horizontal">
                     <table class="table table-dark">
                         <legend><h1>Nouveau membre</h1></legend>
@@ -46,7 +46,7 @@
                                 <td><input id="username" name="birthdate" type="date"  class="form-control my-input" id="username"  placeholder="date de naissance"></td>
                             </tr>
 
-<!--                            <?php //if ($profile->role == "admin"): ?>
+                            <?php if ($profile->role == "admin"): ?>
                                 <tr class="form-group ">
                                     <td>
                                         <select name="role" class="form-control my-input" id="username">
@@ -56,8 +56,8 @@
                                         </select>
                                     </td>
                                 </tr > 
-                            <?php //endif; ?>   
-                            <?php //if ($profile->role == "manager"): ?>
+                            <?php endif; ?>   
+                            <?php if ($profile->role == "manager"): ?>
                                 <tr class="form-group ">
                                     <td>
                                         <select name="role" class="form-control my-input" id="username">
@@ -65,7 +65,7 @@
                                         </select>
                                     </td>
                                 </tr > 
-                            <?php //endif; ?>   -->
+                            <?php endif; ?>   
 
                     </table>
                     <button type="submit" class="btn btn-block btn-success">
@@ -74,7 +74,12 @@
                 </form>
                 <br> <a  class="btn btn-block btn-info" href="user/user_list">Retour</a>
             </div>
-            <div class='text-danger text-left'>
+            
+          
+        </div>
+        <br>
+        <br><br>
+          <div class=' container row col-lg-offset-4 text-danger text-left'>
                 <?php if ($errors !== []): ?>
                     <p>Erreur(s) à corriger:</p>
                     <ul>
@@ -84,7 +89,6 @@
                     </ul>
                 <?php endif; ?>
             </div>
-        </div>
 
     </body>
     <br><br><br><br>

@@ -18,7 +18,7 @@
 
         <form class="" method="post"  action="book/index/">
             <div class="container" >
-                <div class="row">
+                <div class="row col-lg-offset-1">
                     <div id="custom-search-input">
                         <div class="input-group col-md-10">
                             <input type="text" class="  search-query form-control" placeholder="rechercher un livre" name="search"/>
@@ -212,7 +212,7 @@
                             <span class="glyphicon glyphicon-check"> Louer</span>
                         </button>
                         
-                        <button class="col-lg-offset-1 btn btn-danger" type="submit" name="annuler" value="annuler">
+                        <button class="col-lg-offset-4 btn btn-danger" type="submit" name="annuler" value="annuler">
                             <span class="glyphicon glyphicon-remove"> Vider</span>
                         </button>
                     </form>

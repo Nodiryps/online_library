@@ -18,7 +18,7 @@
         </nav>
         <p style="position:absolute;top:80px;right:10px;"><strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
 
-        <div class="container col-md-11">
+        <div class="container col-lg-offset-0 col-md-11">
             <form method="post" action="rental/search_book" class="form-control-static">
                 <div class="row align-items-center justify-content-center " >
 

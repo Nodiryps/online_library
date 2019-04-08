@@ -43,7 +43,7 @@ class User extends Model {
             $errors[] = "Pseudo length must be between 3 and 16.";
         } if (!(isset($this->username) && is_string($this->username) && preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $this->username))) {
             $errors[] = "Pseudo must start by a letter and must contain only letters and numbers.";
-        } if (!User::is_email_available($this->email)) {
+        } if (!User::is_email_available($this->id,$this->email)) {
             $errors[] = "l'email existe deja";
         }
         return $errors;
@@ -143,6 +143,16 @@ class User extends Model {
         }
     }
 
+    public static function is_mail_exist($email) {
+        try {
+            $query = self::execute("SELECT email FROM user where email=:email", array("email" => $email));
+            $email = $query->fetchAll();
+            return count($email) == 0;
+        } catch (Exception $e) {
+            Tools::abort("Problème lors de l'accès a la base de données69");
+        }
+    }
+
     public static function get_user_by_mail($email) {
         try {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
@@ -193,13 +203,12 @@ class User extends Model {
 
     public static function validate_birthdate_add_user($birthdate) {
         $res = self::age($birthdate);
+        
         return $res >= 10;
     }
 
-    public static function validate_birthdate_edit_user($id, $birthdate) {
-        $user = self::get_user_by_id($id);
+    public static function validate_birthdate_edit_user( $birthdate) {
         $res = self::age($birthdate);
-        var_dump($res);
         if ($_POST['role'] === 'member')
             return $res >= 10;
         elseif ($_POST['role'] === 'admin' || $_POST['role'] === 'manager')
@@ -310,20 +319,23 @@ class User extends Model {
         $errors = [];
         if (!User::is_username_not_available($username))
             $errors[] = "l'utilisateur existe deja";
-        if (!isset($_POST['username']) || trim($username) == '' || strlen(trim($username)) < 3)
+        if ( trim($username) == '' || strlen(trim($username)) < 3)
             $errors[] = "Le username est obligatoire(3 caract. min.)";
-        if (!isset($_POST['fullname']) || trim($fullname) == '')
+        if ( trim($fullname) == '')
             $errors[] = "Le fullname est obligatoire";
-        if (!isset($_POST['mail']) || trim($email) == '')
+        if ( trim($email) == '')
             $errors[] = "L'email est obligatoire";
-        if (!User::is_email_available($email))
+        if (!self::is_mail_exist($email))
             $errors[] = "l'email existe deja";
-        if (!isset($_POST["birthdate"]) && $birthdate == "")
-            $error[] = "Date de naissance obligatoire!";
-        if (!User::validate_birthdate_add_user($_POST["birthdate"]))
-            $error[] = "Date de naissance invalide!";
-        if (!isset($_POST['password']) || !isset($_POST['pasword_confirm']) || $password === '' || $password_confirm === '')
+        if ($birthdate == "")
+            $errors[] = "Date de naissance obligatoire!";
+        if (!User::validate_birthdate_edit_user($birthdate))
+            $errors[] = "Date de naissance invalide!";
+        if ( $password === '' || $password_confirm === '') {
+            var_dump($_POST['password_confirm']);
+            var_dump($_POST['password']);
             $errors[] = "Les mdp sont obligatoires!";
+        }
         if ($password != $password_confirm)
             $errors[] = "Les mdp doivent être identiques!";
 
@@ -337,7 +349,7 @@ class User extends Model {
 
         if (!isset($_POST["username"]) || $_POST["fullname"] === '')
             $error[] = "Fullname obligatoire!";
-        if (strtolower($member->username) !==strtolower($_POST['username']))
+        if (strtolower($member->username) !== strtolower($_POST['username']))
             $error = array_merge(self::validate_unicity($_POST["username"]));
         if (strlen($_POST["username"]) < 3 || empty($_POST["username"]))
             $error[] = "Pseudo obligatoir! (min. 3 caractères)";
@@ -389,10 +401,7 @@ class User extends Model {
     private static function age($date_naissance) {
         $arr1 = intval($date_naissance);
         $arr2 = intval(date('Y/m/d'));
-        
-        return $arr2-$arr1;
-     
-        
+        return $arr2 - $arr1;
     }
 
 }
