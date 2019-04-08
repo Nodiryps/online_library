@@ -49,7 +49,7 @@ class ControllerUser extends Controller {
             $role = "";
             $errors = [];
             if (isset($_POST['username']) || isset($_POST['password']) || isset($_POST['password_confirm']) || isset($_POST["fullname"]) || isset($_POST["mail"]) || isset($_POST["birthdate"]) || isset($_POST["role"])) {
-                $username = $_POST['username'];
+                $username = strtolower($_POST['username']);
                 $password = $_POST['password'];
                 $password_confirm = $_POST['password_confirm'];
                 $fullname = $_POST["fullname"];

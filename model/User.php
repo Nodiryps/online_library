@@ -337,7 +337,7 @@ class User extends Model {
 
         if (!isset($_POST["username"]) || $_POST["fullname"] === '')
             $error[] = "Fullname obligatoire!";
-        if ($member->username !== $_POST["username"])
+        if (strtolower($member->username) !==strtolower($_POST['username']))
             $error = array_merge(self::validate_unicity($_POST["username"]));
         if (strlen($_POST["username"]) < 3 || empty($_POST["username"]))
             $error[] = "Pseudo obligatoir! (min. 3 caractères)";
@@ -366,7 +366,7 @@ class User extends Model {
         if ($_POST["fullname"] !== "")
             $member->fullname = $_POST["fullname"];
         if ($_POST["username"] !== "")
-            $member->username = $_POST["username"];
+            $member->username = $_POST['username'];
         if ($_POST["email"] !== "")
             $member->email = $_POST["email"];
         if (isset($_POST["password"]) && !empty(trim($_POST["password"])))
