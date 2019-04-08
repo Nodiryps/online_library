@@ -173,15 +173,15 @@ class Book extends Model {
         }
     }
 
-    private static function titleOk($string) {
-        $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
-        $res = str_replace('é', 'e', $res);
-        $res = str_replace('è', 'e', $res);
-        $res = str_replace('à', 'a', $res);
-        $res = str_replace('ê', 'e', $res);
-        $res = str_replace(' ', '', $res);
-        return $res;
-    }
+//    private static function titleOk($string) {
+//        $res = preg_replace('~[\\\\/.,;:*!?&@{}"<>|]~', '', $string);
+//        $res = str_replace('é', 'e', $res);
+//        $res = str_replace('è', 'e', $res);
+//        $res = str_replace('à', 'a', $res);
+//        $res = str_replace('ê', 'e', $res);
+//        $res = str_replace(' ', '', $res);
+//        return $res;
+//    }
 
     public static function delete_img($book, $bookpicToDel, $errors, $user, $nbCopie) {
         if (isset($_POST["delimageH"])) {
@@ -268,8 +268,8 @@ class Book extends Model {
         $extension_upload = $infosfichier['extension'];
         $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'PNG', 'png', 'JPG', 'JPEG', 'GIF');
         if (in_array($extension_upload, $extensions_autorisees)) {
-            $titleOk = self::titleOk($title); // remplace les char par '' dans $title
-            $picture_path = $titleOk . "." . $extension_upload;
+//            $titleOk = self::titleOk($title); // remplace les char par '' dans $title
+            $picture_path = $title . "." . $extension_upload;
             move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
         }
         return $picture_path;
@@ -280,8 +280,8 @@ class Book extends Model {
         $extension_upload = $infosfichier['extension'];
         $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'PNG', 'png', 'JPG', 'JPEG', 'GIF');
         if (in_array($extension_upload, $extensions_autorisees)) {
-            $titleOk = self::titleOk($this->title); // remplace les char par '' dans $title
-            $picture_path = $titleOk . "." . $extension_upload;
+//            $titleOk = self::titleOk($this->title); // remplace les char par '' dans $title
+            $picture_path = $this->title . "." . $extension_upload;
             move_uploaded_file($_FILES['picture']['tmp_name'], 'uploads/' . $picture_path);
             $this->picture = $picture_path;
         }
