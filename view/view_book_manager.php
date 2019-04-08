@@ -3,6 +3,7 @@
 <html>
     <head>
         <title>Bibliothèque</title>
+        <meta charset="utf-8"/>
     </head>
     <body>
         <nav class="text-right"> 
@@ -15,7 +16,7 @@
         </nav>
         <p style="position:absolute;top:80px;right:10px;"><strong><?= $profile->fullname; ?>'s profile (<?= $profile->role ?>)</strong></p>
 
-        <form class="" method="post"  action="book/index">
+        <form class="" method="post"  action="book/index/">
             <div class="container" >
                 <div class="row">
                     <div id="custom-search-input">
@@ -163,15 +164,17 @@
                                     </button>
                                 </form>
                             </td>
-<!--                             <td style="border:none;margin-left:10px;" bgcolor="white">
+                            <?php if($profile->is_admin()):?>
+                             <td style="border:none;margin-left:10px;" bgcolor="white">
                                 <form  method="post" action="book/delete_book">
-                                    <input type="hidden" name="delbook" value="<? = $book->id ?>">
+                                    <input type="hidden" name="delbook" value="<?= $rent->id ?>">
                                     <input type="hidden" name="panierof" value="<? = $actualpanier->id ?>">
                                     <button type="submit" name="idsubmit" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span >
                                     </button>
                                 </form>
-                            </td>-->
+                            </td>
+                            <?php endif;?>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

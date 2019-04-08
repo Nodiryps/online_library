@@ -65,9 +65,8 @@ class Book extends Model {
         $results = [];
         try {
             $books = self::execute("SELECT * FROM book "
-                            . "WHERE book.id  not in (select rental.book from rental) "
-                            . "AND (isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR "
-                            . "editor LIKE :critere)", array(":critere" => "%" . $critere . "%"));
+                            . "WHERE isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR "
+                            . "editor LIKE :critere AND book.id  not in (select rental.book from rental) " ,array(":critere" => "%" . $critere . "%"));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);

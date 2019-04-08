@@ -80,7 +80,7 @@ class User extends Model {
         }
         return $errors;
     }
-    
+
     public static function same_hash($clear_password, $hash) {
         return $hash === Tools::my_hash($clear_password);
     }
@@ -151,7 +151,7 @@ class User extends Model {
             Tools::abort("Problème lors de l'accès a la base de données(userbymail)");
         }
     }
-    
+
     public function is_admin() {
         return $this->role === "admin";
     }
@@ -174,21 +174,29 @@ class User extends Model {
         }
     }
 
-    public static function is_email_available($email) {
+    public static function _email($id) {
         try {
-            $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
+            $query = self::execute("SELECT email FROM user WHERE email NOT IN (SELECT email FROM user WHERE id=:id)", array("id" => $id));
             $result = $query->fetchAll();
-            return count($result) === 0;
+            return $result;
         } catch (Exception $e) {
-            Tools:: abort("Problème lors de l'accès a la base de données111");
+            Tools::abort("Problème lors de l'accès a la base de données(usernameavailable)");
         }
     }
-    
+
+    private static function is_email_available($id, $mail) {
+        $val = self::_email($id);
+        var_dump($val);
+        foreach ($val as $value) {
+            return $value !== $mail;
+        }
+    }
+
     public static function validate_birthdate_add_user($birthdate) {
         $today = self::today_one_int();
         $res = self::age_calc($birthdate, $today);
-        
-        if (self::res_age_valid($res, $today, $birthdate)){
+
+        if (self::res_age_valid($res, $today, $birthdate)) {
             $res = self::res_age_valid($res, $today, $birthdate);
             return $res >= 10;
         } else
@@ -265,8 +273,7 @@ class User extends Model {
                     . "WHERE id = :id", array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
                 "email" => $this->email, "birthdate" => $this->birthdate, "role" => $this->role, "id" => $this->id));
         } catch (Exception $e) {
-            //Tools::abort("Problème lors de l'accès a la base de données(update)");
-            $e->getMessage();
+            Tools::abort("Problème lors de l'accès a la base de données(update)");
         }
     }
 
@@ -289,8 +296,8 @@ class User extends Model {
         $results = [];
         try {
             $books = self::execute("SELECT DISTINCT book.*"
-                                 . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
-                                 . "WHERE user.id=:id AND rental.rentaldate IS  NULL ", array("id" => $this->id));
+                            . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                            . "WHERE user.id=:id AND rental.rentaldate IS  NULL ", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
@@ -305,8 +312,8 @@ class User extends Model {
         $results = [];
         try {
             $books = self::execute("SELECT DISTINCT book.*"
-                                 . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
-                                 . "WHERE user.id=:id AND rentaldate IS NULL", array("id" => $this->id));
+                            . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                            . "WHERE user.id=:id AND rentaldate IS NULL", array("id" => $this->id));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
@@ -336,7 +343,7 @@ class User extends Model {
             Tools::abort("Problème lors de l'accès a la base de données(get_username_by_id)");
         }
     }
-    
+
     public static function errors_add_user($username, $email, $fullname, $password, $password_confirm, $birthdate) {
         $errors = [];
         if (!User::is_username_not_available($username))
@@ -353,11 +360,11 @@ class User extends Model {
             $error[] = "Date de naissance obligatoire!";
         if (!User::validate_birthdate_add_user($_POST["birthdate"]))
             $error[] = "Date de naissance invalide!";
-        if(!isset($_POST['password']) || !isset($_POST['pasword_confirm']) || $password === '' || $password_confirm === '')
+        if (!isset($_POST['password']) || !isset($_POST['pasword_confirm']) || $password === '' || $password_confirm === '')
             $errors[] = "Les mdp sont obligatoires!";
         if ($password != $password_confirm)
             $errors[] = "Les mdp doivent être identiques!";
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
             $errors[] = "Email invalide!";
         return $errors;
     }
@@ -368,7 +375,7 @@ class User extends Model {
             $error[] = "Fullname obligatoire!";
         if (strlen($_POST["username"]) < 3 || empty($_POST["username"]))
             $error[] = "Pseudo obligatoir! (min. 3 caractères)";
-        if (!self::is_email_available($member->id, $_POST["email"], $oldmail))
+        if (!self::is_email_available($member->id, $_POST["email"]))
             $error[] = "L'email existe déjà !";
         if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
             if (!User::validate_birthdate_edit_user($member->id, $_POST["birthdate"]))
@@ -377,12 +384,12 @@ class User extends Model {
             $error[] = "Email obligatoir!";
         if (isset($_POST["password"]) && ($_POST["password"] !== $_POST["confirm_password"]))
             $error[] = "Les mdp ne correspondent pas!";
-       
-        if (!filter_var($oldmail, FILTER_VALIDATE_EMAIL)) 
+
+        if (!filter_var($oldmail, FILTER_VALIDATE_EMAIL))
             $errors[] = "Email invalide!";
         return $error;
     }
-    
+
     public static function set_member_attr_edit_profile(&$member, &$confirm_password) {
         if ($_POST["birthdate"] !== "")
             $member->birthdate = $_POST["birthdate"];
@@ -399,6 +406,16 @@ class User extends Model {
         if (isset($_POST["confirm_password"]) && !empty(trim($_POST["confirm_password"])))
             $confirm_password = $_POST["confirm_password"];
     }
-    
-    
+
+    public static function is_return_late($datereturn) {
+        $return = self::returnDate_one_int($datereturn);
+        $today = self::returnDate_one_int(date("d/m/Y"));
+        return $today > $return;
+    }
+
+    private static function returnDate_one_int($birthdate) {
+        $birthdate = explode("/", $birthdate);
+        return ($birthdate[2] * 10000) + ($birthdate[1] * 100) + $birthdate[0];
+    }
+
 }

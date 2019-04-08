@@ -34,7 +34,7 @@ class ControllerRental extends Controller {
             $this->redirect();
     }
 
-    public function add_rental_in_basket() {// on recupere un user mais le champ id est vide
+    public function add_rental_in_basket() {
         $user = $this->get_user_or_redirect();
         $users = User::get_user_by_username($user->username);
         $books = Rental::get_rental_join_book_join_user_rentdate($user->id);
@@ -47,6 +47,7 @@ class ControllerRental extends Controller {
         if (isset($_POST["idbook"]) && isset($_POST["panierof"])) {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
+            var_dump($rent);
             if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
                 $msg = "Vous ne pouvez pas louer plus de 5 livres à la fois!";
             } else {

@@ -22,15 +22,7 @@ class ControllerUser extends Controller {
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate,"vignette"=>$vignette));
     }
 
-    public static function is_return_late($datereturn) {
-       $return= self::birthdate_one_int($datereturn);
-       $today= self::birthdate_one_int(date("d/m/Y"));
-        return $today>$return;
-    }
-      public  static function birthdate_one_int($birthdate) {
-        $birthdate = explode("/", $birthdate);
-        return ($birthdate[2] * 10000) + ($birthdate[1] * 100) + $birthdate[0];
-    }
+  
 
     public function user_list() {
         $user = $this->get_user_or_redirect();
