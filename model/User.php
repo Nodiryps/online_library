@@ -50,7 +50,7 @@ class User extends Model {
     }
 
     public static function validate_unicity($pseudo) {
-        $errors = [] ;
+        $errors = [];
         $member = self::is_username_not_available($pseudo);
         if (!$member) {
             $errors[] = "Pseudo existant!";
@@ -192,43 +192,20 @@ class User extends Model {
     }
 
     public static function validate_birthdate_add_user($birthdate) {
-        $today = self::today_one_int();
         $res = self::age($birthdate);
-
-        if (self::res_age_valid($res, $today, $birthdate)) {
-            $res = self::res_age_valid($res, $today, $birthdate);
-            return $res >= 10;
-        } else
-            return FALSE;
+        return $res >= 10;
     }
 
     public static function validate_birthdate_edit_user($id, $birthdate) {
         $user = self::get_user_by_id($id);
-
         $res = self::age($birthdate);
-
-        if ($user->is_member())
+        var_dump($res);
+        if ($_POST['role'] === 'member')
             return $res >= 10;
-        elseif ($user->is_admin() || $user->is_manager())
+        elseif ($_POST['role'] === 'admin' || $_POST['role'] === 'manager')
             return $res >= 18;
         else
             return FALSE;
-    }
-
-    private static function age_calc($birthdate, $today) {
-        $birthdate = self::birthdate_one_int($birthdate);
-        return $today - $birthdate;
-    }
-
-    public static function today_one_int() {
-        $today = date("Y-m-d");
-        $today = explode("-", $today);
-        return ($today[0] * 10000) + ($today[1] * 100) + $today[2];
-    }
-
-    public static function birthdate_one_int($birthdate) {
-        $birthdate = explode("-", $birthdate);
-        return ($birthdate[0] * 10000) + ($birthdate[1] * 100) + $birthdate[2];
     }
 
     public function delete_user() {
@@ -349,6 +326,7 @@ class User extends Model {
             $errors[] = "Les mdp sont obligatoires!";
         if ($password != $password_confirm)
             $errors[] = "Les mdp doivent être identiques!";
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL))
             $errors[] = "Email invalide!";
         return $errors;
@@ -356,10 +334,11 @@ class User extends Model {
 
     public static function errors_edit_profile($member, $oldmail) {
         $error = [];
+
         if (!isset($_POST["username"]) || $_POST["fullname"] === '')
             $error[] = "Fullname obligatoire!";
-        if($member->username !== $_POST["username"])
-            $error= array_merge( self::validate_unicity($_POST["username"]));
+        if ($member->username !== $_POST["username"])
+            $error = array_merge(self::validate_unicity($_POST["username"]));
         if (strlen($_POST["username"]) < 3 || empty($_POST["username"]))
             $error[] = "Pseudo obligatoir! (min. 3 caractères)";
         if ($member->email !== $oldmail) {
@@ -367,19 +346,17 @@ class User extends Model {
                 $error[] = "L'email existe déjà !";
             }
         }
-            if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
-                if (!User::validate_birthdate_edit_user($member->id, $_POST["birthdate"]))
-                    $error[] = "Date de naissance invalide!";
-            if (!isset($_POST["email"]) || empty($_POST["email"]))
-                $error[] = "Email obligatoir!";
-            if (isset($_POST["password"]) && ($_POST["password"] !== $_POST["confirm_password"]))
-                $error[] = "Les mdp ne correspondent pas!";
-
-            if (!filter_var($oldmail, FILTER_VALIDATE_EMAIL))
-                $errors[] = "Email invalide!";
-            return $error;
-        }
-    
+        if (isset($_POST["birthdate"]) && $_POST["birthdate"] !== "")
+            if (!User::validate_birthdate_edit_user($member->id, $_POST["birthdate"]))
+                $error[] = "Date de naissance invalide!";
+        if (!isset($_POST["email"]) || empty($_POST["email"]))
+            $error[] = "Email obligatoir!";
+        if (isset($_POST["password"]) && ($_POST["password"] !== $_POST["confirm_password"]))
+            $error[] = "Les mdp ne correspondent pas!";
+        if (!filter_var($oldmail, FILTER_VALIDATE_EMAIL))
+            $errors[] = "Email invalide!";
+        return $error;
+    }
 
     public static function set_member_attr_edit_profile(&$member, &$confirm_password) {
         if ($_POST["birthdate"] !== "")
@@ -410,16 +387,12 @@ class User extends Model {
     }
 
     private static function age($date_naissance) {
-        $arr1 = explode('/', $date_naissance);
-        $arr2 = explode('/', date('d/m/Y'));
-
-
-        if (isset($arr1[1]) && isset($arr1[0]) && isset($arr2[1]) && isset($arr2[0])) {
-            if (($arr1[1] < $arr2[1]) || (($arr1[1] == $arr2[1]) && ($arr1[0] <= $arr2[0])))
-                return $arr2[2] - $arr1[2];
-
-            return $arr2[2] - $arr1[2] - 1;
-        }
+        $arr1 = intval($date_naissance);
+        $arr2 = intval(date('Y/m/d'));
+        
+        return $arr2-$arr1;
+     
+        
     }
 
 }
