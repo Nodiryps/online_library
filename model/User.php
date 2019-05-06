@@ -43,8 +43,11 @@ class User extends Model {
             $errors[] = "Pseudo length must be between 3 and 16.";
         } if (!(isset($this->username) && is_string($this->username) && preg_match("/^[a-zA-Z][a-zA-Z0-9]*$/", $this->username))) {
             $errors[] = "Pseudo must start by a letter and must contain only letters and numbers.";
-        } if (!User::is_email_available($this->id,$this->email)) {
+        } if (!User::is_email_available($this->email)) {
             $errors[] = "l'email existe deja";
+        }
+        if($this->hash_password=="" || empty($this->hash_password)){
+            $errors[]="le mot de passe est obligatoire et le confirme de mot de passe est obligatoire";
         }
         return $errors;
     }
@@ -184,21 +187,23 @@ class User extends Model {
         }
     }
 
-    public static function _email($id) {
+    public static function _email($email) {
         try {
-            $query = self::execute("SELECT email FROM user WHERE email NOT IN (SELECT email FROM user WHERE id=:id)", array("id" => $id));
+            $query = self::execute("SELECT email FROM user WHERE email=:email", array("email" => $email));
             $result = $query->fetchAll();
-            return $result;
+            return count($result)>0;
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données(usernameavailable)");
         }
     }
 
-    private static function is_email_available($id, $mail) {
-        $val = self::_email($id);
-        foreach ($val as $value) {
-            return $value !== $mail;
-        }
+    private static function is_email_available( $mail) {
+        $val = self::_email($mail);
+        var_dump($val);
+       if($val){
+           return false;
+       }
+       return true;
     }
 
     public static function validate_birthdate_add_user($birthdate) {

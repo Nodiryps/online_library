@@ -89,6 +89,10 @@ class ControllerRental extends Controller {
         $usertoAddRent = "";
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $members = User::get_all_user();
+        
+        if(isset($_GET["param1"])){
+            
+        }
         if (isset($_POST["panierof"])) {
             $value = $_POST["member_rents"];
             $usertoAddRent = User::get_user_by_id($value);
