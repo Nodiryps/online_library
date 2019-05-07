@@ -23,6 +23,7 @@
                         <div class="input-group col-md-10">
                             <input type="text" class="  search-query form-control" placeholder="rechercher un livre" name="search"/>
                             <span class="input-group-btn">
+                                <input name="idUser" type="hidden" value="<?=  $actualpanier->id ?>">
                                 <button class="btn btn-info" type="submit" value="rechercher">
                                     <span class=" glyphicon glyphicon-search"></span>
                                 </button>
@@ -183,14 +184,15 @@
         <div class="col-lg-2 ">
             <?php if ($profile->is_admin() || $profile->is_manager()): ?>
             <br><br><br>
-                <form class="form-horizontal" method="post" action="rental/get_basket">
+              
                     <label>Panier pour:</label> <?= $actualpanier->username ?>
                     <br>
+                      <form class="form-horizontal" method="post" action="rental/get_basket">
                     <select id="selectbasic" name="member_rents" class="form-control">
                         <option value="<?= $actualpanier->id ?>"><?= $actualpanier->username ?></option>
                         <?php foreach ($members as $member): 
                             if($member->id !== $actualpanier->id):?>
-                            <option value="<?= $member->id ?>"><?= $member->username ?></option>
+                            <option value="<?= $member->id ?>"><?= $member->username ?>,<?= $actualpanier->id ?></option>
                         <?php endif; 
                         endforeach; ?>
                     </select>

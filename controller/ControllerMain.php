@@ -71,8 +71,8 @@ class ControllerMain extends Controller {
                 $errors[] = "Date de naissance invalide!";
              
             if (count($errors) == 0) {
-//                $member->insert();
-//                $this->log_user(User::get_user_by_username($member->username));
+                $member->insert();
+                $this->log_user(User::get_user_by_username($member->username));
             }
         }
         (new View("signup"))->show(array("username" => $username, "password" => $password, "password_confirm" => $password_confirm, "fullname" => $fullname, "email" => $email, "birthdate" => $birthdate, "errors" => $errors));

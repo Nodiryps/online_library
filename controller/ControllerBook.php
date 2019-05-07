@@ -12,29 +12,32 @@ class ControllerBook extends Controller {
     public function index() {
         $user = $this->get_user_or_redirect();
         $books = Book::get_all_books($user->id);
+        var_dump($books);
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $members = User::get_all_user();
         $usertoAddRent = $user;
         $msg = " ";
         $filter = [];
 
-        if (isset($_GET["param1"])) {
+        if (isset($_GET["param1"]) ) {
             $filter = Tools::url_safe_decode($_GET['param1']);
+            $msg=$filter["idUser"];
             if (!$filter)
                 Tools::abort("bad url parameter");
         }
-        if (isset($_POST["search"])) {
+        if (isset($_POST["search"]) && isset($_POST["idUser"])) {
             $filter["search"] = $_POST["search"];
+            $filter["idUser"]=$_POST["idUser"];
             $this->redirect("Book", "index", Tools::url_safe_encode($filter));
         }    
         if ($filter) {
-            $books = Book::get_book_by_critere($filter["search"]);
-            $msg = " ";
-            $filter = "";
+            var_dump($filter);
+            $books = Book::get_book_by_critere($filter["search"],$filter["idUser"]);
         }
-       
-        if (empty($_GET["param1"]))
-            $books = Book::get_all_books($user->id);
+       else{
+            // $books = Book::get_all_books($msg);
+       }
+          
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
