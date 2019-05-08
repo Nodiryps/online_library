@@ -1,17 +1,35 @@
 console.log("Index");
 $(function () {
+     $("input:text:first").focus();
+      validatePasswordFocusLost();
+    validate();
+    validateUserFocusLost();
+   
+
+});
+
+function validateUserFocusLost() {
+   
+    let errPseudo = $("#errPseudo");
+    var r = $('#pseudo');
+    r.focusout(function () {
+        $.get("user/ValidateUser/" + r.val(),
+                function (data) {
+                    //console.log("le Data :"+data);
+                    if (data === "false") {
+                        errPseudo.html("");
+                        errPseudo.append("ce Pseudo n'existe pas  ");
+                    }
+                }
+        );
+
+    });
+}
+
+function validate() {
     $('#loginForm').validate({
         rules: {
-            pseudo: {
-                remote: {
-                    url: 'User/rentals_by_user',
-                    type: 'post',
-                    data: {
-                        pseudo: function () {
-                            return $("#pseudo").val();
-                        }
-                    }
-                },
+            pseudo:{
                 required: true,
                 minlength: 3,
                 maxlength: 16
@@ -40,18 +58,25 @@ $(function () {
 
 
     });
-    
-    $("input:text:first").focus();
-    
-    var r = $('#pseudo');
-    r.focusout(function () {
-        console.log(r.val());
-    $.get("User/ValidateUser", function (data) {
-            console.log(data);
-        });
+}
 
-    });
-
-
-});
-               
+function validatePasswordFocusLost(){
+     let errPassword = $("#errPassword");
+      var r = $('#pseudo');
+    var s=$('#password');
+      s.focusout(function(){
+          console.log("click");
+           $.get("user/ValidatePassword/" + r.val()+"/"+s.val(),
+                function (data) {
+                    console.log("le Data :"+data);
+                    if (data === "false") {
+                        errPassword.html("");
+                        errPassword.append("c'est le mauvais mot de passe, réessayez  ");
+                    }else{
+                         errPassword.html("");
+                    }
+                }
+        );
+          
+      });
+}

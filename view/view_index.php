@@ -27,14 +27,14 @@
                     <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="loginForm">
                         <div class="form-group">
                             <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo" id="pseudo">
-                            <p id="error1"></p>
+                          <p class="errors" id="errPseudo"></p>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" name="password" value="<?= $password ?>" placeholder="Mot de passe">
-                            <p class="text-danger"  id="error2"></p>
+                            <input type="password" class="form-control" name="password" value="<?= $password ?>" placeholder="Mot de passe"  id="password">
+                          <p class="errors" id="errPassword"></p>
                         </div>
                         <div class="form-check">
-                            <button class="btn btn-block send-button tx-tfm btn-success" type="submit" 
+                            <button class="btn btn-block send-button tx-tfm btn-success" type="submit" id="connect"
                                     name="connect" id="connect" value="connect" 
                                     style="margin:auto;width:150px;">Connexion
                             </button> 

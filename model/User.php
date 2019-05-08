@@ -14,6 +14,7 @@
 require_once 'framework/Model.php';
 require_once 'model/Book.php';
 require_once 'model/Rental.php';
+require_once 'framework/Tools.php';
 
 class User extends Model {
 
@@ -129,6 +130,16 @@ class User extends Model {
     public static function get_user_by_username($username) {
         try {
             $query = self::execute("SELECT * FROM user WHERE username=:username", array("username" => $username));
+            $member = $query->fetch();
+            return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
+        } catch (Exception $e) {
+            Tools:: abort("Problème lors de l'accès a la base de données(userbyusername)");
+        }
+    }
+    
+      public static function get_user_by_password($password) {
+        try {
+            $query = self::execute("SELECT * FROM user WHERE password=:password", array("password" => Tools::my_hash($password)));
             $member = $query->fetch();
             return new User($member["id"], $member["username"], $member["password"], $member["fullname"], $member["email"], $member["birthdate"], $member["role"]);
         } catch (Exception $e) {
