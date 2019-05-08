@@ -120,5 +120,17 @@ class ControllerUser extends Controller {
     public function rentals_by_user($user) {
         return Rental::get_rentals_by_user($user);
     }
+    
+    public function ValidateUser(){
+        if(isset($_GET["param1"])){
+            $user= User::get_all_user();
+            if($user){
+             return $user;
+            }
+           return false;                    
+        }
+    }
+    
+    
 
 }

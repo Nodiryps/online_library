@@ -408,5 +408,8 @@ class User extends Model {
         $arr2 = intval(date('Y/m/d'));
         return $arr2 - $arr1;
     }
+    
+    
+    
 
 }

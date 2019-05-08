@@ -14,6 +14,9 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="js/index.js" type="text/javascript"></script>
+        <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
     </head>
     <body>
         <div class="container" style="width:350px;margin:5% auto;">	
@@ -21,12 +24,14 @@
                 <h1 class="text-center "><strong>Connexion</strong></h1>
                 <br>
                 <div>
-                    <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="loginForm">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo">
+                            <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo" id="pseudo">
+                            <p id="error1"></p>
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control" name="password" value="<?= $password ?>" placeholder="Mot de passe">
+                            <p class="text-danger"  id="error2"></p>
                         </div>
                         <div class="form-check">
                             <button class="btn btn-block send-button tx-tfm btn-success" type="submit" 
@@ -40,7 +45,7 @@
             </div>
             <br>
             <div class='text-danger text-left'>
-                <?php if ($errors !== []): ?>
+                <?php if ($errors !== []): ?> 
                     <p>Erreur(s) à corriger:</p>
                     <ul>
                         <?php foreach ($errors as $error): ?>
