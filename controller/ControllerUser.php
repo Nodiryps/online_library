@@ -121,11 +121,14 @@ class ControllerUser extends Controller {
         return Rental::get_rentals_by_user($user);
     }
     
+    
+    //////////Ajax methode/////////////////////////
     public function ValidateUser(){
         $res="false";
         
         if(isset($_GET["param1"]) && $_GET["param1"] !== "" ){
             $user= User::get_user_by_username($_GET['param1']);
+            var_dump($user);
             if($user->id!=null){
              $res="true";
             }
@@ -137,12 +140,26 @@ class ControllerUser extends Controller {
         $res="false";
         if(isset($_GET["param1"]) && $_GET["param1"] !== "" && isset($_GET["param2"]) && $_GET["param2"] !== ""){
             $user= User::get_user_by_username($_GET['param1']);
-            //var_dump($user);
+            var_dump($user);
             if($user->id!=null && $user->hash_password === Tools::my_hash($_GET["param2"])){
                  $res = "true";
             }
            echo  $res;                    
         }
+    }
+    
+    public  function  isEmailExist(){
+        $res="false";
+        if(isset($_POST["param1"]) && $_POST["param1"] !== ""){
+              var_dump($_GET["param1"]);
+            $email= User::is_mail_exist($_POST['param1']);
+            var_dump($email);
+            if($email){
+                 $res = "true";
+            }
+           echo  $res;                    
+        }
+        
     }
     
     

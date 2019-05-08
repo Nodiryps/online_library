@@ -45,6 +45,8 @@ class ControllerMain extends Controller {
         $role = "";
         $id = 0;
         $errors = [];
+        
+    
 
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['password_confirm']) && isset($_POST['fullname']) && isset($_POST['email']) && isset($_POST['birthdate'])) {
             $username = trim($_POST['username']);
