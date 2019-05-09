@@ -157,7 +157,6 @@ class ControllerBook extends Controller {
     public function get_search(){
         if(isset($_GET['param1']) && !$_GET['param1']=="" && isset($_GET['param2'])){
             $result= Book::get_book_by_critere($_GET['param1'], $_GET['param2']);
-            var_dump(gettype($result));
             echo json_encode($result);
             }
     }

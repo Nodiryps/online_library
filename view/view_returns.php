@@ -6,6 +6,18 @@
         <meta charset="UTF-8">
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
+        <!--<script src="js/.js" type="text/javascript"></script>-->
     </head>
     <body>
         <nav> 
@@ -79,6 +91,7 @@
 
                         </tr>
                     </thead>
+                    
                     <?php foreach ($books as $book): ?>
                         <tr>
                             <td class="text-center"><?= $book->rentaldate ?></td>
