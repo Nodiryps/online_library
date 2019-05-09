@@ -1,4 +1,3 @@
-console.log("Index");
 $(function () {
     $("input:text:first").focus();
     validatePasswordLogin();
