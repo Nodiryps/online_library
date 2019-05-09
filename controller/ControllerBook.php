@@ -12,7 +12,6 @@ class ControllerBook extends Controller {
     public function index() {
         $user = $this->get_user_or_redirect();
         $books = Book::get_all_books($user->id);
-        var_dump($books);
         $getUserRental = $user->get_rental_join_book_join_user_by_user_not_rented();
         $members = User::get_all_user();
         $usertoAddRent = $user;
@@ -31,7 +30,6 @@ class ControllerBook extends Controller {
             $this->redirect("Book", "index", Tools::url_safe_encode($filter));
         }    
         if ($filter) {
-            var_dump($filter);
             $books = Book::get_book_by_critere($filter["search"],$filter["idUser"]);
         }
        else{
@@ -154,6 +152,14 @@ class ControllerBook extends Controller {
             }
         } else
             $this->redirect("book", "index");
+    }
+    
+    public function get_search(){
+        if(isset($_GET['param1']) && !$_GET['param1']=="" && isset($_GET['param2'])){
+            $result= Book::get_book_by_critere($_GET['param1'], $_GET['param2']);
+            var_dump(gettype($result));
+            echo json_encode($result);
+            }
     }
 
 }

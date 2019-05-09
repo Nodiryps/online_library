@@ -24,7 +24,7 @@
             <div class="row">
                 <h1 class="text-center"><strong>Inscription</strong></h1>
                 <br>
-                <form action="main/signup" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <form action="main/signup" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="signupForm">
                     <div class="form-group">
                         <input type="text" name="fullname"  class="form-control my-input" id="fullname" placeholder="Nom complet" value="<?= $fullname ?>">
                     </div>
@@ -40,7 +40,7 @@
                         <input type="date" name="birthdate" id="birthdate"  class="form-control my-input" placeholder="Date de naissance"  value="<?= $birthdate ?>">
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password"  class="form-control my-input" id="password" placeholder="Mot(phrase!) de passe">
+                        <input type="password" name="password"  class="form-control my-input" id="passwordSignup" placeholder="Mot(phrase!) de passe">
                     </div>
                     <div class="form-group">
                         <input type="password" name="password_confirm"  class="form-control my-input" id="password_confirm" placeholder="Répétez votre mot(phrase!) de passe">

@@ -128,10 +128,11 @@ class ControllerUser extends Controller {
         
         if(isset($_GET["param1"]) && $_GET["param1"] !== "" ){
             $user= User::get_user_by_username($_GET['param1']);
-            var_dump($user);
+            //var_dump($user);
             if($user->id!=null){
              $res="true";
             }
+            
            echo  $res;     
         }
     }
@@ -140,7 +141,7 @@ class ControllerUser extends Controller {
         $res="false";
         if(isset($_GET["param1"]) && $_GET["param1"] !== "" && isset($_GET["param2"]) && $_GET["param2"] !== ""){
             $user= User::get_user_by_username($_GET['param1']);
-            var_dump($user);
+            
             if($user->id!=null && $user->hash_password === Tools::my_hash($_GET["param2"])){
                  $res = "true";
             }
