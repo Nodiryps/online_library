@@ -6,26 +6,103 @@
         <meta charset="UTF-8">
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
 
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
 
         <!-- Latest compiled and minified JavaScript -->
+
+                        <!--Plugin Fullcalendar-->
+                        
+        <link href='lib/fullcalendar/packages/core/main.css' rel='stylesheet' />
+        <link href='lib/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
+          <script src='lib/fullcalendar/packages/moment/main.js'></script>
+        <script src='lib/fullcalendar/packages/core/main.js'></script>
+        <script src='lib/fullcalendar/packages/interaction/main.js'></script>
+        <script src='lib/fullcalendar/packages/daygrid/main.js'></script>
+        
+                  <!--Script javascript et Jquery-->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
         <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
-        <!--<script src="js/.js" type="text/javascript"></script>-->
+        <script src="js/fullcalendar.js" type="text/javascript"></script>
     </head>
     <body>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+             var calendarEl = $('#phpAffiche');
+    console.log("methode");
+   var calendar = new FullCalendar.Calendar(calendarEl, {
+    plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+    defaultView: 'dayGridMonth',
+    defaultDate: '2019-05-07',
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    events: [
+      {
+        title: 'All Day Event',
+        start: '2019-05-01'
+      },
+      {
+        title: 'Long Event',
+        start: '2019-05-07',
+        end: '2019-05-10'
+      },
+      {
+        groupId: '999',
+        title: 'Repeating Event',
+        start: '2019-05-09T16:00:00'
+      },
+      {
+        groupId: '999',
+        title: 'Repeating Event',
+        start: '2019-05-16T16:00:00'
+      },
+      {
+        title: 'Conference',
+        start: '2019-05-11',
+        end: '2019-05-13'
+      },
+      {
+        title: 'Meeting',
+        start: '2019-05-12T10:30:00',
+        end: '2019-05-12T12:30:00'
+      },
+      {
+        title: 'Lunch',
+        start: '2019-05-12T12:00:00'
+      },
+      {
+        title: 'Meeting',
+        start: '2019-05-12T14:30:00'
+      },
+      {
+        title: 'Birthday Party',
+        start: '2019-05-13T07:00:00'
+      },
+      {
+        title: 'Click for Google',
+        url: 'http://google.com/',
+        start: '2019-05-28'
+      }
+    ]
+  });
+
+  calendar.render();
+            });
+        </script>
         <nav> 
             <?php
             if ($profile->is_member())
-            include('menuMember.html');
+                include('menuMember.html');
             if ($profile->is_admin() || $profile->is_manager())
-            include('menu.html');
+                include('menu.html');
             ?>
         </nav>
         <p style="position:absolute;top:80px;right:10px;"><strong>  <?= $profile->fullname; ?>'s profile! (<?= $profile->role ?>) </strong></p>
@@ -55,17 +132,17 @@
                         <div class="form-group">
                             <select id="inputState" name="filtre" class="form-control"  >
                                 <option <?php if (!empty($filter) && $filter == "tous") { ?>
-                                    selected
+                                        selected
                                     <?php }
                                     ?> value="tous" >Tous</option>
                                 <option 
                                 <?php if (!empty($filter) && $filter == "location") { ?>
-                                    selected
+                                        selected
                                     <?php }
                                     ?>value="location">Location</option>
                                 <option 
                                 <?php if (!empty($filter) && $filter == "retour") { ?>
-                                    selected
+                                        selected
                                     <?php }
                                     ?>value="retour">Retour</option>
                             </select>
@@ -78,20 +155,20 @@
             </form>
         </div>
         <br><br><br><br><br>
-        <div>
-            <div class="container table-wrapper-scroll-y">
-                <table class="table table-striped table-condensed " >
-                    <legend class="text-center"><h1>Retours</h1></legend>
-                    <thead class="thead-dark">
-                        <tr>
-                            <th class="text-center" scope="col">DATE LOCATION</th>
-                            <th class="text-center" scope="col">MEMBRE</th>
-                            <th class="text-center" scope="col">LIVRE</th>
-                            <th class="text-center" scope="col">DATE RETOUR</th>
 
-                        </tr>
-                    </thead>
-                    
+        <div class="container table-wrapper-scroll-y " id="phpAffiche">
+            <table class="table table-striped table-condensed " >
+                <legend class="text-center"><h1>Retours</h1></legend>
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-center" scope="col">DATE LOCATION</th>
+                        <th class="text-center" scope="col">MEMBRE</th>
+                        <th class="text-center" scope="col">LIVRE</th>
+                        <th class="text-center" scope="col">DATE RETOUR</th>
+
+                    </tr>
+                </thead>
+                <div>
                     <?php foreach ($books as $book): ?>
                         <tr>
                             <td class="text-center"><?= $book->rentaldate ?></td>
@@ -100,40 +177,47 @@
                             <td class="text-center"><?= $book->returndate ?></td>
                             <?php if ($book->returndate == null): ?>
                                 <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
-                                <td style="border:none;" bgcolor="white">
-                                    <form  method="post" action="rental/update_rental_returndate">
-                                        <input type="hidden" name="idbook" value="<?= $book->id ?>">
-                                        <button type="submit" name="idsubmit" class="btn btn-success">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </button>
-                                    </form>
-                                </td>
-                                <?php endif;
-                                elseif ($book->returndate !== null): ?>
-                                <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
-                                <td style="border:none;" bgcolor="white">
-                                    <form  method="post" action="rental/cancel_rental_returndate">
-                                        <input type="hidden" name="idcancel" value="<?= $book->id ?>">
-                                        <button type="submit" name="idsubmit" class="btn btn-warning">
-                                            <span class="glyphicon glyphicon-repeat"></span>
-                                        </button>
-                                    </form>
-                                </td>
-                                <?php endif; 
-                                if ($profile->role == "admin" ): ?>
-                                <td style="border:none;" bgcolor="white">
-                                    <form  method="post" action="rental/delete_rental">
-                                        <input type="hidden" name="delrent" value="<?= $book->id ?>">
-                                        <button type="submit" name="idsubmit" class="btn btn-danger ">
-                                            <span class="glyphicon glyphicon-trash text-right"></span >
-                                        </button>
-                                    </form>
-                                </td>
-                            <?php endif; endif; ?>
+                                    <td style="border:none;" bgcolor="white">
+                                        <form  method="post" action="rental/update_rental_returndate">
+                                            <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                            <button type="submit" name="idsubmit" class="btn btn-success">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                <?php
+                                endif;
+                            elseif ($book->returndate !== null):
+                                ?>
+        <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
+                                    <td style="border:none;" bgcolor="white">
+                                        <form  method="post" action="rental/cancel_rental_returndate">
+                                            <input type="hidden" name="idcancel" value="<?= $book->id ?>">
+                                            <button type="submit" name="idsubmit" class="btn btn-warning">
+                                                <span class="glyphicon glyphicon-repeat"></span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                <?php
+                                endif;
+                                if ($profile->role == "admin"):
+                                    ?>
+                                    <td style="border:none;" bgcolor="white">
+                                        <form  method="post" action="rental/delete_rental">
+                                            <input type="hidden" name="delrent" value="<?= $book->id ?>">
+                                            <button type="submit" name="idsubmit" class="btn btn-danger ">
+                                                <span class="glyphicon glyphicon-trash text-right"></span >
+                                            </button>
+                                        </form>
+                                    </td>
+                            <?php endif;
+                        endif;
+                        ?>
                         </tr>
-                    <?php endforeach; ?>
-                </table>
-            </div>
+<?php endforeach; ?>
+            </table>
+
         </div>
-    </body>
+    </div>
+</body>
 </html>

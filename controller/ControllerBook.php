@@ -18,24 +18,23 @@ class ControllerBook extends Controller {
         $msg = " ";
         $filter = [];
 
-        if (isset($_GET["param1"]) ) {
+        if (isset($_GET["param1"])) {
             $filter = Tools::url_safe_decode($_GET['param1']);
-            $msg=$filter["idUser"];
+            $msg = $filter["idUser"];
             if (!$filter)
                 Tools::abort("bad url parameter");
         }
         if (isset($_POST["search"]) && isset($_POST["idUser"])) {
             $filter["search"] = $_POST["search"];
-            $filter["idUser"]=$_POST["idUser"];
+            $filter["idUser"] = $_POST["idUser"];
             $this->redirect("Book", "index", Tools::url_safe_encode($filter));
-        }    
-        if ($filter) {
-            $books = Book::get_book_by_critere($filter["search"],$filter["idUser"]);
         }
-       else{
+        if ($filter) {
+            $books = Book::get_book_by_critere($filter["search"], $filter["idUser"]);
+        } else {
             // $books = Book::get_all_books($msg);
-       }
-          
+        }
+
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
@@ -153,12 +152,19 @@ class ControllerBook extends Controller {
         } else
             $this->redirect("book", "index");
     }
-    
-    public function get_search(){
-        if(isset($_GET['param1']) && !$_GET['param1']=="" && isset($_GET['param2'])){
-            $result= Book::get_book_by_critere($_GET['param1'], $_GET['param2']);
-            echo json_encode($result);
+
+    public function get_search() {
+        if (isset($_GET['param1']) && !$_GET['param1'] == "" && isset($_GET['param2'])) {
+            if ($_GET['param1'] !== " ") {
+                $result = Book::get_book_by_critere($_GET['param1'], $_GET['param2']);
+                 // var_dump($result);
+                echo json_encode($result);
+            } else {
+                $result = Book::get_all_books($_GET['param2']);
+                //var_dump($result);
+                echo json_encode($result);
             }
+        }
     }
 
 }

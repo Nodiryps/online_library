@@ -40,7 +40,7 @@
                             <input type="text" class="  search-query form-control" placeholder="rechercher un livre" name="search" id="search"/>
                             <span class="input-group-btn">
                                 <input name="idUser" type="hidden" value="<?= $actualpanier->id ?>" id="user" >
-                                <button class="btn btn-info" type="submit" >
+                                <button class="btn btn-info" type="submit" id="btnSearch" >
                                     <span class=" glyphicon glyphicon-search"></span>
                                 </button>
                             </span>

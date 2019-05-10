@@ -1,6 +1,7 @@
 var list;
 var actual;
 $(function () {
+    var btnSearch=$('#btnSearch').hide();
     $("#serach").focus();
     var s = $('#search');
     var u = $('#user');
@@ -8,8 +9,10 @@ $(function () {
     actual = $('#user');
     $('#search').keyup(function () {
         $.get("book/get_search/" + s.val() + "/" + u.val(), function (data) {
+               console.log(data);
             if (data !== "") {
                 var datas = JSON.parse(data);
+             
                 list.html("");
                 applyFilter(datas);
             }
