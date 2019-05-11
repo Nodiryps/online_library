@@ -8,7 +8,7 @@ $(function () {
 function isbn() {
     var isbn = $('#ISBN');
     isbn.focus();
-    isbn.focusout(function () {
+    isbn.keyup(function () {
         var tmp = isbn.val();
         $.get("book/getIsbn/" + isbn.val(), function (data) {
             console.log("Ajax return " + data);
@@ -16,7 +16,6 @@ function isbn() {
             console.log("Json return " + datas);
 
             isbn.val(datas);
-            addFeatures();
         });
 
 
