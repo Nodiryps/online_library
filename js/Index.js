@@ -14,12 +14,9 @@ function validateUserLogin() {
     let errPseudo = $("#errPseudo");
     var r = $('#pseudo');
     r.focusout(function () {
-        console.log(r.val());
         $.get("user/ValidateUser/" + r.val(),
                 function (data) {
-                    console.log("le Data :" + data);
                     if (data === "false") {
-                        console.log("coucouc");
                         errPseudo.html("");
                         errPseudo.append("ce Pseudo n'existe pas  ");
                     } else {
@@ -37,7 +34,6 @@ function validationPseudoSignup() {
     var pseudo = $("#username");
     pseudo.focusout(function () {
         $.get("user/ValidateUser/" + pseudo.val(), function (data) {
-            console.log("le Data :" + data);
             if (data === "true") {
                 errPseudo.html("");
                 errPseudo.append("Pseudo existant");
@@ -57,10 +53,8 @@ function validatePasswordLogin() {
     var r = $('#pseudo');
     var s = $('#password');
     s.focusout(function () {
-        console.log("click");
         $.get("user/ValidatePassword/" + r.val() + "/" + s.val(),
                 function (data) {
-                    console.log("le Data :" + data);
                     if (data === "false") {
                         errPassword.html("");
                         errPassword.append("c'est le mauvais mot de passe, réessayez  ");
@@ -170,9 +164,7 @@ function validationEmailSignup() {
     var errEmail = $('#errEmail');
     var email = $('#email');
     email.focusout(function () {
-        console.log(email.val());
         $.get("user/isEmailExist/" + email.val(), function (data) {
-            //console.log("le Data :"+data);
             encodeURIComponent(email.val())
             if (data === "false") {
                 errEmail.html("");

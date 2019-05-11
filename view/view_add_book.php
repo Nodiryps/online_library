@@ -6,7 +6,7 @@
         <title>Nouveau livre</title>
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"  crossorigin="anonymous">
 
         <!-- Optional theme -->
@@ -14,6 +14,9 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"  crossorigin="anonymous"></script>
+        <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="js/newBook.js" type="text/javascript"></script>
         
     </head>
     <body>
@@ -25,7 +28,7 @@
                 <table>
                     <legend><h1>Nouveau livre</h1></legend>
 
-                    <div class="">
+                    <div class="isbn">
                         <input id="ISBN" name="isbn" type="text" placeholder="isbn(12 chiffres)" class="form-control input-md" value="<?= $isbn?>" >
                     </div>
 

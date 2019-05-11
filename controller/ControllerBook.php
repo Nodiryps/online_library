@@ -18,6 +18,7 @@ class ControllerBook extends Controller {
         $msg = " ";
         $filter = [];
 
+
         if (isset($_GET["param1"])) {
             $filter = Tools::url_safe_decode($_GET['param1']);
             $msg = $filter["idUser"];
@@ -157,13 +158,29 @@ class ControllerBook extends Controller {
         if (isset($_GET['param1']) && !$_GET['param1'] == "" && isset($_GET['param2'])) {
             if ($_GET['param1'] !== " ") {
                 $result = Book::get_book_by_critere($_GET['param1'], $_GET['param2']);
-                 // var_dump($result);
+                // var_dump($result);
                 echo json_encode($result);
             } else {
                 $result = Book::get_all_books($_GET['param2']);
                 //var_dump($result);
                 echo json_encode($result);
             }
+        }
+    }
+
+    public function getIsbn() {
+        $isbn = "";
+        if (isset($_GET['param1'])) {
+            $isbn = Book::calcul_isbn($_GET['param1']);
+            echo json_encode($isbn);
+        }
+    }
+
+    public
+            function addFeatures() {
+        if (isset($_GET['param1'])) {
+            $isbn = Book::isbn_format_EAN_13($_GET['param1']);
+            echo json_encode($isbn);
         }
     }
 
