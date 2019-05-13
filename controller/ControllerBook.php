@@ -171,7 +171,7 @@ class ControllerBook extends Controller {
     public function getIsbn() {
         $isbn = "";
         if (isset($_GET['param1'])) {
-            $isbn = Book::calcul_isbn($_GET['param1']);
+            $isbn = Book::calcul_isbn_js($_GET['param1']);
             echo json_encode($isbn);
         }
     }

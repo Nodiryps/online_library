@@ -29,8 +29,11 @@
                     <legend><h1>Nouveau livre</h1></legend>
 
                     <div class="isbn">
-                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(12 chiffres)" class="form-control input-md" value="<?= $isbn?>" >
+                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(12 chiffres)" class="form-control input-md " value="<?= $isbn?>" style="float: left;" > <!--<input style="display:inline-block;" id="isbn2">-->
+                       
                     </div>
+                    <br>
+                    
 
                     <div class="">
                         <input id="textinput" name="author" type="text" placeholder="auteur.e" class="form-control input-md"value="<?= $author?>" >

@@ -61,21 +61,19 @@ class Book extends Model {
         }
     }
 
-    public static function get_book_by_critere($critere,$user) {
+    public static function get_book_by_critere($critere, $user) {
         $results = [];
         try {
-            $books = self::execute("SELECT * FROM book WHERE (isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR editor LIKE :critere) AND book.id NOT IN (SELECT rental.book FROM rental WHERE rental.user=:user)" ,array(":critere" => "%" . $critere . "%","user"=>$user));
+            $books = self::execute("SELECT * FROM book WHERE (isbn LIKE :critere OR title LIKE :critere OR author LIKE :critere OR editor LIKE :critere) AND book.id NOT IN (SELECT rental.book FROM rental WHERE rental.user=:user)", array(":critere" => "%" . $critere . "%", "user" => $user));
             $query = $books->fetchAll();
             foreach ($query as $row) {
                 $results[] = new Book($row["id"], $row["isbn"], $row["title"], $row["author"], $row["editor"], $row["picture"], $row["nbCopies"]);
             }
             return $results;
         } catch (Exception $e) {
-           // Tools::abort("Problème lors de l'accès a la base de données");
-        echo $e->getMessage();
-            
+            // Tools::abort("Problème lors de l'accès a la base de données");
+            echo $e->getMessage();
         }
-        
     }
 
     public static function get_book_by_id($id) {
@@ -305,7 +303,12 @@ class Book extends Model {
         }
         return $isbn . $rest;
     }
-    
+
+    public static function calcul_isbn_js($isbn) {
+        $val = self::calcul_isbn($isbn);
+        return substr($val, -1, 1);
+    }
+
     private static function one_or_three(&$tabIsbn) {
         for ($i = 1; $i <= sizeof($tabIsbn); ++$i) {
             if ($i % 2 == 0) {
