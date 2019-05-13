@@ -7,7 +7,7 @@ $(function () {
 
 });
 
-var isbn2 = "<input style='display:inline-block;'id='isbn2'>";
+var isbn2 = "<input style='display:inline-block; width:35px'id='isbn2'>";
 
 function isbn() {
     var isbn = $('#ISBN');
