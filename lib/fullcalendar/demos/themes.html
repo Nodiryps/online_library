@@ -5,15 +5,20 @@
 <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
 <link href='../packages/core/main.css' rel='stylesheet' />
 <link href='../packages/bootstrap/main.css' rel='stylesheet' />
-<link href='../packages/timegrid/main.css' rel='stylesheet' />
 <link href='../packages/daygrid/main.css' rel='stylesheet' />
+<link href='../packages/timegrid/main.css' rel='stylesheet' />
 <link href='../packages/list/main.css' rel='stylesheet' />
+<link href='../packages/timeline/main.css' rel='stylesheet' />
+<link href='../packages/resource-timeline/main.css' rel='stylesheet' />
 <script src='../packages/core/main.js'></script>
-<script src='../packages/interaction/main.js'></script>
 <script src='../packages/bootstrap/main.js'></script>
+<script src='../packages/interaction/main.js'></script>
 <script src='../packages/daygrid/main.js'></script>
 <script src='../packages/timegrid/main.js'></script>
 <script src='../packages/list/main.js'></script>
+<script src='../packages/timeline/main.js'></script>
+<script src='../packages/resource-common/main.js'></script>
+<script src='../packages/resource-timeline/main.js'></script>
 <script src='js/theme-chooser.js'></script>
 <script>
 
@@ -25,73 +30,63 @@
 
       init: function(themeSystem) {
         calendar = new FullCalendar.Calendar(calendarEl, {
-          plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+          plugins: [ 'bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list', 'resourceTimeline' ],
           themeSystem: themeSystem,
+          now: '2019-04-07',
+          editable: true, // enable draggable events
+          aspectRatio: 1.8,
+          scrollTime: '00:00', // undo default 6am scrollTime
           header: {
-            left: 'prev,next today',
+            left: 'today prev,next',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            right: 'resourceTimelineDay,resourceTimelineThreeDays,timeGridWeek,dayGridMonth,listWeek'
           },
-          defaultDate: '2019-04-12',
-          weekNumbers: true,
-          navLinks: true, // can click day/week names to navigate views
-          editable: true,
-          eventLimit: true, // allow "more" link when too many events
-          events: [
-            {
-              title: 'All Day Event',
-              start: '2019-04-01'
-            },
-            {
-              title: 'Long Event',
-              start: '2019-04-07',
-              end: '2019-04-10'
-            },
-            {
-              groupId: 999,
-              title: 'Repeating Event',
-              start: '2019-04-09T16:00:00'
-            },
-            {
-              groupId: 999,
-              title: 'Repeating Event',
-              start: '2019-04-16T16:00:00'
-            },
-            {
-              title: 'Conference',
-              start: '2019-04-11',
-              end: '2019-04-13'
-            },
-            {
-              title: 'Meeting',
-              start: '2019-04-12T10:30:00',
-              end: '2019-04-12T12:30:00'
-            },
-            {
-              title: 'Lunch',
-              start: '2019-04-12T12:00:00'
-            },
-            {
-              title: 'Meeting',
-              start: '2019-04-12T14:30:00'
-            },
-            {
-              title: 'Happy Hour',
-              start: '2019-04-12T17:30:00'
-            },
-            {
-              title: 'Dinner',
-              start: '2019-04-12T20:00:00'
-            },
-            {
-              title: 'Birthday Party',
-              start: '2019-04-13T07:00:00'
-            },
-            {
-              title: 'Click for Google',
-              url: 'http://google.com/',
-              start: '2019-04-28'
+          defaultView: 'resourceTimelineDay',
+          views: {
+            resourceTimelineThreeDays: {
+              type: 'resourceTimeline',
+              duration: { days: 3 },
+              buttonText: '3 days'
             }
+          },
+          resourceLabelText: 'Rooms',
+          resources: [
+            { id: 'a', title: 'Auditorium A' },
+            { id: 'b', title: 'Auditorium B', eventColor: 'green' },
+            { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
+            { id: 'd', title: 'Auditorium D', children: [
+              { id: 'd1', title: 'Room D1' },
+              { id: 'd2', title: 'Room D2' }
+            ] },
+            { id: 'e', title: 'Auditorium E' },
+            { id: 'f', title: 'Auditorium F', eventColor: 'red' },
+            { id: 'g', title: 'Auditorium G' },
+            { id: 'h', title: 'Auditorium H' },
+            { id: 'i', title: 'Auditorium I' },
+            { id: 'j', title: 'Auditorium J' },
+            { id: 'k', title: 'Auditorium K' },
+            { id: 'l', title: 'Auditorium L' },
+            { id: 'm', title: 'Auditorium M' },
+            { id: 'n', title: 'Auditorium N' },
+            { id: 'o', title: 'Auditorium O' },
+            { id: 'p', title: 'Auditorium P' },
+            { id: 'q', title: 'Auditorium Q' },
+            { id: 'r', title: 'Auditorium R' },
+            { id: 's', title: 'Auditorium S' },
+            { id: 't', title: 'Auditorium T' },
+            { id: 'u', title: 'Auditorium U' },
+            { id: 'v', title: 'Auditorium V' },
+            { id: 'w', title: 'Auditorium W' },
+            { id: 'x', title: 'Auditorium X' },
+            { id: 'y', title: 'Auditorium Y' },
+            { id: 'z', title: 'Auditorium Z' }
+          ],
+          events: [
+            { id: '1', resourceId: 'b', start: '2019-04-07T02:00:00', end: '2019-04-07T07:00:00', title: 'event 1' },
+            { id: '2', resourceId: 'c', start: '2019-04-07T05:00:00', end: '2019-04-07T22:00:00', title: 'event 2' },
+            { id: '3', resourceId: 'd', start: '2019-04-06', end: '2019-04-08', title: 'event 3' },
+            { id: '4', resourceId: 'e', start: '2019-04-07T03:00:00', end: '2019-04-07T08:00:00', title: 'event 4' },
+            { id: '5', resourceId: 'f', start: '2019-04-07T00:30:00', end: '2019-04-07T02:30:00', title: 'event 5' }
           ]
         });
         calendar.render();

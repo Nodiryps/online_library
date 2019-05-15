@@ -3,14 +3,10 @@
 <head>
 <meta charset='utf-8' />
 <link href='../packages/core/main.css' rel='stylesheet' />
-<link href='../packages/daygrid/main.css' rel='stylesheet' />
-<link href='../packages/timegrid/main.css' rel='stylesheet' />
 <link href='../packages/timeline/main.css' rel='stylesheet' />
 <link href='../packages/resource-timeline/main.css' rel='stylesheet' />
 <script src='../packages/core/main.js'></script>
 <script src='../packages/interaction/main.js'></script>
-<script src='../packages/daygrid/main.js'></script>
-<script src='../packages/timegrid/main.js'></script>
 <script src='../packages/timeline/main.js'></script>
 <script src='../packages/resource-common/main.js'></script>
 <script src='../packages/resource-timeline/main.js'></script>
@@ -20,26 +16,30 @@
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'resourceTimeline' ],
+      plugins: [ 'interaction', 'resourceTimeline' ],
       now: '2019-04-07',
-      selectable: true,
-      selectHelper: true,
-      editable: true, // enable draggable events
+      editable: true,
       aspectRatio: 1.8,
-      scrollTime: '00:00', // undo default 6am scrollTime
+      scrollTime: '00:00',
       header: {
         left: 'today prev,next',
         center: 'title',
-        right: 'resourceTimelineDay,resourceTimelineThreeDays,timeGridWeek,dayGridMonth'
+        right: 'resourceTimelineDay,resourceTimelineTenDay,resourceTimelineMonth,resourceTimelineYear'
       },
       defaultView: 'resourceTimelineDay',
       views: {
-        resourceTimelineThreeDays: {
+        resourceTimelineDay: {
+          buttonText: ':15 slots',
+          slotDuration: '00:15'
+        },
+        resourceTimelineTenDay: {
           type: 'resourceTimeline',
-          duration: { days: 3 },
-          buttonText: '3 days'
+          duration: { days: 10 },
+          buttonText: '10 days'
         }
       },
+      navLinks: true,
+      resourceAreaWidth: '25%',
       resourceLabelText: 'Rooms',
       resources: [
         { id: 'a', title: 'Auditorium A' },
@@ -78,38 +78,10 @@
         { id: '3', resourceId: 'd', start: '2019-04-06', end: '2019-04-08', title: 'event 3' },
         { id: '4', resourceId: 'e', start: '2019-04-07T03:00:00', end: '2019-04-07T08:00:00', title: 'event 4' },
         { id: '5', resourceId: 'f', start: '2019-04-07T00:30:00', end: '2019-04-07T02:30:00', title: 'event 5' }
-      ],
-      select: function(arg) {
-        console.log(
-          'select callback',
-          arg.startStr,
-          arg.endStr,
-          arg.resource ? arg.resource.id : '(no resource)'
-        );
-      },
-      dateClick: function(arg) {
-        console.log(
-          'dateClick',
-          arg.date,
-          arg.resource ? arg.resource.id : '(no resource)'
-        );
-      }
+      ]
     });
 
     calendar.render();
-
-    document.getElementById('select-G').addEventListener('click', function() {
-      calendar.select({
-        start: '2019-04-07T02:00:00',
-        end: '2019-04-07T07:00:00',
-        resourceId: 'g'
-      });
-    });
-
-    document.getElementById('select-unspecified').addEventListener('click', function() {
-      calendar.select('2019-04-07T02:00:00', '2019-04-07T07:00:00');
-    });
-
   });
 
 </script>
@@ -132,11 +104,6 @@
 <body>
 
   <div id='calendar'></div>
-
-  <p style='text-align:center'>
-    <button id='select-G'>select G</button>
-    <button id='select-unspecified'>select w/o a resource</button>
-  </p>
 
 </body>
 </html>

@@ -176,8 +176,7 @@ class ControllerBook extends Controller {
         }
     }
 
-    public
-            function addFeatures() {
+    public function addFeatures() {
         if (isset($_GET['param1'])) {
             $isbn = Book::isbn_format_EAN_13($_GET['param1']);
             echo json_encode($isbn);

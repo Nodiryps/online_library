@@ -22,6 +22,7 @@ class ControllerRental extends Controller {
             $author = "";
             $date = "";
             $filter = "";
+           
             if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
                 $title = $_POST["title"];
                 $author = $_POST["author"];
@@ -196,6 +197,14 @@ class ControllerRental extends Controller {
             } (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
         } else
             $this->redirect();
+    }
+    
+    public function getReturns() {
+        if(isset($_GET['param1'])){
+            $rent= Rental::get_rental_join_book_join_user_rentdates($_GET['param1']);
+            echo json_encode($rent);
+        }
+        
     }
 
 }
