@@ -33,7 +33,7 @@ class ControllerBook extends Controller {
         if ($filter) {
             $books = Book::get_book_by_critere($filter["search"], $filter["idUser"]);
         } else {
-            // $books = Book::get_all_books($msg);
+//             $books = Book::get_all_books($msg);
         }
 
 

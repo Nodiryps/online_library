@@ -10,7 +10,6 @@ $(function () {
 var isbn2 = "<input style='display:inline-block; width:35px'id='isbn2'>";
 
 function isbn() {
-    var isbn = $('#ISBN');
     $('#ISBN').after(isbn2);
     $('#ISBN').removeClass("form-control input-md");
     $('#ISBN').focus();

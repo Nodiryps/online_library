@@ -16,9 +16,6 @@
 
         <!--Plugin Fullcalendar-->
 
-        <link href='lib/fullcalendar/packages/core/main.css' rel='stylesheet' />
-        <link href='lib/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
-
         <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
         <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
 
@@ -32,73 +29,243 @@
         <script src='lib/fullcalendar/packages/timeline/main.js'></script>
         <script src='lib/fullcalendar/packages/resource-common/main.js'></script>
         <script src='lib/fullcalendar/packages/resource-timeline/main.js'></script>
+
+
+        <link href='lib/fullcalendar/packages/core/main.css' rel='stylesheet' />
+        <link href='lib/fullcalendar/packages/timeline/main.css' rel='stylesheet' />
+        <link href='lib/fullcalendar/packages/resource-timeline/main.css' rel='stylesheet' />
+        <link href="lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.theme.min.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.structure.min.css" rel="stylesheet" type="text/css"/>
+
+        <script src='lib/fullcalendar/packages/core/main.js'></script>
+        <script src='lib/fullcalendar/packages/timeline/main.js'></script>
+        <script src='lib/fullcalendar/packages/resource-common/main.js'></script>
+        <script src='lib/fullcalendar/packages/resource-timeline/main.js'></script>
+        <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.min.js" type="text/javascript"></script>
+
+
     </head>
     <body>
         <script>
-            $(function () {
+            $('#phpAffiche').hide();
+
+//            $("select").change(function () {
+//                console.log($("#location").val());
+//            });
+//            $('#tabReturn').hide();
+//            document.addEventListener('DOMContentLoaded', function () {
+//                var calendarEI = document.getElementById('phpAffiche');
+//                var calendar = new FullCalendar.Calendar(calendarEI,
+//                        {
+//                            refetchResourcesOnNavigate: true,
+//                            plugins: ['interaction', 'resourceTimeline'],
+//                            timeZone: 'UTC',
+//                            defaultView: 'resourceTimelineWeek',
+//                            aspectRatio: 2.5,
+//                            allDaySlot: false,
+//                            eventLimit: true,
+//                            firstday: 1,
+//                            schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+//                            header: {
+//                                left: 'today prev,next',
+//                                center: 'title',
+//                                right: 'resourceTimelineDay,resourceTimelineTenDay,resourceTimelineMonth,resourceTimelineYear'
+//                            },
+//                            scrollTime: '08:00',
+//                            views: {
+//                                year: {
+//                                    slotDuration: {month: 1}
+//                                },
+//                                month: {
+//                                    slotDuration: {day: 1},
+//                                    slotLabelFormat: [
+//                                        {day: 'numeric'}
+//                                    ]
+//                                },
+//                                week: {
+//                                    slotDuration: {day: 1},
+//                                    slotLabelFormat: [
+//                                        {day: 'numeric'}
+//                                    ]
+//                                }
+//                            },
+//                            resourceColumns: [
+//                                {
+//                                    labelText: 'Membres',
+//                                    field: 'user'
+//                                },
+//                                {
+//                                    labelText: 'Livres',
+//                                    field: 'book'
+//                                }
+//                            ],
+//                            resources: {
+//                                url: 'rental/getReturns/',
+//                                method: 'post',
+//                                extraParams: function () {
+//                                    return {
+//                                        title: $("#title").val(),
+//                                        author: $("#author").val(),
+//                                        rentaldate: $("#rentaldate").val(),
+//                                        autres: $("#tous").is(":checked"),
+//                                        autre1: $("#location").is(":checked"),
+//                                        autre2: $("#retour").is(":checked"),
+//                                    };
+//                                }
+//                            },
+//                            editable: true,
+//                            selectable: true,
+//                            events:
+//                                    {
+//                                        url: 'rental/getRentalsEvents/',
+//                                        method: 'get',
+//                                        extraParams: {
+//                                            custom_param1: 'returndate',
+//                                            custom_param2: 'rentaldate'
+//                                        },
+//                                        failure: function () {
+//                                            alert('there was an error while fetching events!');
+//                                        },
+//                                        color: 'blue', // a non-ajax option
+//                                        textColor: 'black' // a non-ajax option
+//                                    },
+//                            select: {
+//
+//                            }
+//
+//                        });
+//                calendar.render();
+//            });
 
 
-                $.get("rental/getReturns/"+$('#user').val(),function(data){
-                    datas=JSON.parse(data);
-                    console.log(datas);
+            document.addEventListener('DOMContentLoaded', function () {
+
+                $.get("rental/getRentalsRessources", function (data) {
+                    console.log(data);
+                    console.log(JSON.parse(data));
                 });
 
-                $('#tabReturn').hide();
-                console.log("methode");
-                var calendar = new FullCalendar.Calendar($('#phpAffiche')[0],
-                        {
-                            schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-                            plugins: ['interaction', 'resourceTimeline'],
-                            timeZone: 'UTC',
-                            header: {
-                                left: 'today prev,next',
-                                center: 'title',
-                                right: 'resourceTimelineDay,resourceTimelineTenDay,resourceTimelineMonth,resourceTimelineYear'
-                            },
-                            defaultView: 'resourceTimelineDay',
-                            scrollTime: '08:00',
-                            aspectRatio: 1.5,
-                            views: {
-                                resourceTimelineDay: {
-                                    buttonText: ':1 slots',
-                                    slotDuration: '00:15'
-                                },
-                                resourceTimelineTenDay: {
-                                    type: 'resourceTimeline',
-                                    duration: {days: 10},
-                                    buttonText: '10 days'
-                                }
-                            },
-                            refetchResourcesOnNavigate: true,
-                            resources: {
-                                url: 'rental/getReturns/' + $('#user').val(),
-                                method: 'GET'
-                            },
-                            editable: true,
-                            resourceLabelText: 'Livres',
-//                            events: 'rental/getReturns/' + $('#user').val()
-                            events: [
-//                                {// this object will be "parsed" into an Event Object
-//                                    title: 'The Title', // a property!
-//                                    start: '2018-09-01', // a property!
-//                                    end: '2018-09-02' // a property! ** see important note below about 'end' **
-//                                }
-                                    {
-                                        url: 'rental/getReturns/' + $('#user').val(),
-                                        method: 'get',
-                                        extraParams: {
-                                            custom_param1: 'returndate',
-                                            custom_param2: 'rentaldate'
-                                        },
-                                        failure: function () {
-                                            alert('there was an error while fetching events!');
-                                        },
-                                        color: 'yellow', // a non-ajax option
-                                        textColor: 'black' // a non-ajax option
-                                    }
+//                $.get("rental/getRentalsEvents", function (data) {
+//                    console.log(data);
+//                    console.log(JSON.parse(data));
+//                });
+                var calendarEl = document.getElementById('phpAffiche');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    refetchResourcesOnNavigate: true,
+                    plugins: ['interaction', 'resourceTimeline'],
+                    timeZone: 'UTC',
+                    defaultView: 'resourceTimelineWeek',
+                    aspectRatio: 1.5,
+                    allDaySlot: false,
+                    eventLimit: true,
+                    height: "parent",
+                    firstday: 1,
+                    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                    header: {
+                        left: 'today, prev, next',
+                        center: 'title',
+                        right: 'resourceTimelineWeek, resourceTimelineMonth, resourceTimelineYear',
+                    },
+                    views: {
+                        year: {
+                            slotDuration: {month: 1}
+                        },
+                        month: {
+                            slotDuration: {day: 1},
+                            slotLabelFormat: [
+                                {day: 'numeric'}
                             ]
+                        },
+                        week: {
+                            slotDuration: {day: 1},
+                            slotLabelFormat: [
+                                {day: 'numeric'}
+                            ]
+                        }
+
+                    },
+                    editable: false,
+                    selectable: true,
+                    resourceColumns: [
+                        {
+                            labelText: 'Users',
+                            field: 'user'
+                        },
+                        {
+                            labelText: 'Books',
+                            field: 'book'
+                        }
+                    ],
+                    resources: {
+                        url: "rental/getRentalsRessources",
+                        method: 'POST',
+                        extraParams: function () {
+                            return {
+                                title: $("#title").val(),
+                                author: $("#author").val(),
+                                rentaldate: $("#rentaldate").val(),
+                                rentalId: $("#rentalid").val(),
+                                select: $('#select').val()
+
+                            };
+                        }
+                    },
+                    events: {
+                        url: "rental/getRentalsEvents",
+                        method: 'POST',
+                        extraParams: function () {
+                            return {
+                                title: $("#title").val(),
+                                author: $("#author").val(),
+                                rentaldate: $("#rentaldate").val(),
+                                rentalId: $("#rentalid").val(),
+                                select: $('#select').val()
+
+                            };
+                        }
+                    },
+                    eventClick: function (data) {
+                        var res = data.event.getResources();
+                        var colonne = res["0"]._resource.extendedProps;
+                        $("#rentalid").text(data.event.id);
+                        $("#user").text(colonne.user);
+                        $("#bookTitle").text(colonne.book);
+                        $("#start").text(data.event.start.toDateString());
+                        $("#end").text(colonne.end);
+                        $('#confirmDialog').dialog({
+                            resizable: false,
+                            height: 300,
+                            width: 500,
+                            modal: true,
+                            autoOpen: true,
+
+                            buttons: {
+                                retourner: function () {
+                                    var idRent = $("#rentalid").html();
+                                    $.post("rental/returnDate", {rentId: idRent}, refetch, "html");
+                                    $(this).dialog("close");
+                                },
+                                supprimer: function () {
+                                    var idRent = $("#rentalid").html();
+                                    $.post("rental/deleteRental", {rentdel: idRent}, refetch, "html");
+                                    $(this).dialog("close");
+                                }
+                            }
                         });
+                    }
+                });
+                
                 calendar.render();
+                $("#title, #author, #rentaldate, #select, #rentalid").on("input", function () {
+                    refetch();
+                });
+                
+                function refetch() {
+                    calendar.refetchEvents();
+                    calendar.refetchResources();
+                }
             });
 
         </script>
@@ -118,25 +285,25 @@
                     <input type="hidden" value="<?= $profile->id ?>" id="user"/>
                     <div class="col-lg-offset-1 col-md-2 pt-3">
                         <div class="form-group ">
-                            <input type="text" name="title" placeholder="TITRE" class="form-control" value="<?= $title ?>">
+                            <input type="text" name="title" placeholder="TITRE" class="form-control" value="<?= $title ?>" id="title">
                         </div>
                     </div>
                     <div class="col-md-2 pt-3">
                         <div class="form-group ">
-                            <input type="text" name="author" placeholder="AUTHEUR.E" class="form-control" value="<?= $author ?>">
+                            <input type="text" name="author" placeholder="AUTHEUR.E" class="form-control" value="<?= $author ?>" id="author">
                         </div>
                     </div>
                     <div class="col-md-2 pt-3">
                         <div class="form-group">
                             <div class="form-group ">
-                                <input type="date" name="date"  class="form-control" value="<?php echo date("d/m/Y"); ?>">
+                                <input type="date" name="rentaldate"  class="form-control" value="<?php echo date("d/m/Y"); ?>" id="rentaldate">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2 pt-3">
                         <div class="form-group">
-                            <select id="inputState" name="filtre" class="form-control"  >
-                                <option <?php if (!empty($filter) && $filter == "tous") { ?>
+                            <select id="inputState" name="filtre" class="form-control" id="select"  >
+                                <option  <?php if (!empty($filter) && $filter == "tous") { ?>
                                         selected
                                     <?php }
                                     ?> value="tous" >Tous</option>
@@ -144,7 +311,7 @@
                                 <?php if (!empty($filter) && $filter == "location") { ?>
                                         selected
                                     <?php }
-                                    ?>value="location">Location</option>
+                                    ?>value="location" >Location</option>
                                 <option 
                                 <?php if (!empty($filter) && $filter == "retour") { ?>
                                         selected
@@ -184,7 +351,7 @@
                                 <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
                                     <td style="border:none;" bgcolor="white">
                                         <form  method="post" action="rental/update_rental_returndate">
-                                            <input type="hidden" name="idbook" value="<?= $book->id ?>">
+                                            <input type="hidden" name="idbook" value="<?= $book->id ?>" id="rentalid">
                                             <button type="submit" name="idsubmit" class="btn btn-success">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </button>
@@ -222,7 +389,9 @@
                         </tr>
                     <?php endforeach; ?>
             </table>
-
+            <div id="confirmDialog">
+                <strong><p>Gestion des retours</p></strong>
+            </div>
         </div>
     </div>
 </body>

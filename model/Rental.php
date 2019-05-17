@@ -42,7 +42,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -57,7 +57,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -71,7 +71,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -85,7 +85,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -99,7 +99,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -113,7 +113,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -127,7 +127,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            abort("Problème lors de l'accès a la base de données");
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -136,7 +136,9 @@ class Rental extends Model {
         $results = [];
         try {
             if ($filter == "tous") {
-                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) AND book.title LIKE :title AND book.author LIKE :author AND rentaldate LIKE :date", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%", ":date" => "%" . $date . "%"));
+                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                . "WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) "
+                                . "AND book.title LIKE :title AND book.author LIKE :author AND rentaldate LIKE :date", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%", ":date" => "%" . $date . "%"));
                 $query = $books->fetchAll();
                 foreach ($query as $row) {
                     $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
@@ -161,7 +163,7 @@ class Rental extends Model {
                 return $results;
             }
         } catch (Exception $e) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -172,7 +174,7 @@ class Rental extends Model {
 
             return sizeof($books) < Configuration::get("max_rents");
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -183,7 +185,7 @@ class Rental extends Model {
 
             return sizeof($books) < Configuration::get("max_rents");
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -197,7 +199,7 @@ class Rental extends Model {
             }
             return $results;
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -210,7 +212,7 @@ class Rental extends Model {
                 $res[] = new Rental($rental["id"], $rental["user"], $rental["book"], $rental["rentaldate"], $rental["returndate"]);
             return $res;
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès à la base de données.");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s Ã  la base de donnÃ©es.");
         }
     }
 
@@ -224,7 +226,7 @@ class Rental extends Model {
             }
             return $res;
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès à la base de données.");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s Ã  la base de donnÃ©es.");
         }
     }
 
@@ -238,7 +240,7 @@ class Rental extends Model {
             }
             return $res;
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès à la base de données.");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s Ã  la base de donnÃ©es.");
         }
     }
 
@@ -249,7 +251,7 @@ class Rental extends Model {
             $book = $query->fetch();
             return new Book($book["id"], $book["isbn"], $book["title"], $book["author"], $book["editor"], $book["picture"], $book["nbCopies"]);
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -258,7 +260,7 @@ class Rental extends Model {
             $query = self::execute("SELECT COUNT(*) FROM rental WHERE rentaldate =null ", array());
             return $query->fetch();
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -266,7 +268,7 @@ class Rental extends Model {
         try {
             self::execute("DELETE FROM rental WHERE  id=:id", array("id" => $this->id));
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -276,7 +278,7 @@ class Rental extends Model {
             $books = $query->fetchAll();
             return count($books) != 0;
         } catch (Exception $ex) {
-            Tools::abort("Problème lors de l'accès a la base de données");
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
@@ -327,7 +329,7 @@ class Rental extends Model {
             foreach ($allrentofUser as $rent)
                 $rent->update_rental_rentdate(date("Y-m-d H:i:s"));
         else
-            $msg = "Vous avez déjà 5 livres en location!";
+            $msg = "Vous avez dÃ©jÃ  5 livres en location!";
         return $msg;
     }
 
@@ -337,7 +339,7 @@ class Rental extends Model {
             foreach ($allrentofUser as $rent)
                 $rent->update_rental_rentdate_for_user($usertoAddRent->id, date("Y-m-d H:i:s"));
         else
-            $msg = "Cet utilisateur a déjà 5 locations en cours!";
+            $msg = "Cet utilisateur a dÃ©jÃ  5 locations en cours!";
         return $msg;
     }
 
@@ -369,6 +371,57 @@ class Rental extends Model {
         } else {
             $rental = new Rental($id, $users->id, $rent->id, NULL, NULL);
             $rental->insert_book_without_rent();
+        }
+    }
+
+    public static function get_rental_join_book_join_user_rentdatesJs() {
+        $results = [];
+        try {
+            $query = self::execute("SELECT rental.id,user.username ,book.title,rental.rentaldate,rental.returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                            . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) ", array());
+            $rental = $query->fetchAll();
+            foreach ($rental as $row) {
+                $results[] = new Rental($row["id"], $row["username"], $row["title"], $row["rentaldate"], $row["returndate"]);
+            }
+            return $results;
+        } catch (Exception $e) {
+            abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
+        }
+    }
+
+    public static function get_rental_join_book_join_user_rentdatesFilterJs($title, $author, $date, $filter) {
+        $results = [];
+
+        try {
+            if ($filter == "tous") {
+                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                . "WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) "
+                                . "AND book.title LIKE :title AND book.author LIKE :author AND rentaldate LIKE :date", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%", ":date" => "%" . $date . "%"));
+                $query = $books->fetchAll();
+                foreach ($query as $row) {
+                    $results[] = new Rental($row["id"], $row["username"], $row["title"], $row["rentaldate"], $row["returndate"]);
+                }
+                return $results;
+            }
+            if ($filter == "retour") {
+                $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $rental = $query->fetchAll();
+                foreach ($rental as $row) {
+                    $results[] = new Rental($row["id"], $row["username"], $row["title"], $row["rentaldate"], $row["returndate"]);
+                }
+                return $results;
+            }
+            if ($filter == "location") {
+                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $query = $books->fetchAll();
+                foreach ($query as $row) {
+                    $results[] = new Rental($row["id"], $row["username"], $row["title"], $row["rentaldate"], $row["returndate"]);
+                }
+                return $results;
+            }
+        } catch (Exception $e) {
+            Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
 
