@@ -150,7 +150,6 @@
                     eventClick: function (data) {
                         var res = data.event.getResources();
                         var colonne = res["0"]._resource.extendedProps;
-                        console.log(data.event);
                         $("#rentalid").text(data.event.id);
                         $("#user").text(colonne.user);
                         $("#bookTitle").text(colonne.book);

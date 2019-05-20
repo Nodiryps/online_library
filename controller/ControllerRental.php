@@ -18,20 +18,33 @@ class ControllerRental extends Controller {
     public function search_book() {
         $profile = $this->get_user_or_redirect();
         if ($profile->is_admin() || $profile->is_manager()) {
-              $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
+            $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
             $title = "";
             $author = "";
             $date = "";
             $filter = "";
+            $filters = [];
 
-            if (isset($_POST["title"]) || isset($_POST["author"])  || isset($_POST["date"]) || isset($_POST["filtre"])) {
-                $title = $_POST["title"];
-                $author = $_POST["author"];
-                $date = $_POST["date"];
-                $filter = $_POST["filtre"];
-                $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
-             
+            if (isset($_GET['param1']) && $_GET['param1'] != "") {
+                $filters = Tools::url_safe_decode($_GET['param1']);
+
+                if (!$filters)
+                    Tools::abort("bad url parameter");
             }
+
+            if (isset($_POST["title"]) || isset($_POST["author"]) || isset($_POST["date"]) || isset($_POST["filtre"])) {
+                $filters["title"] = $_POST["title"];
+                $filters["author"] = $_POST["author"];
+                $filters["date"] = $_POST["date"];
+                $filters["filtre"] = $_POST["filtre"];
+                $this->redirect("rental", "search_book", Tools::url_safe_encode($filters));
+            }
+            $title = $filters["title"];
+            $author = $filters["author"];
+            $date = $filters["date"];
+            $filter = $filters["filtre"];
+            $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
+
             (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
         } else
             $this->redirect();
@@ -303,15 +316,13 @@ class ControllerRental extends Controller {
         if (isset($_POST['rentId'])) {
             $rent = Rental::get_rentals_by_id($_POST['rentId']);
             $rent[0]->update_rental_returndate(date('Y-m-d h:i:s'));
-            
         }
     }
-    
+
     public function delete_RentalJS() {
         if (isset($_POST['rentdel'])) {
             $rent = Rental::get_rentals_by_id($_POST['rentdel']);
             $rent[0]->delete_rental();
-            
         }
     }
 
