@@ -18,20 +18,20 @@ class ControllerRental extends Controller {
     public function search_book() {
         $profile = $this->get_user_or_redirect();
         if ($profile->is_admin() || $profile->is_manager()) {
-            $books = Rental::get_rental_join_book_join_user_rentdate($profile->id);
+              $books = Rental::get_rental_join_book_join_user_rentdates($profile->id);
             $title = "";
             $author = "";
             $date = "";
             $filter = "";
-            echo "ttttttttttttttttttttttt";
-            if (isset($_POST["title"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["date"]) && isset($_POST["filtre"])) {
+
+            if (isset($_POST["title"]) || isset($_POST["author"])  || isset($_POST["date"]) || isset($_POST["filtre"])) {
                 $title = $_POST["title"];
                 $author = $_POST["author"];
                 $date = $_POST["date"];
                 $filter = $_POST["filtre"];
                 $books = Rental::get_rental_by_critere($title, $author, $filter, $date);
-               
-            } var_dump($books);
+             
+            }
             (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
         } else
             $this->redirect();
@@ -255,7 +255,7 @@ class ControllerRental extends Controller {
         } else {
             $rentals = Rental::get_rental_join_book_join_user_rentdatesFilterJs($title, $author, $rentaldate, $select);
         }
-        if ($rentals  != null) {
+        if ($rentals != null) {
             foreach ($rentals as $rental) {
                 if ($rental->returndate == NULL) {
                     if (date('Y-m-d', strtotime('1 month', strtotime($rental->rentaldate))) >= date('Y-m-d')) {
@@ -271,7 +271,7 @@ class ControllerRental extends Controller {
                     }
                 }
                 if ($rental->returndate == null) {
-                    $rental->end = "Is not returned";
+                    $rental->end = "pas encore retourner";
                 } else {
                     $rental->end = $rental->returndate;
                 }
@@ -281,7 +281,6 @@ class ControllerRental extends Controller {
     }
 
     public function getRentalsEvents() {
-//        $filter = ["rentaldate" => null, "book" => '', "user" => '', "autre" => 'tous'];
         $rentals = Rental::get_rental_join_book_join_user_rentdatesJs();
         foreach ($rentals as $rental) {
             $rental->resourceId = $rental->id;
@@ -298,6 +297,14 @@ class ControllerRental extends Controller {
         }
 
         echo json_encode($rentals);
+    }
+
+    public function returnDate() {
+        if (isset($_POST['rentId'])) {
+            echo $_POST['rentId'];
+//            $rent = Rental::get_rentals_by_id($_POST['param1']);
+//            $rent->update_rental_returndate(new DateTime());
+        }
     }
 
 }

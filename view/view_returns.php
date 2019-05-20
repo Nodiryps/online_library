@@ -49,108 +49,26 @@
     </head>
     <body>
         <script>
-            $('#phpAffiche').hide();
-
-//            $("select").change(function () {
-//                console.log($("#location").val());
-//            });
-//            $('#tabReturn').hide();
-//            document.addEventListener('DOMContentLoaded', function () {
-//                var calendarEI = document.getElementById('phpAffiche');
-//                var calendar = new FullCalendar.Calendar(calendarEI,
-//                        {
-//                            refetchResourcesOnNavigate: true,
-//                            plugins: ['interaction', 'resourceTimeline'],
-//                            timeZone: 'UTC',
-//                            defaultView: 'resourceTimelineWeek',
-//                            aspectRatio: 2.5,
-//                            allDaySlot: false,
-//                            eventLimit: true,
-//                            firstday: 1,
-//                            schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-//                            header: {
-//                                left: 'today prev,next',
-//                                center: 'title',
-//                                right: 'resourceTimelineDay,resourceTimelineTenDay,resourceTimelineMonth,resourceTimelineYear'
-//                            },
-//                            scrollTime: '08:00',
-//                            views: {
-//                                year: {
-//                                    slotDuration: {month: 1}
-//                                },
-//                                month: {
-//                                    slotDuration: {day: 1},
-//                                    slotLabelFormat: [
-//                                        {day: 'numeric'}
-//                                    ]
-//                                },
-//                                week: {
-//                                    slotDuration: {day: 1},
-//                                    slotLabelFormat: [
-//                                        {day: 'numeric'}
-//                                    ]
-//                                }
-//                            },
-//                            resourceColumns: [
-//                                {
-//                                    labelText: 'Membres',
-//                                    field: 'user'
-//                                },
-//                                {
-//                                    labelText: 'Livres',
-//                                    field: 'book'
-//                                }
-//                            ],
-//                            resources: {
-//                                url: 'rental/getReturns/',
-//                                method: 'post',
-//                                extraParams: function () {
-//                                    return {
-//                                        title: $("#title").val(),
-//                                        author: $("#author").val(),
-//                                        rentaldate: $("#rentaldate").val(),
-//                                        autres: $("#tous").is(":checked"),
-//                                        autre1: $("#location").is(":checked"),
-//                                        autre2: $("#retour").is(":checked"),
-//                                    };
-//                                }
-//                            },
-//                            editable: true,
-//                            selectable: true,
-//                            events:
-//                                    {
-//                                        url: 'rental/getRentalsEvents/',
-//                                        method: 'get',
-//                                        extraParams: {
-//                                            custom_param1: 'returndate',
-//                                            custom_param2: 'rentaldate'
-//                                        },
-//                                        failure: function () {
-//                                            alert('there was an error while fetching events!');
-//                                        },
-//                                        color: 'blue', // a non-ajax option
-//                                        textColor: 'black' // a non-ajax option
-//                                    },
-//                            select: {
-//
-//                            }
-//
-//                        });
-//                calendar.render();
-//            });
-
 
             document.addEventListener('DOMContentLoaded', function () {
-
-                $.get("rental/getRentalsRessources", function (data) {
-                    console.log(data);
-                    console.log(JSON.parse(data));
+                $('#tabReturn').hide();
+                $('#legend').hide();
+                $('#btnFiltre').hide();
+                $('select ').change(function () {
+                    $("select option:selected").each(function () {
+                        console.log($(this).text());
+                    });
                 });
 
-//                $.get("rental/getRentalsEvents", function (data) {
-//                    console.log(data);
-//                    console.log(JSON.parse(data));
-//                });
+//                $("select").change(function () {
+//                    var str = "";
+//                    $("select option:selected").each(function () {
+//                        str += $(this).text() + " ";
+//                    });
+//                    $("div").text(str);
+//                })
+//                        .trigger('change');
+
                 var calendarEl = document.getElementById('phpAffiche');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     refetchResourcesOnNavigate: true,
@@ -160,7 +78,7 @@
                     aspectRatio: 1.5,
                     allDaySlot: false,
                     eventLimit: true,
-                    height: "parent",
+                    height: "",
                     firstday: 1,
                     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
                     header: {
@@ -207,9 +125,10 @@
                                 author: $("#author").val(),
                                 rentaldate: $("#rentaldate").val(),
                                 rentalId: $("#rentalid").val(),
-                                select: $('#select').val()
-
-                            };
+                                select: $('select  option:selected').each(function () {
+                                    return  $(this).text();
+                                })
+                            }
                         }
                     },
                     events: {
@@ -221,14 +140,17 @@
                                 author: $("#author").val(),
                                 rentaldate: $("#rentaldate").val(),
                                 rentalId: $("#rentalid").val(),
-                                select: $('#select').val()
+                                select: $('select  option:selected').each(function () {
+                                    return  $(this).text();
+                                })
 
-                            };
+                            }
                         }
                     },
                     eventClick: function (data) {
                         var res = data.event.getResources();
                         var colonne = res["0"]._resource.extendedProps;
+                        console.log(data.event);
                         $("#rentalid").text(data.event.id);
                         $("#user").text(colonne.user);
                         $("#bookTitle").text(colonne.book);
@@ -243,25 +165,24 @@
 
                             buttons: {
                                 retourner: function () {
-                                    var idRent = $("#rentalid").html();
-                                    $.post("rental/returnDate", {rentId: idRent}, refetch, "html");
+                                    console.log(data.event.id);
+                                    $.post("rental/returnDate", {rentId: data.event.id}, refetch, "html");
                                     $(this).dialog("close");
                                 },
                                 supprimer: function () {
-                                    var idRent = $("#rentalid").html();
-                                    $.post("rental/deleteRental", {rentdel: idRent}, refetch, "html");
+                                    $.post("rental/deleteRental", {rentdel: data.event.id}, refetch, "html");
                                     $(this).dialog("close");
                                 }
                             }
                         });
                     }
                 });
-                
+
                 calendar.render();
-                $("#title, #author, #rentaldate, #select, #rentalid").on("input", function () {
+                $("#title, #author, #rentaldate, select, #rentalid").on("input", function () {
                     refetch();
                 });
-                
+
                 function refetch() {
                     calendar.refetchEvents();
                     calendar.refetchResources();
@@ -321,7 +242,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary btn-block">FILTRER</button>
+                        <button type="submit" class="btn btn-primary btn-block" id="btnFiltre">FILTRER</button>
                     </div>
                 </div>
             </form>
@@ -330,7 +251,7 @@
 
         <div class="container table-wrapper-scroll-y " id="phpAffiche">
             <table class="table table-striped table-condensed " id="tabReturn">
-                <legend class="text-center"><h1>Retours</h1></legend>
+                <legend class="text-center" id="legend"><h1>Retours</h1></legend>
                 <thead class="thead-dark">
                     <tr>
                         <th class="text-center" scope="col">DATE LOCATION</th>
@@ -342,6 +263,7 @@
                 </thead>
                 <div>
                     <?php foreach ($books as $book): ?>
+
                         <tr>
                             <td class="text-center"><?= $book->rentaldate ?></td>
                             <td class="text-center"><?= User::get_username_by_id($book->user) ?></td>
@@ -389,8 +311,12 @@
                         </tr>
                     <?php endforeach; ?>
             </table>
-            <div id="confirmDialog">
-                <strong><p>Gestion des retours</p></strong>
+            <div id="confirmDialog" hidden>
+                <p hidden>ID BOOK: <strong id="rentalid"></strong></p>
+                <p>Membre: <strong id="user"></strong></p>
+                <p>Titre: <strong id="bookTitle"></strong></p>
+                <p>Date de location: <strong id="start"></strong></p>
+                <p>Date de Retour:<strong id="end"></strong></p>
             </div>
         </div>
     </div>

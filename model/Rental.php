@@ -136,7 +136,7 @@ class Rental extends Model {
         $results = [];
         try {
             if ($filter == "tous") {
-                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                $books = self::execute("SELECT rental.id,rental.user,rental.book,rentaldate,returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
                                 . "WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) "
                                 . "AND book.title LIKE :title AND book.author LIKE :author AND rentaldate LIKE :date", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%", ":date" => "%" . $date . "%"));
                 $query = $books->fetchAll();
@@ -146,7 +146,7 @@ class Rental extends Model {
                 return $results;
             }
             if ($filter == "retour") {
-                $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $query = self::execute("SELECT rental.id,rental.user,rental.book,rentaldate,returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $rental = $query->fetchAll();
                 foreach ($rental as $row) {
                     $results[] = new Rental($row["id"], $row["user"], $row["book"], $row["rentaldate"], $row["returndate"]);
@@ -154,7 +154,7 @@ class Rental extends Model {
                 return $results;
             }
             if ($filter == "location") {
-                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                $books = self::execute("SELECT rental.id,rental.user,rental.book,rentaldate,returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
                                 . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $query = $books->fetchAll();
                 foreach ($query as $row) {
@@ -394,7 +394,7 @@ class Rental extends Model {
 
         try {
             if ($filter == "tous") {
-                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                $books = self::execute("SELECT rental.id,user.username,book.title,rentaldate,returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
                                 . "WHERE( rentaldate IS NOT NULL  OR returndate IS NOT NULL) "
                                 . "AND book.title LIKE :title AND book.author LIKE :author AND rentaldate LIKE :date", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%", ":date" => "%" . $date . "%"));
                 $query = $books->fetchAll();
@@ -404,7 +404,7 @@ class Rental extends Model {
                 return $results;
             }
             if ($filter == "retour") {
-                $query = self::execute("SELECT DISTINCT* FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
+                $query = self::execute("SELECT rental.id,user.username,book.title,rentaldate,returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id WHERE returndate IS NOT NULL AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $rental = $query->fetchAll();
                 foreach ($rental as $row) {
                     $results[] = new Rental($row["id"], $row["username"], $row["title"], $row["rentaldate"], $row["returndate"]);
@@ -412,7 +412,7 @@ class Rental extends Model {
                 return $results;
             }
             if ($filter == "location") {
-                $books = self::execute("SELECT * FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                $books = self::execute("SELECT rental.id,user.username,book.title,rentaldate,returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
                                 . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) AND book.title LIKE :title AND book.author LIKE :author", array(":title" => "%" . $title . "%", ":author" => "%" . $author . "%"));
                 $query = $books->fetchAll();
                 foreach ($query as $row) {
