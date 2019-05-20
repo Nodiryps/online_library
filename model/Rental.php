@@ -243,6 +243,8 @@ class Rental extends Model {
             Tools::abort("ProblÃ¨me lors de l'accÃ¨s Ã  la base de donnÃ©es.");
         }
     }
+  
+    
 
     // methode pas a la bonne place->dans BOOK
     public function get_book() {

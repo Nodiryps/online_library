@@ -165,12 +165,11 @@
 
                             buttons: {
                                 retourner: function () {
-                                    console.log(data.event.id);
-                                    $.post("rental/returnDate", {rentId: data.event.id}, refetch, "html");
+                                    $.post("Rental/return_date", {rentId: data.event.id}, refetch, "html");
                                     $(this).dialog("close");
                                 },
                                 supprimer: function () {
-                                    $.post("rental/deleteRental", {rentdel: data.event.id}, refetch, "html");
+                                    $.post("rental/delete_RentalJS", {rentdel: data.event.id}, refetch, "html");
                                     $(this).dialog("close");
                                 }
                             }

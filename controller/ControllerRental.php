@@ -299,11 +299,19 @@ class ControllerRental extends Controller {
         echo json_encode($rentals);
     }
 
-    public function returnDate() {
+    public function return_date() {
         if (isset($_POST['rentId'])) {
-            echo $_POST['rentId'];
-//            $rent = Rental::get_rentals_by_id($_POST['param1']);
-//            $rent->update_rental_returndate(new DateTime());
+            $rent = Rental::get_rentals_by_id($_POST['rentId']);
+            $rent[0]->update_rental_returndate(date('Y-m-d h:i:s'));
+            
+        }
+    }
+    
+    public function delete_RentalJS() {
+        if (isset($_POST['rentdel'])) {
+            $rent = Rental::get_rentals_by_id($_POST['rentdel']);
+            $rent[0]->delete_rental();
+            
         }
     }
 
