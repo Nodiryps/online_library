@@ -17,62 +17,62 @@
         <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
         <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
         <script src="js/newBook.js" type="text/javascript"></script>
-        
+
     </head>
     <body>
         <nav> 
             <?php include('menu.html'); ?>
         </nav>
         <div class="form-horizontal text-center col-lg-offset-4 col-lg-4">
-            <form class="form-horizontal" action="book/add_book" method="post" enctype="multipart/form-data">
+            <form class="form-horizontal" action="book/add_book" method="post" enctype="multipart/form-data" id="AddBookForm">
                 <table>
                     <legend><h1>Nouveau livre</h1></legend>
 
                     <div class="isbn">
-                        <input id="ISBN" name="isbn" type="text" placeholder="isbn(12 chiffres)" class="form-control input-md " value="<?= $isbn?>" style="float: left;" > <!--<input style="display:inline-block;" id="isbn2">-->
-                       
+                    <input id="ISBN" name="isbn" type="text" placeholder="isbn(12 chiffres)" maxlength="12"   class="form-control input-md " value="<?= $isbn ?>" style="float: left;" > <!--<input style="display:inline-block;" id="isbn2">-->
+
                     </div>
                     <br>
-                    
+
 
                     <div class="">
-                        <input id="textinput" name="author" type="text" placeholder="auteur.e" class="form-control input-md"value="<?= $author?>" >
-                    </div>
-
-                    <div class="">
-                        <input id="textinput" name="title" type="text" placeholder="titre" class="form-control input-md" value="<?= $title ?>">
+                        <input id="author" name="author" type="text" placeholder="auteur.e" class="form-control input-md"value="<?= $author ?>" >
                     </div>
 
                     <div class="">
-                        <input id="textinput" name="editor" type="text" placeholder="edition" class="form-control input-md" value="<?= $editor ?>">
+                        <input id="title" name="title" type="text" placeholder="titre" class="form-control input-md" value="<?= $title ?>">
                     </div>
-                       <div class="">
-                           <input id="textinput" name="nbCopie" type="number" placeholder="nombre de copies" min="0" class="form-control input-md" value="<?= $nbCopie ?>">
+
+                    <div class="">
+                        <input id="editor" name="editor" type="text" placeholder="edition" class="form-control input-md" value="<?= $editor ?>">
                     </div>
-                    
+                    <div class="">
+                        <input id="nbCopie" name="nbCopie" type="number" placeholder="nombre de copies" min="1" class="form-control input-md" value="<?= $nbCopie ?>">
+                    </div>
+
                     <br>
-                  
+
                     <div class="form-group text-left">
                         <label  for="picture">Couverture:</label>
-                        
+
                         <input id="picture" name="picture" class="" type="file" accept="image/x-png, image/gif, image/jpeg">
-                          <br>
+                        <br>
                         <br>
                         <button  name="button2id" class="btn btn-default">
                             <span>Effacer l'image</span>
                         </button>
                     </div>
-                    
+
                     <div class="form-group">
                         <button id="idbook" type="submit" name="idbook" class="btn btn-success">
                             <span class="glyphicon glyphicon-ok"></span>  Valider
                         </button>
 
-                      
-                           
-                                <a class="btn btn-success" href="book/index" alt="book manager" >Annuler</a>
-                            
-                      
+
+
+                        <a class="btn btn-success" href="book/index" alt="book manager" >Annuler</a>
+
+
                     </div>
                 </table>
             </form>

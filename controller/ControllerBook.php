@@ -182,5 +182,16 @@ class ControllerBook extends Controller {
             echo json_encode($isbn);
         }
     }
+    
+       public function isbnExists() {
+        $res = "false";
+        if (isset($_POST["ISBN"]) && $_POST["ISBN"] !== "") {
+            $email = Book::existIsbn($_POST['ISBN']);
+            if (!$email) {
+                $res = "true";
+            }
+            echo $res;
+        }
+    }
 
 }

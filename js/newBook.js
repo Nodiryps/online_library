@@ -4,6 +4,7 @@ $(function () {
     isbn();
     addFeatures();
     onFocus();
+    ValidateAddBook();
 
 });
 
@@ -65,5 +66,54 @@ function onFocus() {
 
     });
 }
+
+function ValidateAddBook(){
+    
+     $('#AddBookForm').validate({
+        rules: {
+           ISBN : {
+                required: true,
+                remote:{
+                    url:"book/isbnExists",
+                    type:'post',
+                    data:{
+                        ISBN:function(){
+                            return $('#ISBN').val();
+                        }
+                    }
+                    
+                            
+                }
+            },
+            title: {
+                required: true
+            },
+            author:{
+                required: true
+            },
+            editor: {
+                required: true
+            }
+        },
+            messages: {
+                ISBN: {
+                    required: 'le ISBN est obligatoire'
+                },
+                title: {
+                    required: 'required',
+                },
+                author: {
+                    required: 'required'
+                },
+                editor: {
+                    required: 'required'
+                }
+             
+            }
+        
+    });
+}
+
+
 
 
