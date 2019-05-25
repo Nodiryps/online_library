@@ -421,6 +421,5 @@ class User extends Model {
     }
     
     
-    
 
 }

@@ -2,52 +2,33 @@
 //
 $(function () {
     $("input:text:first").focus();
-    validateLogin();
+//    validateLogin();
     validateSignup();
 });
 
 
 function validateLogin() {
     $('#loginForm').validate({
-        
+
         rules: {
-            pseudo: {
-                required: true,
-                minlength: 3,
-                maxlength: 16,
-                remote: {
-                    url: "user/ValidateUser/",
-                    type: "post",
-                    data: {
-                        pseudo: function () {
-                            return $('#pseudo').val();
-                        }
-                    }
-                }
+            username: {
+                required: true
+                
             },
+            password : {required: true}
            
+
         },
         messages: {
-            pseudo: {
-                required: 'required',
-                minlength: 'minimum 3 characters',
-                maxlength: 'maximum 16 characters',
-                remote: 'this pseudo is already taken'
+            username: {
+                required: 'required'
             },
             password: {
-                required: 'required',
-                minlength: 'minimum 8 characters',
-                maxlength: 'maximum 16 characters'
+                required: 'required'
             }
 
-
-            }
-
-
-
-
+        }
     });
-    
 }
 
 function validateSignup() {
@@ -60,7 +41,7 @@ function validateSignup() {
                 required: true,
                 minlength: 3,
                 maxlength: 16,
-                 remote: {
+                remote: {
                     url: "user/ValidateUser/",
                     type: "post",
                     data: {
@@ -70,9 +51,9 @@ function validateSignup() {
                     }
                 }
             },
-            email:{
+            email: {
                 required: true,
-                 remote: {
+                remote: {
                     url: "user/isEmailExist/",
                     type: "post",
                     data: {
@@ -84,37 +65,37 @@ function validateSignup() {
             },
             password: {
                 required: true
-                
+
             },
             password_confirm: {
                 required: true
-            
+
             }
         },
-            messages: {
-                fullname: {
-                    required: 'le fullname est obligatoire'
-                },
-                username: {
-                    required: 'required',
-                    minlength: 'minimum 3 characters',
-                    maxlength: 'maximum 16 characters',
-                     remote: 'this pseudo is already taken'
-                },
-                password: {
-                    required: 'required',
-                   
-                },
-                password_confirm: {
-                    required: 'required',
-                   
-                },
-                email:{
-                    required: 'required',
-                    remote:'Email existant'
-                }
+        messages: {
+            fullname: {
+                required: 'le fullname est obligatoire'
+            },
+            username: {
+                required: 'required',
+                minlength: 'minimum 3 characters',
+                maxlength: 'maximum 16 characters',
+                remote: 'this pseudo is already taken'
+            },
+            password: {
+                required: 'required',
+
+            },
+            password_confirm: {
+                required: 'required',
+
+            },
+            email: {
+                required: 'required',
+                remote: 'Email existant'
             }
-        
+        }
+
     });
 }
 

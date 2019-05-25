@@ -64,12 +64,14 @@ class ControllerRental extends Controller {
             $usertoAddRent = User::get_user_by_id($_POST["panierof"]);
             $rent = Book::get_book_by_id($_POST["idbook"]);
             if (!Rental::cpt_basket_ok($usertoAddRent->id)) {
-                $msg = "Vous ne pouvez pas louer plus de 5 livres Ã  la fois!";
+                $msg = "Vous ne pouvez pas louer plus de 5 livres a la fois!";
             } else {
+
                 Rental::add_to_basket($user, $usertoAddRent, $rent, $id, $users);
+                $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
+                $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
+//                $this->redirect("rental", "get_basket", $usertoAddRent->username);
             }
-            $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
-            $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user();
         } (new View("book_manager"))->show(array("books" => $books, "profile" => $users, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
 
@@ -109,23 +111,17 @@ class ControllerRental extends Controller {
         $getUserRental = $user->get_rental_join_book_join_user_by_user();
         $members = User::get_all_user();
         $filter = [];
+        $value = "";
         if (isset($_GET["param1"])) {
-            $filter = Tools::url_safe_decode($_GET['param1']);
-
-            if (!$filter)
-                Tools::abort("bad url parameter");
+            $value = $_GET["param1"];
         }
+
         if (isset($_POST["member_rents"])) {
-            $filter["member_rents"] = $_POST["member_rents"];
-            $this->redirect("Rental", "get_basket", Tools::url_safe_encode($filter));
+            $value = $_POST["member_rents"];
         }
-        if ($filter) {
-            $value = $filter["member_rents"];
-            $usertoAddRent = User::get_user_by_id($value);
-            $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
-            $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
-        }
-
+        $usertoAddRent = User::get_user_by_id($value);
+        $getUserRental = $usertoAddRent->get_rental_join_book_join_user_by_user_not_rented();
+        $books = Rental::get_rental_join_book_join_user_rentdate($usertoAddRent->id);
 
         (new View("book_manager"))->show(array("books" => $books, "profile" => $user, "UserRentals" => $getUserRental, "msg" => $msg, "members" => $members, "actualpanier" => $usertoAddRent));
     }
@@ -153,7 +149,7 @@ class ControllerRental extends Controller {
         $author = "";
         $date = "";
         $filter = "";
-        //var_dump(Rental::get_rental_join_book_join_user_rentdatesJs());
+//var_dump(Rental::get_rental_join_book_join_user_rentdatesJs());
         (new View("returns"))->show(array("profile" => $profile, "books" => $books, "title" => $title, "author" => $author, "date" => $date, "filter" => $filter));
     }
 
@@ -268,19 +264,19 @@ class ControllerRental extends Controller {
         } else {
             $rentals = Rental::get_rental_join_book_join_user_rentdatesFilterJs($title, $author, $rentaldate, $select);
         }
-        if ($rentals != null) {
+        if ($rentals ) {
             foreach ($rentals as $rental) {
-                if ($rental->returndate == NULL) {
-                    if (date('Y-m-d', strtotime('1 month', strtotime($rental->rentaldate))) >= date('Y-m-d')) {
+                if ($rental->returndate == null) {
+                    if ($this->is_not_late($rental->rentaldate)) {
                         $rental->eventColor = 'green';
                     } else {
                         $rental->eventColor = 'red';
                     }
                 } else {
-                    if (date('Y-m-d', strtotime('1 month', strtotime($rental->rentaldate))) >= $rental->returndate) {
-                        $rental->eventColor = 'lightgreen';
+                    if ($this->is_not_late($rental->rentaldate)) {
+                        $rental->eventColor = 'yellow';
                     } else {
-                        $rental->eventColor = 'lightred';
+                        $rental->eventColor = 'purple';
                     }
                 }
                 if ($rental->returndate == null) {
@@ -291,6 +287,10 @@ class ControllerRental extends Controller {
             }
         }
         echo json_encode($rentals);
+    }
+
+    public function is_not_late($rentaldate) {
+        return date('Y-m-d', strtotime('1 month', strtotime($rentaldate))) >= date('Y-m-d');
     }
 
     public function getRentalsEvents() {

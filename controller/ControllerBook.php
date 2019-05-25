@@ -187,6 +187,7 @@ class ControllerBook extends Controller {
         $res = "false";
         if (isset($_POST["ISBN"]) && $_POST["ISBN"] !== "") {
             $email = Book::existIsbn($_POST['ISBN']);
+            var_dump($email);
             if (!$email) {
                 $res = "true";
             }

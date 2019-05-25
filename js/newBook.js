@@ -1,10 +1,12 @@
 
 $(function () {
     $('#ISBN').after(isbn2);
+    
     isbn();
     addFeatures();
-    onFocus();
     ValidateAddBook();
+    onFocus();
+    
 
 });
 
@@ -19,11 +21,8 @@ function isbn() {
             console.log("Ajax return " + data);
             var datas = JSON.parse(data);
             console.log("Json return " + datas);
-
             $('#isbn2').val(datas);
         });
-
-
     });
 }
 
@@ -48,69 +47,64 @@ function addFeatures() {
 }
 
 function onFocus() {
-    $('#isbn2')
+    $('#isbn2');
 
     $('#ISBN').focusin(function () {
         if ($('#isbn2').length === 0) {
             $('#ISBN').after(isbn2);
         }
-
         $('#ISBN').removeClass("form-control input-md");
         $('#ISBN').val($('#ISBN').val().replace(/\-/g, ''));
         if ($('#ISBN').val().length === 13) {
             $('#isbn2').val($('#ISBN').val().substr(-1));
-            $('#ISBN').val($('#ISBN').val().substr(0, $('#ISBN').val().length - 1))
-
-
+            $('#ISBN').val($('#ISBN').val().substr(0, $('#ISBN').val().length - 1));
         }
-
     });
 }
 
-function ValidateAddBook(){
-    
-     $('#AddBookForm').validate({
+function ValidateAddBook() {
+
+    $('#AddBookForm').validate({
         rules: {
-           ISBN : {
+            ISBN: {
                 required: true,
-                remote:{
-                    url:"book/isbnExists",
-                    type:'post',
-                    data:{
-                        ISBN:function(){
+                remote: {
+                    url: "book/isbnExists",
+                    type: 'post',
+                    data: {
+                        ISBN: function () {
                             return $('#ISBN').val();
                         }
                     }
-                    
-                            
                 }
             },
             title: {
                 required: true
             },
-            author:{
+            author: {
                 required: true
             },
             editor: {
                 required: true
             }
         },
-            messages: {
-                ISBN: {
-                    required: 'le ISBN est obligatoire'
-                },
-                title: {
-                    required: 'required',
-                },
-                author: {
-                    required: 'required'
-                },
-                editor: {
-                    required: 'required'
-                }
-             
+        messages: {
+            ISBN: {
+                required: 'le ISBN est obligatoire',
+                remote: 'ISBN existant'
+            },
+            title: {
+                required: 'required'
+            },
+            author: {
+                required: 'required'
+            },
+            editor: {
+                required: 'required'
             }
-        
+
+        }
+
     });
 }
 

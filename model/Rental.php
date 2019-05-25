@@ -379,8 +379,9 @@ class Rental extends Model {
     public static function get_rental_join_book_join_user_rentdatesJs() {
         $results = [];
         try {
-            $query = self::execute("SELECT rental.id,user.username ,book.title,rental.rentaldate,rental.returndate FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
-                            . "WHERE (rentaldate IS NOT NULL  AND returndate IS NULL) ", array());
+            $query = self::execute("SELECT rental.id,user.username ,book.title,rental.rentaldate,rental.returndate "
+                                    . "FROM (rental join user on rental.user=user.id) join book on rental.book=book.id "
+                                    . "WHERE (rentaldate IS NOT NULL) ", array());
             $rental = $query->fetchAll();
             foreach ($rental as $row) {
                 $results[] = new Rental($row["id"], $row["username"], $row["title"], $row["rentaldate"], $row["returndate"]);

@@ -162,6 +162,16 @@ class ControllerUser extends Controller {
         }
     }
     
- 
+    public function isAvailablePseudo(){
+        $res = "true";
+        if(isset($_POST["username"]) && $_POST["username"] !== ""){
+            $old = User::get_user_by_id($id);
+            if(User::is_username_not_available($username))
+                $res = "false";
+        }
+        echo $res;
+    }
+    
+    
 
 }

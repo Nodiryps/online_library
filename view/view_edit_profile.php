@@ -13,6 +13,10 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="js/editUser.js" type="text/javascript"></script>
+
     <style>
         legend, td{text-align: center;}
     </style>
@@ -29,15 +33,15 @@
                     <legend><h1>Modificiation du profile de: <?= $member->username ?></h1></legend>
                     <tr>
                         <td>Pseudo:</td>
-                        <td><input  name="username" type="text" value="<?= $member->username ?>"  class="form-control my-input"></td>
+                        <td><input id="username"  name="username" type="text" value="<?= $member->username ?>"  class="form-control my-input"></td>
                     </tr>
                     <tr>
                         <td>Nom complet:</td>
-                        <td><input  name="fullname" type="text" value="<?= $member->fullname ?>"  class="form-control my-input"></td>
+                        <td><input id="fullname" name="fullname" type="text" value="<?= $member->fullname ?>"  class="form-control my-input"></td>
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input  name="email" type="text" value="<?= $member->email ?>"  class="form-control my-input"></td>
+                        <td><input id="email" name="email" type="text" value="<?= $member->email ?>"  class="form-control my-input"></td>
                     </tr>
                     <tr>
                         <td>Date de naissance:</td> <!-- max="<? strtotime(substr(User::today_one_int(), 0, 4)); ?>" -->
@@ -63,11 +67,11 @@
                     <?php if ($utilisateur->id === $member->id): ?>
                         <tr>
                             <td>Mot de passe:</td>
-                            <td><input  name="password" type="password"  class="form-control my-input"></td>
+                            <td><input id="password" name="password" type="password"  class="form-control my-input"></td>
                         </tr>
                         <tr>
                             <td>Confirmation du mdp:</td>
-                            <td><input  name="confirm_password" type="password"  class="form-control my-input"></td>
+                            <td><input id="confirm_password" name="confirm_password" type="password"  class="form-control my-input"></td>
                         </tr>
                     <?php endif; ?>
                 </table>

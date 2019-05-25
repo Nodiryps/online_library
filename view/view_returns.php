@@ -49,7 +49,6 @@
     </head>
     <body>
         <script>
-
             document.addEventListener('DOMContentLoaded', function () {
                 $('#tabReturn').hide();
                 $('#legend').hide();
@@ -57,6 +56,12 @@
                 $('select ').change(function () {
                     $("select option:selected").each(function () {
                         console.log($(this).text());
+                    });
+                });
+                
+                $("#title").change(function(){
+                    $.get("rental/getRentalsRessources",function(data){
+                        console.log(JSON.parse(data));
                     });
                 });
 

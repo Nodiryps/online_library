@@ -25,7 +25,7 @@
                 <div>
                     <form action="main/login" method="post" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="loginForm">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo" id="pseudo">
+                            <input type="text" class="form-control" name="pseudo" value="<?= $pseudo ?>" placeholder="Pseudo" id="usernamel">
                           <p class="errors" id="errPseudo"></p>
                         </div>
                         <div class="form-group">
