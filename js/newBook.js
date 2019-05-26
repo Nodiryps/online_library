@@ -1,4 +1,3 @@
-var input;
 $(function () {
     $('#ISBN').after(isbn2);
     
@@ -27,7 +26,7 @@ function isbn() {
 function addFeatures() {
 
     $('#ISBN').focusout(function () {
-        input = $('#isbn2');
+        var input = $('#isbn2');
         if ($('#ISBN').val().length === 12) {
             $.get("book/addFeatures/" + $('#ISBN').val(), function (data) {
                 var datas = JSON.parse(data);
@@ -69,12 +68,11 @@ function ValidateAddBook() {
                 minlength: 12,
                 maxlength: 12,
                 remote: {
-                    url: "book/isbnExists/" ,
+                    url: "book/isbnExists" ,
                     type: 'post',
                     data: {
-                        isbn: function () {
-                        console.log($('#ISBN').val() + ' ligne 78');
-                            return $('#ISBN').val() + input.val();
+                        ISBN: function () {
+                            return $('#ISBN').val();
                         }
                     }
                 }
