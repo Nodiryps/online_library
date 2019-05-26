@@ -28,7 +28,7 @@
 
         <div class="container text-center" >
             <br><br>
-            <form action="user/edit_profile" method="post" class=" form-horizontal col-lg-12 col-lg-offset-3 col-lg-5">
+            <form action="user/edit_profile" method="post" class=" form-horizontal col-lg-12 col-lg-offset-3 col-lg-5" id="editform">
                 <table class="table-dark ">
                     <legend><h1>Modificiation du profile de: <?= $member->username ?></h1></legend>
                     <tr>

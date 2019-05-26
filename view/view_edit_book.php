@@ -14,6 +14,9 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="js/editBook.js" type="text/javascript"></script>
     </head>
     <body>
         <nav> 
@@ -30,14 +33,14 @@
         <div class="container row">
 
             <div class="col-lg-offset-2 col-lg-5">
-                <form class="text-right" action="book/edit_book" method="post" enctype="multipart/form-data">
+                <form class="text-right" action="book/edit_book" method="post" enctype="multipart/form-data" id="editBook">
                     <fieldset>
                         <!-- Text input-->
                         <div class="form-group">
                             <label class="col-lg-5 control-label" for="ISBN">ISBN</label>  
                             <div class="col-lg-7">
-                                <input id="ISBN" name="isbn" type="text" 
-                                       class="form-control input-md" value="<?= substr($book->isbn, 0, 12); ?>">
+                                <input id="isbn" name="isbn" type="text" 
+                                       class="form-control input-md" value="<?= $book->isbn ?>">
                             </div>
                         </div>
 
@@ -45,7 +48,7 @@
                         <div class="form-group">
                             <label class="col-lg-5 control-label" for="textinput">AUTEUR.E</label>  
                             <div class="col-lg-7">
-                                <input id="textinput" name="author" type="text"  
+                                <input id="author" name="author" type="text"  
                                        class="form-control input-md" value="<?= $book->author ?>">
                             </div>
                         </div>
@@ -54,7 +57,7 @@
                         <div class="form-group">
                             <label class="col-lg-5 control-label" for="TITRE">TITRE</label>  
                             <div class="col-lg-7">
-                                <input id="textinput" name="title" type="text" 
+                                <input id="title" name="title" type="text" 
                                        class="form-control input-md" value="<?= $book->title ?>">
                             </div>
                         </div>
@@ -63,14 +66,14 @@
                         <div class="form-group">
                             <label class="col-lg-5 control-label" for="textinput">EDITION</label>  
                             <div class="col-lg-7">
-                                <input id="textinput" name="editor" type="text" 
+                                <input id="edition" name="editor" type="text" 
                                        class="form-control input-md" value="<?= $book->editor ?>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-5 control-label" for="TITRE">COPIES</label>  
                             <div class="col-lg-7">
-                                <input id="textinput" name="nbCopie" type="number" name="quantity" min="0"
+                                <input id="copies   " name="nbCopie" type="number" name="quantity" min="0"
                                        class="form-control input-md" value="<?= $book->nbCopies ?>">
                             </div>
                         </div>

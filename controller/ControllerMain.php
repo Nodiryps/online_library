@@ -59,8 +59,6 @@ class ControllerMain extends Controller {
             if(empty($password)|| empty($password_confirm)){
                $errors[] = "Date de naissance invalide!";
             }
-            var_dump($password);
-            var_dump($password_confirm);
              $member = new User($id, $username, Tools::my_hash($password), $fullname, $email, $birthdate, $role);
             $errors = array_merge( User::validate_unicity($username));
             $errors = array_merge($errors, $member->validate());

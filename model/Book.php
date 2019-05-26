@@ -165,8 +165,7 @@ class Book extends Model {
         try {
             $query = self::execute("SELECT * FROM book  WHERE isbn=:isbn", array("isbn" => $isbn));
             $books = $query->fetchAll();
-            if (sizeof($books) == 0)
-                return false;
+            return sizeof($books) !== 0;
         } catch (Exception $ex) {
             Tools::abort("problemes lors de l'acces a la DB");
         }

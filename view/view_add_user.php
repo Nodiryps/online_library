@@ -44,7 +44,7 @@
                                 <td><input id="fullname" name="fullname" type="text" value="" class="form-control my-input" id="fullname"  placeholder="fullname" value="<?= $fullname ?>"></td>
                             </tr>
                             <tr class="form-group">
-                                <td><input id="mail" name="mail" type="text" value="" class="form-control my-input" id="mail"  placeholder="email  " value="<?= $email ?>"></td>
+                                <td><input id="email" name="mail" type="text" value="" class="form-control my-input"   placeholder="email  " value="<?= $email ?>"></td>
                             </tr>
                             <tr class="form-group">
                                 <td><input id="birthdate" name="birthdate" type="date"  class="form-control my-input" id="birthdate"  placeholder="date de naissance"></td>

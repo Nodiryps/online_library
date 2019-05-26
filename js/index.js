@@ -57,8 +57,8 @@ function validateSignup() {
                     url: "user/isEmailExist/",
                     type: "post",
                     data: {
-                        username: function () {
-                            return $('#username').val();
+                        email: function () {
+                            return $('#email').val();
                         }
                     }
                 }
@@ -68,8 +68,8 @@ function validateSignup() {
 
             },
             password_confirm: {
-                required: true
-
+                required: true,
+                equalTo:'#password'
             }
         },
         messages: {
@@ -83,11 +83,12 @@ function validateSignup() {
                 remote: 'this pseudo is already taken'
             },
             password: {
-                required: 'required',
+                required: 'required'
 
             },
             password_confirm: {
                 required: 'required',
+                equalTo: 'Not same password'
 
             },
             email: {

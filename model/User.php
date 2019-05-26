@@ -210,7 +210,6 @@ class User extends Model {
 
     private static function is_email_available( $mail) {
         $val = self::_email($mail);
-        var_dump($val);
        if($val){
            return false;
        }
@@ -348,8 +347,6 @@ class User extends Model {
         if (!User::validate_birthdate_edit_user($birthdate))
             $errors[] = "Date de naissance invalide!";
         if ( $password === '' || $password_confirm === '') {
-            var_dump($_POST['password_confirm']);
-            var_dump($_POST['password']);
             $errors[] = "Les mdp sont obligatoires!";
         }
         if ($password != $password_confirm)

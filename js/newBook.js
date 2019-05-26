@@ -66,11 +66,11 @@ function ValidateAddBook() {
 
     $('#AddBookForm').validate({
         rules: {
-            ISBN: {
+            isbn: {
                 required: true,
                 remote: {
                     url: "book/isbnExists",
-                    type: 'post',
+                    type: 'POST',
                     data: {
                         ISBN: function () {
                             return $('#ISBN').val();
@@ -79,30 +79,49 @@ function ValidateAddBook() {
                 }
             },
             title: {
-                required: true
+                required: true,
+                minlength: 2,
+                maxlength: 50
             },
             author: {
-                required: true
+                required: true,
+                minlength: 5,
+                maxlength: 50
             },
             editor: {
-                required: true
+                required: true,
+                minlength: 2,
+                maxlength: 16
+            },
+            nbCopie:{
+                required: true,
+                minlength: 1
             }
         },
         messages: {
-            ISBN: {
-                required: 'le ISBN est obligatoire',
+            isbn: {
+                required: 'required',
                 remote: 'ISBN existant'
             },
             title: {
-                required: 'required'
+                required: 'required',
+                minlength: '2 caractères min',
+                maxlength: '50 caractères max'
             },
             author: {
-                required: 'required'
+                required: 'required',
+                minlength: '5 caractères min',
+                maxlength: '50 caractères max'
             },
             editor: {
-                required: 'required'
+                required: 'required',
+                minlength: '2 caractères min',
+                maxlength: '16 caractères max'
+            },
+            nbCopie:{
+                required: 'required',
+                minlength: '1 caractère min'
             }
-
         }
 
     });

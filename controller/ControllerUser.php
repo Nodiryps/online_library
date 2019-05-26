@@ -153,7 +153,7 @@ class ControllerUser extends Controller {
 
     public function isEmailExist() {
         $res = "false";
-        if (isset($_POST["email"]) && $_POST["email"] !== "") {
+            if (isset($_POST["email"]) && $_POST["email"] !== "") {
             $email = User::is_mail_exist($_POST['email']);
             if ($email) {
                 $res = "true";

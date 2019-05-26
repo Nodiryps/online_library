@@ -131,7 +131,7 @@
                                 rentaldate: $("#rentaldate").val(),
                                 rentalId: $("#rentalid").val(),
                                 select: $('#inputState option:selected').each(function () {
-                                    return  $(this).text();
+                                    return  "$(this).text()";
                                 })
                             };
                         }
@@ -149,7 +149,7 @@
                                     return  $(this).text();
                                 })
 
-                            }
+                            };
                         }
                     },
                     eventClick: function (data) {
