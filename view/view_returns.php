@@ -6,30 +6,8 @@
         <meta charset="UTF-8">
         <base href="<?= $web_root ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
-
-        <!-- Latest compiled and minified JavaScript -->
-
-        <!--Plugin Fullcalendar-->
-
-        <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
-        <script src="lib/jquery-validation-1.19.0/jquery.validate.min.js" type="text/javascript"></script>
-
-        <!--Script javascript et Jquery-->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-
-        <script src='lib/fullcalendar/packages/moment/main.js'></script>
-        <script src='lib/fullcalendar/packages/core/main.js'></script>
-        <script src='lib/fullcalendar/packages/interaction/main.js'></script>
-        <script src='lib/fullcalendar/packages/timeline/main.js'></script>
-        <script src='lib/fullcalendar/packages/resource-common/main.js'></script>
-        <script src='lib/fullcalendar/packages/resource-timeline/main.js'></script>
-
 
         <link href='lib/fullcalendar/packages/core/main.css' rel='stylesheet' />
         <link href='lib/fullcalendar/packages/timeline/main.css' rel='stylesheet' />
@@ -44,7 +22,10 @@
         <script src='lib/fullcalendar/packages/resource-timeline/main.js'></script>
         <script src="lib/jquery-3.3.1.min.js" type="text/javascript"></script>
         <script src="lib/jquery-ui-1.12.1.ui-lightness/jquery-ui.min.js" type="text/javascript"></script>
-
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
     </head>
     <body>
@@ -58,128 +39,121 @@
                         console.log($(this).text());
                     });
                 });
-                
-                $("#title").change(function(){
-                    $.get("rental/getRentalsRessources",function(data){
+
+                $("#title").change(function () {
+                    $.get("rental/getRentalsRessources", function (data) {
                         console.log(JSON.parse(data));
                     });
                 });
 
-//                $("select").change(function () {
-//                    var str = "";
-//                    $("select option:selected").each(function () {
-//                        str += $(this).text() + " ";
-//                    });
-//                    $("div").text(str);
-//                })
-//                        .trigger('change');
-
                 var calendarEl = document.getElementById('phpAffiche');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
-                    refetchResourcesOnNavigate: true,
-                    plugins: ['interaction', 'resourceTimeline'],
-                    timeZone: 'UTC',
-                    defaultView: 'resourceTimelineWeek',
-                    aspectRatio: 1.5,
-                    allDaySlot: false,
-                    eventLimit: true,
-                    height: "",
-                    firstday: 1,
-                    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-                    header: {
+                refetchResourcesOnNavigate: true,
+                        plugins: ['interaction', 'resourceTimeline'],
+                        timeZone: 'UTC',
+                        defaultView: 'resourceTimelineWeek',
+                        aspectRatio: 1.5,
+                        allDaySlot: false,
+                        eventLimit: true,
+                        height: "",
+                        firstday: 1,
+                        schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                        header: {
                         left: 'today, prev, next',
-                        center: 'title',
-                        right: 'resourceTimelineWeek, resourceTimelineMonth, resourceTimelineYear',
-                    },
-                    views: {
+                                center: 'title',
+                                right: 'resourceTimelineWeek, resourceTimelineMonth, resourceTimelineYear',
+                        },
+                        views: {
                         year: {
-                            slotDuration: {month: 1}
+                        slotDuration: {month: 1}
                         },
-                        month: {
-                            slotDuration: {day: 1},
-                            slotLabelFormat: [
-                                {day: 'numeric'}
-                            ]
-                        },
-                        week: {
-                            slotDuration: {day: 1},
-                            slotLabelFormat: [
-                                {day: 'numeric'}
-                            ]
-                        }
-
-                    },
-                    editable: false,
-                    selectable: true,
-                    resourceColumns: [
-                        {
-                            labelText: 'Users',
-                            field: 'user'
-                        },
-                        {
-                            labelText: 'Books',
-                            field: 'book'
-                        }
-                    ],
-                    resources: {
-                        url: "rental/getRentalsRessources",
-                        method: 'POST',
-                        extraParams: function () {
-                            return {
-                                title: $("#title").val(),
-                                author: $("#author").val(),
-                                rentaldate: $("#rentaldate").val(),
-                                rentalId: $("#rentalid").val(),
-                                select: $('select option:selected').each(function () {
-                                    return  $(this).text();
-                                })
-                            };
-                        }
-                    },
-                    events: {
-                        url: "rental/getRentalsEvents",
-                        method: 'POST',
-                        extraParams: function () {
-                            return {
-                                title: $("#title").val(),
-                                author: $("#author").val(),
-                                rentaldate: $("#rentaldate").val(),
-                                rentalId: $("#rentalid").val(),
-                                select: $('select option:selected').each(function () {
-                                    return  $(this).text();
-                                })
-
-                            };
-                        }
-                    },
-                    eventClick: function (data) {
-                        var res = data.event.getResources();
-                        var colonne = res["0"]._resource.extendedProps;
-                        $("#rentalid").text(data.event.id);
-                        $("#user").text(colonne.user);
-                        $("#bookTitle").text(colonne.book);
-                        $("#start").text(data.event.start.toDateString());
-                        $("#end").text(colonne.end);
-                        $('#confirmDialog').dialog({
-                            resizable: false,
-                            height: 300,
-                            width: 500,
-                            modal: true,
-                            autoOpen: true,
-
-                            buttons: {
-                                retourner: function () {
-                                    $.post("Rental/return_date", {rentId: data.event.id}, refetch, "html");
-                                    $(this).dialog("close");
+                                month: {
+                                slotDuration: {day: 1},
+                                        slotLabelFormat: [
+                                        {day: 'numeric'}
+                                        ]
                                 },
-                                supprimer: function () {
-                                    $.post("rental/delete_RentalJS", {rentdel: data.event.id}, refetch, "html");
-                                    $(this).dialog("close");
+                                week: {
+                                slotDuration: {day: 1},
+                                        slotLabelFormat: [
+                                        {day: 'numeric'}
+                                        ]
                                 }
+
+                        },
+                        editable: false,
+                        selectable: true,
+                        resourceColumns: [
+                        {
+                        labelText: 'Users',
+                                field: 'user'
+                        },
+                        {
+                        labelText: 'Books',
+                                field: 'book'
+                        }
+                        ],
+                        resources: {
+                        url: "rental/getRentalsRessources",
+                                method: 'POST',
+                                extraParams: function () {
+                                return {
+                                title: $("#title").val(),
+                                        author: $("#author").val(),
+                                        rentaldate: $("#rentaldate").val(),
+                                        rentalId: $("#rentalid").val(),
+                                        select: $('select option:selected').each(function () {
+                                return  $(this).text();
+                                })
+                                };
+                                }
+                        },
+                        events: {
+                        url: "rental/getRentalsEvents",
+                                method: 'POST',
+                                extraParams: function () {
+                                return {
+                                title: $("#title").val(),
+                                        author: $("#author").val(),
+                                        rentaldate: $("#rentaldate").val(),
+                                        rentalId: $("#rentalid").val(),
+                                        select: $('select option:selected').each(function () {
+                                return  $(this).text();
+                                })
+
+                                };
+                                }
+                        },
+                        eventClick: function (data) {
+                        var res = data.event.getResources();
+                                var colonne = res["0"]._resource.extendedProps;
+                                $("#rentalid").text(data.event.id);
+                                $("#user").text(colonne.user);
+                                $("#bookTitle").text(colonne.book);
+                                $("#start").text(data.event.start.toDateString());
+                                $("#end").text(colonne.end);
+                                $('#confirmDialog').dialog({
+                        resizable: false,
+                                height: 300,
+                                width: 500,
+                                modal: true,
+                                autoOpen: true
+<?php if ($profile->is_admin()): ?>
+                            , buttons: {
+                            retourner: function () {
+                            $.post("Rental/return_date", {rentId: data.event.id}, refetch, "html");
+                                    $(this).dialog("close");
+                            },
+                                    supprimer: function () {
+                                    $.post("rental/delete_RentalJS", {rentdel: data.event.id}, refetch, "html");
+                                            $(this).dialog("close");
+                                    }
                             }
+<?php endif; ?>
                         });
-                    }
-                });
+                        }
+                }
+                );
 
                 calendar.render();
                 $("#title, #author, #rentaldate, select, #rentalid").on("input", function () {
@@ -232,12 +206,12 @@
                                     <?php }
                                     ?> value="tous" >Tous</option>
                                 <option 
-                                <?php if (!empty($filter) && $filter == "location") { ?>
+                                    <?php if (!empty($filter) && $filter == "location") { ?>
                                         selected
                                     <?php }
                                     ?>value="location" >Location</option>
                                 <option 
-                                <?php if (!empty($filter) && $filter == "retour") { ?>
+                                    <?php if (!empty($filter) && $filter == "retour") { ?>
                                         selected
                                     <?php }
                                     ?>value="retour">Retour</option>
@@ -265,7 +239,7 @@
                     </tr>
                 </thead>
                 <div>
-                    <?php foreach ($books as $book): ?>
+<?php foreach ($books as $book): ?>
 
                         <tr>
                             <td class="text-center"><?= $book->rentaldate ?></td>
@@ -273,7 +247,7 @@
                             <td class="text-center"><strong><?= Book::get_title_by_id($book->book) ?></strong> (<?= strtoupper(Book::get_author_by_id($book->book)) ?>)</td>
                             <td class="text-center"><?= $book->returndate ?></td>
                             <?php if ($book->returndate == null): ?>
-                                <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
+        <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
                                     <td style="border:none;" bgcolor="white">
                                         <form  method="post" action="rental/update_rental_returndate">
                                             <input type="hidden" name="idbook" value="<?= $book->id ?>" id="rentalid">
@@ -286,7 +260,7 @@
                                 endif;
                             elseif ($book->returndate !== null):
                                 ?>
-                                <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
+        <?php if ($profile->role == "admin" || $profile->role == "manager"): ?>
                                     <td style="border:none;" bgcolor="white">
                                         <form  method="post" action="rental/cancel_rental_returndate">
                                             <input type="hidden" name="idcancel" value="<?= $book->id ?>">
@@ -312,7 +286,7 @@
                             endif;
                             ?>
                         </tr>
-                    <?php endforeach; ?>
+<?php endforeach; ?>
             </table>
             <div id="confirmDialog" hidden>
                 <p hidden>ID BOOK: <strong id="rentalid"></strong></p>

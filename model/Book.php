@@ -71,8 +71,8 @@ class Book extends Model {
             }
             return $results;
         } catch (Exception $e) {
-            // Tools::abort("Problème lors de l'accès a la base de données");
-            echo $e->getMessage();
+             Tools::abort("Problème lors de l'accès a la base de données");
+//            echo $e->getMessage();
         }
     }
 

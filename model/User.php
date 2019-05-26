@@ -244,8 +244,8 @@ class User extends Model {
                     . "WHERE id = :id", array("username" => $this->username, "password" => $this->hash_password, "fullname" => $this->fullname,
                 "email" => $this->email, "birthdate" => $this->birthdate, "role" => $this->role, "id" => $this->id));
         } catch (Exception $e) {
-            // Tools::abort("Problème lors de l'accès a la base de données(update)");
-            echo $e->getMessage();
+            Tools::abort("Problème lors de l'accès a la base de données(update)");
+//            echo $e->getMessage();
         }
     }
 

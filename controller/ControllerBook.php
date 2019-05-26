@@ -166,11 +166,9 @@ class ControllerBook extends Controller {
         if (isset($_GET['param1']) && !$_GET['param1'] == "" && isset($_GET['param2'])) {
             if ($_GET['param1'] !== " ") {
                 $result = Book::get_book_by_critere($_GET['param1'], $_GET['param2']);
-                // var_dump($result);
                 echo json_encode($result);
             } else {
                 $result = Book::get_all_books($_GET['param2']);
-                //var_dump($result);
                 echo json_encode($result);
             }
         }

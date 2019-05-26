@@ -17,10 +17,6 @@ class ControllerUser extends Controller {
         $profile = $this->get_user_or_redirect();
         $returndate = [];
         $datetoreturn = [];
-        $user = User::get_user_by_username('fdgdfgsdf');
-        if ($user->id !== null) {
-            var_dump($user);
-        }
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
         $vignette = count(Rental::get_rentals_by_user($profile->id));
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate, "vignette" => $vignette));
@@ -144,18 +140,18 @@ class ControllerUser extends Controller {
     }
 
     public function isEmailExist() {
-        $res = "true";
+        $res = "false";
         if (isset($_POST['email']) && $_POST['email'] !== "") {
             if (isset($_POST['idmember']) && $_POST['idmember'] !== "") {
                 $thisMember = User::get_user_by_id($_POST['idmember']);
                 if ($thisMember->email === $_POST['email'])
                     $res = "true";
-                elseif (!User::is_email_available($_POST['email'])) {
-                    $res = "false";
+                if (User::is_email_available($_POST['email'])) {
+                    $res = "true";
                 }
             }
-            echo $res;
         }
+        echo $res;
     }
 
 }

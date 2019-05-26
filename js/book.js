@@ -9,7 +9,6 @@ $(function () {
     actual = $('#user');
     $('#search').keyup(function () {
         $.get("book/get_search/" + s.val() + "/" + u.val(), function (data) {
-               console.log(data);
             if (data !== "") {
                 var datas = JSON.parse(data);
              

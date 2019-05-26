@@ -1,10 +1,4 @@
 $(function () {
-
-//    $('#username').keyup(function () {
-//        $.post("user/ValidateUser", $('#username').val(), function (data) {
-//            console.log(data);
-//        });
-//    });
     validateUser();
 
 

@@ -427,5 +427,36 @@ class Rental extends Model {
             Tools::abort("ProblÃ¨me lors de l'accÃ¨s a la base de donnÃ©es");
         }
     }
+    
+    public function eventsColorMngmt(&$title, &$author, &$rentaldate, &$select) {
+        $rentals = Rental::get_rental_join_book_join_user_rentdatesFilterJs($title, $author, $rentaldate, $select);
+
+        if ($rentals)
+            foreach ($rentals as $rental) {
+                if ($rental->returndate == null) {
+                    if ($this->is_not_late($rental->rentaldate)) {
+                        $rental->eventColor = 'green';
+                    } else {
+                        $rental->eventColor = 'red';
+                    }
+                } else {
+                    if ($this->is_not_late($rental->rentaldate)) {
+                        $rental->eventColor = 'yellow';
+                    } else {
+                        $rental->eventColor = 'purple';
+                    }
+                }
+                if ($rental->returndate == null) {
+                    $rental->end = "pas encore retourner";
+                } else {
+                    $rental->end = $rental->returndate;
+                }
+            }
+        echo json_encode($rentals);
+    }
+
+    private function is_not_late($rentaldate) {
+        return date('Y-m-d', strtotime('1 month', strtotime($rentaldate))) >= date('Y-m-d');
+    }
 
 }
