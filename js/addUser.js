@@ -47,14 +47,13 @@ function validateUser() {
                 equalTo: '#password'
             },
             mail: {
+                email: true,
                 required: true,
-                minlength: 11,
-                email:true,
                 remote: {
                     url: "user/isEmailExist/",
-                    type: "get",
+                    type: "post",
                     data: {
-                        mail: function () {
+                        email: function () {
                             return $('#email').val();
                         }
                     }
