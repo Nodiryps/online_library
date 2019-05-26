@@ -140,8 +140,8 @@ class ControllerUser extends Controller {
 
     public function isEmailExist() {
         $res = "false";
-        if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
-            if (User::is_email_available($_GET["param1"])) {
+        if (isset($_POST['email']) && $_POST['email'] !== "") {
+            if (User::is_email_available($_POST['email'])) {
                 $res = "true";
             }
             echo $res;
