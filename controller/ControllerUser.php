@@ -131,18 +131,28 @@ class ControllerUser extends Controller {
 
         if (isset($_POST["username"]) && $_POST["username"] !== "") {
             $user = User::get_user_by_username($_POST['username']);
-            if ($user->id !== null) {
-                $res = "false";
+            if (isset($_POST['idmember']) && $_POST['idmember'] !== "") {
+                $thisMember = User::get_user_by_id($_POST['idmember']);
+                if ($thisMember->username === $_POST['username'])
+                    $res = "true";
+                elseif ($user->id !== null) {
+                    $res = "false";
+                }
             }
         }
         echo $res;
     }
 
     public function isEmailExist() {
-        $res = "false";
+        $res = "true";
         if (isset($_POST['email']) && $_POST['email'] !== "") {
-            if (User::is_email_available($_POST['email'])) {
-                $res = "true";
+            if (isset($_POST['idmember']) && $_POST['idmember'] !== "") {
+                $thisMember = User::get_user_by_id($_POST['idmember']);
+                if ($thisMember->email === $_POST['email'])
+                    $res = "true";
+                elseif (!User::is_email_available($_POST['email'])) {
+                    $res = "false";
+                }
             }
             echo $res;
         }

@@ -52,7 +52,7 @@ function validateUser() {
         },
         messages: {
             username: {
-                remote: 'this pseudo is already taken',
+                remote: 'pseudo existant',
                 required: 'required',
                 minlength: 'minimum 3 characters',
                 maxlength: 'maximum 16 characters'
@@ -63,7 +63,7 @@ function validateUser() {
                 maxlength: 'maximum 16 characters'
             },
             email:{
-                remote: 'this email is already taken',
+                remote: 'email existant',
                 required: 'required'
             }
         }

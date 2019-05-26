@@ -126,8 +126,10 @@ class ControllerBook extends Controller {
                 $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor, $book->nbCopies);
 
                 $isbn13 = Book::calcul_isbn($book->isbn);
-                if (Book::existIsbn($isbn13))
-                    $errors[] = "ISBN existe deja !";
+                $thisBook = Book::get_book_by_id($_POST["idbook"]);
+                if ($thisBook->isbn !== $isbn13)
+                    if (Book::existIsbn($isbn13))
+                        $errors[] = "ISBN existe deja !";
 
                 if (empty($errors)) {
                     $book->isbn = Book::calcul_isbn($book->isbn);
@@ -192,9 +194,16 @@ class ControllerBook extends Controller {
     public function isbnExists() {
         $res = "true";
         if (isset($_POST["isbn"]) && $_POST["isbn"] !== "") {
-            if (Book::existIsbn(Book::calcul_isbn($_POST["isbn"]))) {
-                $res = "false";
+            if (isset($_POST["idbook"]) && $_POST["idbook"] !== "") {
+                $thisBook = Book::get_book_by_id($_POST["idbook"]);
+                if ($thisBook->isbn === Book::calcul_isbn($_POST["isbn"]))
+                    $res = "true";
+                elseif (Book::existIsbn(Book::calcul_isbn($_POST["isbn"]))) {
+                    $res = "false";
+                }
             }
+
+
             echo $res;
         }
     }
