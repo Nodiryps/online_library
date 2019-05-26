@@ -1,4 +1,4 @@
-
+var input;
 $(function () {
     $('#ISBN').after(isbn2);
     
@@ -18,9 +18,7 @@ function isbn() {
     $('#ISBN').focus();
     $('#ISBN').keyup(function () {
         $.get("book/getIsbn/" + $('#ISBN').val(), function (data) {
-            console.log("Ajax return " + data);
             var datas = JSON.parse(data);
-            console.log("Json return " + datas);
             $('#isbn2').val(datas);
         });
     });
@@ -29,11 +27,9 @@ function isbn() {
 function addFeatures() {
 
     $('#ISBN').focusout(function () {
-        var input = $('#isbn2');
+        input = $('#isbn2');
         if ($('#ISBN').val().length === 12) {
             $.get("book/addFeatures/" + $('#ISBN').val(), function (data) {
-                console.log(input.val());
-                console.log(data);
                 var datas = JSON.parse(data);
                 $('#ISBN').val(datas + input.val());
                 $('#ISBN').addClass("form-control input-md");
@@ -44,6 +40,7 @@ function addFeatures() {
 
     });
     $('#isbn2').remove();
+    
 }
 
 function onFocus() {
@@ -53,6 +50,7 @@ function onFocus() {
         if ($('#isbn2').length === 0) {
             $('#ISBN').after(isbn2);
         }
+        
         $('#ISBN').removeClass("form-control input-md");
         $('#ISBN').val($('#ISBN').val().replace(/\-/g, ''));
         if ($('#ISBN').val().length === 13) {
@@ -68,12 +66,15 @@ function ValidateAddBook() {
         rules: {
             isbn: {
                 required: true,
+                minlength: 12,
+                maxlength: 12,
                 remote: {
-                    url: "book/isbnExists",
-                    type: 'POST',
+                    url: "book/isbnExists/" ,
+                    type: 'post',
                     data: {
-                        ISBN: function () {
-                            return $('#ISBN').val();
+                        isbn: function () {
+                        console.log($('#ISBN').val() + ' ligne 78');
+                            return $('#ISBN').val() + input.val();
                         }
                     }
                 }
@@ -101,7 +102,9 @@ function ValidateAddBook() {
         messages: {
             isbn: {
                 required: 'required',
-                remote: 'ISBN existant'
+                remote: 'ISBN existant',
+                minlength: '12 caractères min',
+                maxlength: '12 caractères max'
             },
             title: {
                 required: 'required',

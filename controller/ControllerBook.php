@@ -188,12 +188,11 @@ class ControllerBook extends Controller {
     }
     
        public function isbnExists() {
-        $res = "false";
-        if (isset($_GET["param1"])) {
-            echo $_GET["param1"];
-            $isbn = Book::existIsbn(str_replace("-", "",$_GET["param1"]));
+        $res = "true";
+        if (isset($_GET['param1']) && $_GET['param1'] !== "") {
+            $isbn = Book::existIsbn($_GET['param1']);
             if ($isbn) {
-                $res = "true";
+                $res = "false";
             }
             echo $res;
         }

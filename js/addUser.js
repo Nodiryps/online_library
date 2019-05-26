@@ -1,11 +1,10 @@
-console.log("adduser");
 $(function () {
 
-    $('#username').keyup(function () {
-        $.post("user/ValidateUser", $('#username').val(), function (data) {
-            console.log(data);
-        });
-    });
+//    $('#username').keyup(function () {
+//        $.post("user/ValidateUser", $('#username').val(), function (data) {
+//            console.log(data);
+//        });
+//    });
     validateUser();
 
 
@@ -16,9 +15,6 @@ function validateUser() {
     $('#addUserForm').validate({
 
         rules: {
-            required: true,
-            minlength: 3,
-            maxlength: 16,
             username: {
                 required: true,
                 minlength: 3,
@@ -32,72 +28,69 @@ function validateUser() {
                         }
                     }
                 }
-            }
-
-        },
-         email: {
+            },
+            fullname:{
                 required: true,
+                minlength: 2,
+                maxlength: 50
+            },
+            password: {
+                required: true,
+                minlength: 4,
+                maxlength: 16
+
+            },
+            password_confirm: {
+                required: true,
+                minlength: 4,
+                maxlength: 16,
+                equalTo: '#password'
+            },
+            mail: {
+                required: true,
+                minlength: 11,
+                email:true,
                 remote: {
                     url: "user/isEmailExist/",
-                    type: "post",
+                    type: "get",
                     data: {
-                        email: function () {
+                        mail: function () {
                             return $('#email').val();
                         }
-                    }
-                }
-            },
-        password: {
-            required: true,
-            minlength: 4,
-            maxlength: 16
-
-        },
-        password_confirm: {
-            required: true,
-            minlength: 4,
-            maxlength: 16,
-            equalsTo: '#password'
-        },
-        mail: {
-            required: true,
-            remote: {
-                url: "user/isEmailExist/",
-                type: "get",
-                data: {
-                    mail: function () {
-                        return $('#mail').val();
                     }
                 }
             }
         },
         messages: {
             username: {
-
                 required: 'required',
-                minlength: 'minimum 3 characters',
-                maxlength: 'maximum 16 characters',
-                remote: 'this pseudo is already taken'
+                minlength: 'minimum 3 caracteres',
+                maxlength: 'maximum 16 caracteres',
+                remote: 'pseudo existant'
+            },
+            fullname:{
+                required: 'required',
+                minlength: 'minimum 2 caracteres',
+                maxlength: 'maximum 50 caracteres'
             },
             password: {
                 required: 'required',
-                minlength: 'minimum 8 characters',
-                maxlength: 'maximum 16 characters',
-                equalsTo: 'mot de passe doivent etre similaire'
+                minlength: 'minimum 4 caracteres',
+                maxlength: 'maximum 16 caracteres'
 
             },
-             email: {
+            password_confirm: {
                 required: 'required',
-               remote:'email existe deja'
-
+                minlength: 'minimum 4 caracteres',
+                maxlength: 'maximum 16 caracteres',
+                equalTo: 'les mdp doivent etre identique'
+            },
+            mail: {
+                required: 'required',
+                remote: 'email existant',
+                email: 'email invalide',
+                minlength: 'minimum 11 caracteres'
             }
-
-
-
         }
-
-
-
-
     });
 }

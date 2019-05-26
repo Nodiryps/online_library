@@ -265,14 +265,9 @@ class ControllerRental extends Controller {
             $rentaldate = $_POST['rentaldate'];
         }
         if (isset($_POST['select']) && $_POST['select'] === "") {
-//var_dump($title);
             $select = $_POST['select'];
         }
-//        var_dump($title);
-//        var_dump($author);
-//        var_dump($rentaldate);
-//        var_dump($select);
-//           
+        
         $rentals = Rental::get_rental_join_book_join_user_rentdatesFilterJs($title, $author, $rentaldate, $select);
 
         if ($rentals) {

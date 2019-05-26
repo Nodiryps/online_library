@@ -13,11 +13,10 @@ function validateLogin() {
         rules: {
             username: {
                 required: true
-                
             },
-            password : {required: true}
-           
-
+            password : {
+                required: true
+            }
         },
         messages: {
             username: {
@@ -26,7 +25,6 @@ function validateLogin() {
             password: {
                 required: 'required'
             }
-
         }
     });
 }
@@ -35,7 +33,9 @@ function validateSignup() {
     $('#signupForm').validate({
         rules: {
             fullname: {
-                required: true
+                required: true,
+                minlength: 2,
+                maxlength: 50
             },
             username: {
                 required: true,
@@ -52,6 +52,7 @@ function validateSignup() {
                 }
             },
             email: {
+                email: true,
                 required: true,
                 remote: {
                     url: "user/isEmailExist/",
@@ -64,34 +65,45 @@ function validateSignup() {
                 }
             },
             password: {
-                required: true
+                required: true,
+                minlength: 4,
+                maxlength: 16
 
             },
             password_confirm: {
                 required: true,
+                minlength: 4,
+                maxlength: 16,
                 equalTo:'#password'
             }
         },
         messages: {
             fullname: {
-                required: 'le fullname est obligatoire'
+                required: 'le fullname est obligatoire',
+                minlength: 'minimum 2 caracteres',
+                maxlength: 16
             },
             username: {
                 required: 'required',
-                minlength: 'minimum 3 characters',
-                maxlength: 'maximum 16 characters',
-                remote: 'this pseudo is already taken'
+                minlength: 'minimum 3 caracteres',
+                maxlength: 'maximum 16 caracteres',
+                remote: 'pseudo existant'
             },
             password: {
-                required: 'required'
+                required: 'required',
+                minlength: 'minimum 4 caracteres',
+                maxlength: 'maximum 16 caracteres'
 
             },
             password_confirm: {
                 required: 'required',
-                equalTo: 'Not same password'
+                minlength: 'minimum 4 caracteres',
+                maxlength: 'maximum 16 caracteres',
+                equalTo: 'les mdp doivent etre idntiques'
 
             },
             email: {
+                email:'email invalide',
                 required: 'required',
                 remote: 'Email existant'
             }

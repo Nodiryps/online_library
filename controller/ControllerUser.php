@@ -17,10 +17,10 @@ class ControllerUser extends Controller {
         $profile = $this->get_user_or_redirect();
         $returndate = [];
         $datetoreturn = [];
-          $user = User::get_user_by_username('fdgdfgsdf');
-          if($user->id!==null){
-              var_dump($user);
-          }
+        $user = User::get_user_by_username('fdgdfgsdf');
+        if ($user->id !== null) {
+            var_dump($user);
+        }
         $userRentals = Rental::get_rentals_by_user($profile->id); // j'ai modifer cet methode car elle cree de beug dans profile (je sai pas pourquoi)
         $vignette = count(Rental::get_rentals_by_user($profile->id));
         (new View("profile"))->show(array("profile" => $profile, "rentals" => $userRentals, "returndate" => $returndate, "vignette" => $vignette));
@@ -132,46 +132,20 @@ class ControllerUser extends Controller {
         if (isset($_POST["username"]) && $_POST["username"] !== "") {
             $user = User::get_user_by_username($_POST['username']);
             if ($user->id !== null) {
-            
                 $res = "false";
             }
         }
         echo $res;
-    }
-
-    public function ValidatePassword() {
-        $res = "false";
-        if (isset($_GET["param1"]) && $_GET["param1"] !== "" && isset($_GET["param2"]) && $_GET["param2"] !== "") {
-            $user = User::get_user_by_username($_GET['param1']);
-
-            if ($user->id != null && $user->hash_password === Tools::my_hash($_GET["param2"])) {
-                $res = "true";
-            }
-            echo $res;
-        }
     }
 
     public function isEmailExist() {
         $res = "false";
-            if (isset($_POST["email"]) && $_POST["email"] !== "") {
-            $email = User::is_mail_exist($_POST['email']);
-            if ($email) {
+        if (isset($_GET["param1"]) && $_GET["param1"] !== "") {
+            if (User::is_email_available($_GET["param1"])) {
                 $res = "true";
             }
             echo $res;
         }
     }
-    
-    public function isAvailablePseudo(){
-        $res = "true";
-        if(isset($_POST["username"]) && $_POST["username"] !== ""){
-            $old = User::get_user_by_id($id);
-            if(User::is_username_not_available($username))
-                $res = "false";
-        }
-        echo $res;
-    }
-    
-    
 
 }

@@ -130,8 +130,8 @@
                                 author: $("#author").val(),
                                 rentaldate: $("#rentaldate").val(),
                                 rentalId: $("#rentalid").val(),
-                                select: $('#inputState option:selected').each(function () {
-                                    return  "$(this).text()";
+                                select: $('select option:selected').each(function () {
+                                    return  $(this).text();
                                 })
                             };
                         }
@@ -145,7 +145,7 @@
                                 author: $("#author").val(),
                                 rentaldate: $("#rentaldate").val(),
                                 rentalId: $("#rentalid").val(),
-                                select: $('#inputState option:selected').each(function () {
+                                select: $('select option:selected').each(function () {
                                     return  $(this).text();
                                 })
 
@@ -226,7 +226,7 @@
                     </div>
                     <div class="col-md-2 pt-3">
                         <div class="form-group">
-                            <select id="inputState" name="filtre" class="form-control" >
+                            <select id="inputState" name="select" class="form-control" >
                                 <option  <?php if (!empty($filter) && $filter == "tous") { ?>
                                         selected
                                     <?php }

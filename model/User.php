@@ -157,16 +157,6 @@ class User extends Model {
         }
     }
 
-    public static function is_mail_exist($email) {
-        try {
-            $query = self::execute("SELECT email FROM user where email=:email", array("email" => $email));
-            $email = $query->fetchAll();
-            return count($email) == 0;
-        } catch (Exception $e) {
-            Tools::abort("Problème lors de l'accès a la base de données69");
-        }
-    }
-
     public static function get_user_by_mail($email) {
         try {
             $query = self::execute("SELECT * FROM user WHERE email=:email", array("email" => $email));
@@ -198,22 +188,18 @@ class User extends Model {
         }
     }
 
-    public static function _email($email) {
+    private static function _email($email) {
         try {
             $query = self::execute("SELECT email FROM user WHERE email=:email", array("email" => $email));
             $result = $query->fetchAll();
-            return count($result)>0;
+            return count($result) >0;
         } catch (Exception $e) {
             Tools::abort("Problème lors de l'accès a la base de données(usernameavailable)");
         }
     }
 
-    private static function is_email_available( $mail) {
-        $val = self::_email($mail);
-       if($val){
-           return false;
-       }
-       return true;
+    public static function is_email_available( $mail) {
+        return !self::_email($mail);
     }
 
     public static function validate_birthdate_add_user($birthdate) {
@@ -340,7 +326,7 @@ class User extends Model {
             $errors[] = "Le fullname est obligatoire";
         if ( trim($email) == '')
             $errors[] = "L'email est obligatoire";
-        if (!self::is_mail_exist($email))
+        if (!self::is_email_available($email))
             $errors[] = "l'email existe deja";
         if ($birthdate == "")
             $errors[] = "Date de naissance obligatoire!";
