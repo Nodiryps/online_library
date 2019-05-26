@@ -255,7 +255,7 @@ class ControllerRental extends Controller {
                     }
                 }
                 if ($rental->returndate == null) {
-                    $rental->end = "pas encore retourner";
+                    $rental->end = " pas encore retourné";
                 } else {
                     $rental->end = $rental->returndate;
                 }

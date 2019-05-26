@@ -128,7 +128,7 @@
                         var res = data.event.getResources();
                                 var colonne = res["0"]._resource.extendedProps;
                                 $("#rentalid").text(data.event.id);
-                                $("#user").text(colonne.user);
+                                $("#users").text(colonne.user);
                                 $("#bookTitle").text(colonne.book);
                                 $("#start").text(data.event.start.toDateString());
                                 $("#end").text(colonne.end);
@@ -290,7 +290,7 @@
             </table>
             <div id="confirmDialog" hidden>
                 <p hidden>ID BOOK: <strong id="rentalid"></strong></p>
-                <p>Membre: <strong id="user"></strong></p>
+                <p>Membre: <strong id="users"></strong></p>
                 <p>Titre: <strong id="bookTitle"></strong></p>
                 <p>Date de location: <strong id="start"></strong></p>
                 <p>Date de Retour:<strong id="end"></strong></p>
