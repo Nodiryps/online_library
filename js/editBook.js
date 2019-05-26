@@ -1,7 +1,7 @@
 $(function () {
-    console.log($('#isbn').val());
     validateBook();
 });
+
 function validateBook() {
     $('#editBook').validate({
 
@@ -9,10 +9,10 @@ function validateBook() {
             isbn: {
                 remote: {
                     url: "book/isbnExists",
-                    type: 'POST',
+                    type: 'post',
                     data: {
-                        ISBN: function () {
-                            return $('#ISBN').val();
+                        isbn: function () {
+                            return $('#isbn').val();
                         }
                     }
                 },
@@ -42,6 +42,7 @@ function validateBook() {
         },
         messages: {
             isbn: {
+                remote:'isbn existant',
                 required: 'required',
                 minlength: '12 caractères min',
                 maxlength: '12 caractères max'

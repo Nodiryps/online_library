@@ -52,8 +52,8 @@ class ControllerBook extends Controller {
             $nbcopies = "";
             if (isset($_POST["isbn"]) && isset($_POST["author"]) && isset($_POST["title"]) && isset($_POST["editor"]) && isset($_POST["nbCopie"])) {
                 Book::set_book_attr_add($isbn, $title, $author, $editor, $nbcopies);
-                $isbn=str_replace("-", "",$isbn);
-                $errors = Book::rules_add_book( substr($isbn, 0, -1), $title, $author, $editor, $nbcopies);
+                $isbn = str_replace("-", "", $isbn);
+                $errors = Book::rules_add_book(substr($isbn, 0, -1), $title, $author, $editor, $nbcopies);
                 if (isset($_FILES['picture']) && isset($_FILES['picture']['name']) && $_FILES['picture']['name'] != '') {
                     if ($_FILES['picture']['error'] == 0)
                         $picture_path = Book::add_picture($picture_path, $title);
@@ -124,9 +124,11 @@ class ControllerBook extends Controller {
                 } else
                     $book->picture = NULL;
                 $errors = Book::rules_add_book($book->isbn, $book->title, $book->author, $book->editor, $book->nbCopies);
-                if (Book::existIsbn($book->isbn))
+
+                $isbn13 = Book::calcul_isbn($book->isbn);
+                if (Book::existIsbn($isbn13))
                     $errors[] = "ISBN existe deja !";
-                
+
                 if (empty($errors)) {
                     $book->isbn = Book::calcul_isbn($book->isbn);
                     $book->update();
@@ -186,12 +188,11 @@ class ControllerBook extends Controller {
             echo json_encode($isbn);
         }
     }
-    
-       public function isbnExists() {
+
+    public function isbnExists() {
         $res = "true";
-        if (isset($_GET['param1']) && $_GET['param1'] !== "") {
-            $isbn = Book::existIsbn($_GET['param1']);
-            if ($isbn) {
+        if (isset($_POST["isbn"]) && $_POST["isbn"] !== "") {
+            if (Book::existIsbn(Book::calcul_isbn($_POST["isbn"]))) {
                 $res = "false";
             }
             echo $res;
